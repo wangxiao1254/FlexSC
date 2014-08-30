@@ -18,5 +18,6 @@ version 0.2(comming soon)
 # Author
 1. Yan Hunag <yh33@indiana.edu>
 2. Xiao Shaun Wang <wangxiao@cs.umd.edu>
+3. Kartik Nayak <kartik@cs.umd.edu>
 
 This document is in developemnt.
