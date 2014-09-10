@@ -1,7 +1,6 @@
 package test.ints;
 
 import flexsc.CompEnv;
-import flexsc.Mode;
 import gc.GCSignal;
 
 import java.util.Random;
@@ -20,7 +19,7 @@ public class TestLeftPrivaeShift extends Test_2Input1Output<GCSignal>{
 
 		for (int i = 0; i < testCases; i++) {
 			int shift = rnd.nextInt(1<<5);
-			runThreads(new Helper(rnd.nextInt(1<<30), shift, Mode.REAL) {
+			runThreads(new Helper(rnd.nextInt(1<<30), shift) {
 				public GCSignal[] secureCompute(GCSignal[] Signala, GCSignal[] Signalb, CompEnv<GCSignal> e) throws Exception {
 					return new IntegerLib<GCSignal>(e).leftPrivateShift(Signala ,Signalb);}
 

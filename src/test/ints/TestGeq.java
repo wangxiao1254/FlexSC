@@ -1,7 +1,6 @@
 package test.ints;
 
 import flexsc.CompEnv;
-import flexsc.Mode;
 import gc.GCSignal;
 
 import java.util.Random;
@@ -20,7 +19,7 @@ public class TestGeq extends Test_2Input1Output<GCSignal>{
 		Random rnd = new Random();
 
 		for (int i = 0; i < testCases; i++) {
-			runThreads(new Helper(rnd.nextInt()%(1<<30), rnd.nextInt()%(1<<30), Mode.REAL) {
+			runThreads(new Helper(rnd.nextInt()%(1<<30), rnd.nextInt()%(1<<30)) {
 				public GCSignal[] secureCompute(GCSignal[] Signala, GCSignal[] Signalb, CompEnv<GCSignal> e) throws Exception {
 					return new GCSignal[]{new IntegerLib<GCSignal>(e).geq(Signala ,Signalb)}; }
 
@@ -31,7 +30,7 @@ public class TestGeq extends Test_2Input1Output<GCSignal>{
 		
 		for (int i = 0; i < testCases; i++) {
 			int a = rnd.nextInt()%(1<<30);
-			runThreads(new Helper(a, a, Mode.REAL) {
+			runThreads(new Helper(a, a) {
 				public GCSignal[] secureCompute(GCSignal[] Signala, GCSignal[] Signalb, CompEnv<GCSignal> e) throws Exception {
 					return new GCSignal[]{new IntegerLib<GCSignal>(e).geq(Signala ,Signalb)}; }
 

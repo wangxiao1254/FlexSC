@@ -1,13 +1,10 @@
+// Copyright (C) 2014 by Xiao Shaun Wang <wangxiao@cs.umd.edu>
 package flexsc;
 
 import java.io.InputStream;
 import java.io.OutputStream;
 
 import test.Utils;
-import flexsc.BooleanCompEnv;
-import flexsc.CompEnv;
-import flexsc.Mode;
-import flexsc.Party;
 
 public class CVCompEnv extends BooleanCompEnv {	
 	public CVCompEnv(InputStream is, OutputStream os, Party p) {

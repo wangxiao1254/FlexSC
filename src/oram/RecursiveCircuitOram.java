@@ -1,3 +1,4 @@
+// Copyright (C) 2014 by Xiao Shaun Wang <wangxiao@cs.umd.edu>
 package oram;
 
 import java.io.InputStream;
@@ -7,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import flexsc.CompEnv;
-import flexsc.Mode;
 import flexsc.Party;
 
 public class RecursiveCircuitOram<T> {
@@ -52,37 +52,10 @@ public class RecursiveCircuitOram<T> {
 		CircuitOram<T> last = clients.get(clients.size()-1);
 		baseOram = new TrivialPrivateOram<T>(env, (1<<last.lengthOfIden), last.lengthOfPos);
 	}
-
-	//with default params
-	// will be deprecated.
-	public RecursiveCircuitOram(InputStream is, OutputStream os, int N, int dataSize, Party p) throws Exception {
-		CompEnv env = CompEnv.getEnv(Mode.COUNT, p, is, os);
-		this.p = p;
-		this.is = is;
-		this.os = os;
-		this.cutoff = 512;
-		this.recurFactor = 4;
-		this.capacity = 3;
-		int sp = 80;
-		CircuitOram<T>  oram = new CircuitOram<T>(env, N, dataSize, capacity, sp);
-		clients.add(oram);
-		int newDataSize = oram.lengthOfPos * recurFactor, newN = (1<<oram.lengthOfIden)/recurFactor;
-		while(newN > cutoff) {
-			oram = new CircuitOram<T>(env, newN, newDataSize, capacity, sp);
-			clients.add(oram);
-			newDataSize = oram.lengthOfPos * recurFactor;
-			newN = (1<<oram.lengthOfIden)  / recurFactor;
-		}
-		CircuitOram<T> last = clients.get(clients.size()-1);
-		baseOram = new TrivialPrivateOram<T>(env, (1<<last.lengthOfIden), last.lengthOfPos);
-	}
 	
 	public T[] read(T[] iden) throws Exception {
 		T[][] poses = travelToDeep(iden, 1);
 		CircuitOram<T> currentOram = clients.get(0);
-
-//		boolean[] oldPos = baseOram.env.outputToAlice(poses[0]);
-//		oldPos = baseOram.lib.syncBooleans(oldPos);
 		boolean[] oldPos = baseOram.lib.declassifyToBoth(poses[0]);
 		
 		T[] res = currentOram.read(iden, oldPos, poses[1]);
@@ -93,9 +66,6 @@ public class RecursiveCircuitOram<T> {
 		T[][] poses = travelToDeep(iden, 1);
 		CircuitOram<T> currentOram = clients.get(0);
 
-
-//		boolean[] oldPos = baseOram.env.outputToAlice(poses[0]);
-//		oldPos = baseOram.lib.syncBooleans(oldPos);
 		boolean[] oldPos = baseOram.lib.declassifyToBoth(poses[0]);
 		currentOram.write(iden, oldPos, poses[1], data);
 	}

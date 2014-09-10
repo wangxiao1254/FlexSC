@@ -1,7 +1,6 @@
 package test.ints;
 
 import flexsc.CompEnv;
-import flexsc.Mode;
 import gc.GCSignal;
 
 import java.util.Random;
@@ -22,7 +21,7 @@ public class TestDivide extends Test_2Input1Output<GCSignal>{
 			int b = rnd.nextInt()%(1<<15);
 			int a = rnd.nextInt()%(1<<15);
 			b = (b == 0) ? 1 : b;
-			runThreads(new Helper(a, b, Mode.REAL){
+			runThreads(new Helper(a, b){
 				public GCSignal[] secureCompute(GCSignal[] Signala, GCSignal[] Signalb, CompEnv<GCSignal> e) throws Exception {
 					return new IntegerLib<GCSignal>(e).divide(Signala ,Signalb);}
 

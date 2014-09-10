@@ -1,3 +1,4 @@
+// Copyright (C) 2014 by Xiao Shaun Wang <wangxiao@cs.umd.edu>
 package flexsc;
 
 import gc.GCEva;
@@ -8,7 +9,6 @@ import java.io.OutputStream;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.Security;
-import java.util.Arrays;
 
 import rand.ISAACProvider;
 import test.Utils;
@@ -45,7 +45,6 @@ public abstract class CompEnv<T> {
 			rnd = SecureRandom.getInstance ("ISAACRandom");
 
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

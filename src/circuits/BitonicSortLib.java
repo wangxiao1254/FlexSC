@@ -1,3 +1,4 @@
+// Copyright (C) 2014 by Xiao Shaun Wang <wangxiao@cs.umd.edu>
 package circuits;
 
 import flexsc.CompEnv;

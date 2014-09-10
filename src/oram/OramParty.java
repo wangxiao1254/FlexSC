@@ -1,3 +1,4 @@
+// Copyright (C) 2014 by Xiao Shaun Wang <wangxiao@cs.umd.edu>
 package oram;
 
 import java.io.InputStream;

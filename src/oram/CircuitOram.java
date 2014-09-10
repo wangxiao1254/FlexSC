@@ -1,3 +1,4 @@
+// Copyright (C) 2014 by Xiao Shaun Wang <wangxiao@cs.umd.edu>
 package oram;
 
 import java.io.InputStream;
@@ -28,6 +29,7 @@ public class CircuitOram<T> extends TreeBasedOramParty<T> {
 	}
 
 
+	@SuppressWarnings("unchecked")
 	public CircuitOram(InputStream is, OutputStream os, int N, int dataSize,
 			Party p, int cap, Mode m, int sp) throws Exception {
 		super(CompEnv.getEnv(m, p, is, os), N, dataSize, cap);

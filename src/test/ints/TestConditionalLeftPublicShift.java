@@ -1,7 +1,6 @@
 package test.ints;
 
 import flexsc.CompEnv;
-import flexsc.Mode;
 import gc.GCSignal;
 
 import java.util.Random;
@@ -21,7 +20,7 @@ public class TestConditionalLeftPublicShift extends Test_1Input1Output<GCSignal>
 		for (int i = 0; i < testCases; i++) {
 			final int shift = Math.abs(rnd.nextInt()%32);
 			runThreads(
-				new Helper(rnd.nextInt(1<<30), Mode.REAL) {
+				new Helper(rnd.nextInt(1<<30)) {
 					public GCSignal[] secureCompute(GCSignal[] Signala, CompEnv<GCSignal> e) throws Exception {
 						IntegerLib<GCSignal> lib = new IntegerLib<GCSignal>(e);
 						return lib.conditionalLeftPublicShift(Signala, shift, lib.SIGNAL_ONE);
@@ -33,7 +32,7 @@ public class TestConditionalLeftPublicShift extends Test_1Input1Output<GCSignal>
 				});
 			
 			runThreads(
-					new Helper(rnd.nextInt(1<<30), Mode.REAL) {
+					new Helper(rnd.nextInt(1<<30)) {
 						public GCSignal[] secureCompute(GCSignal[] Signala, CompEnv<GCSignal> e) throws Exception {
 							IntegerLib<GCSignal> lib = new IntegerLib<GCSignal>(e);
 							return lib.conditionalLeftPublicShift(Signala, shift, lib.SIGNAL_ZERO);

@@ -4,7 +4,6 @@ import org.junit.Assert;
 
 import test.Utils;
 import flexsc.CompEnv;
-import flexsc.Mode;
 import flexsc.Party;
 
 
@@ -14,9 +13,7 @@ public class Test_2Input1Output<T>  extends TestHarness<T>{
 		int intA, intB;
 		boolean[] a;
 		boolean[] b;
-		Mode m;
-		public Helper(int aa, int bb, Mode m) {
-			this.m = m;
+		public Helper(int aa, int bb) {
 			intA = aa;
 			intB = bb;
 
@@ -38,7 +35,7 @@ public class Test_2Input1Output<T>  extends TestHarness<T>{
 			try {
 				listen(54321);
 				@SuppressWarnings("unchecked")
-				CompEnv<T> gen = CompEnv.getEnv(h.m, Party.Alice, is, os);						
+				CompEnv<T> gen = CompEnv.getEnv(m, Party.Alice, is, os);						
 				
 				T[] a = gen.inputOfAlice(h.a);
 				T[] b = gen.inputOfBob(new boolean[32]);
@@ -66,7 +63,7 @@ public class Test_2Input1Output<T>  extends TestHarness<T>{
 			try {
 				connect("localhost", 54321);				
 				@SuppressWarnings("unchecked")
-				CompEnv<T> eva = CompEnv.getEnv(h.m, Party.Bob, is, os);
+				CompEnv<T> eva = CompEnv.getEnv(m, Party.Bob, is, os);
 				
 				T[] a = eva.inputOfAlice(new boolean[32]);
 				T[] b = eva.inputOfBob(h.b);
