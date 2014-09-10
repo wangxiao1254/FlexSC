@@ -1,6 +1,3 @@
-// Copyright (C) 2013 by Yan Huang <yhuang@cs.umd.edu>
-// Improved by Xiao Shaun Wang <wangxiao@cs.umd.edu> and Kartik Nayak <kartik@cs.umd.edu>
-
 package network;
 
 import java.io.BufferedInputStream;

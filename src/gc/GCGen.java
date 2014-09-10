@@ -1,18 +1,12 @@
-// Copyright (C) 2013 by Yan Huang <yhuang@cs.umd.edu>
-// Improved by Xiao Shaun Wang <wangxiao@cs.umd.edu> and Kartik Nayak <kartik@cs.umd.edu>
-
 package gc;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.security.Security;
 
 import ot.FakeOTSender;
 import ot.OTExtSender;
 import ot.OTSender;
-import rand.ISAACProvider;
 import flexsc.CompEnv;
 import flexsc.Flag;
 import flexsc.Party;
@@ -20,18 +14,9 @@ import flexsc.Party;
 public class GCGen extends GCCompEnv {
 
 	static public GCSignal R = null;
-	static SecureRandom rnd;
-
 	static{
-		Security.addProvider(new ISAACProvider ());
-		try {
-			rnd = SecureRandom.getInstance ("ISAACRandom");
-			R = GCSignal.freshLabel(rnd);
-			R.setLSB();
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		R = GCSignal.freshLabel(new SecureRandom());
+		R.setLSB();
 	}
 
 	OTSender snd;
@@ -111,6 +96,8 @@ public class GCGen extends GCCompEnv {
 		if(gatesRemain){
 			gatesRemain = false;
 			os.flush();
+			//			Flag.sw.ands += ands;
+			//			ands = 0;
 		}
 		if (out.isPublic())
 			return out.v;
@@ -120,8 +107,30 @@ public class GCGen extends GCCompEnv {
 			return false;
 		else if (lb.equals(R.xor(out)))
 			return true;
+		
 		throw new Exception("bad label at final output.");
 	}
+	
+	public boolean outputToBob(GCSignal out) throws Exception {
+		if (!out.isPublic())
+			out.send(os);
+		return false;
+	}
+	
+	public boolean[] outputToBob(GCSignal[] out) throws Exception {
+		boolean [] result = new boolean[out.length];
+		
+		for(int i = 0; i < result.length; ++i) {
+			if (!out[i].isPublic())
+				out[i].send(os);
+		}
+		os.flush();
+		
+		for(int i = 0; i < result.length; ++i)
+			result[i] = false;
+		return result;
+	}
+
 
 	public boolean[] outputToAlice(GCSignal[] out) throws Exception {
 		boolean [] result = new boolean[out.length];

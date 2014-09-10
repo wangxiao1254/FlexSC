@@ -1,6 +1,3 @@
-// Copyright (C) 2013 by Yan Huang <yhuang@cs.umd.edu>
-// Improved by Xiao Shaun Wang <wangxiao@cs.umd.edu> and Kartik Nayak <kartik@cs.umd.edu>
-
 package gc;
 
 import java.io.InputStream;
@@ -80,6 +77,18 @@ public class GCEva extends GCCompEnv {
 		return false;
 	}
 
+	public boolean outputToBob(GCSignal out) throws Exception {
+		if (out.isPublic())
+			return out.v;
+
+		GCSignal lb = GCSignal.receive(is);
+		if (lb.equals(out))
+			return false;
+//		else if (lb.equals(R.xor(out)))
+		else
+			return true;
+	}
+	
 	public boolean[] outputToAlice(GCSignal[] out) throws Exception {
 		boolean [] result = new boolean[out.length];
 		
@@ -91,6 +100,14 @@ public class GCEva extends GCCompEnv {
 		
 		for(int i = 0; i < result.length; ++i)
 			result[i] = false;
+		return result;
+	}
+	
+	public boolean[] outputToBob(GCSignal[] out) throws Exception {
+		boolean [] result = new boolean[out.length];
+		for(int i = 0; i < result.length; ++i) {
+			result[i] = outputToBob(out[i]);
+		}
 		return result;
 	}
 

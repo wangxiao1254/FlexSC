@@ -1,12 +1,13 @@
-// Copyright (C) 2013 by Yan Huang <yhuang@cs.umd.edu>
-// 					 and Xiao Shaun Wang <wangxiao@cs.umd.edu>
-
 package flexsc;
 
 import java.io.InputStream;
 import java.io.OutputStream;
 
 import test.Utils;
+import flexsc.BooleanCompEnv;
+import flexsc.CompEnv;
+import flexsc.Mode;
+import flexsc.Party;
 
 public class CVCompEnv extends BooleanCompEnv {	
 	public CVCompEnv(InputStream is, OutputStream os, Party p) {
@@ -45,6 +46,11 @@ public class CVCompEnv extends BooleanCompEnv {
 		return out;
 	}
 
+	public boolean outputToBob(Boolean out) throws Exception {
+		return out;
+	}
+
+	
 	@Override
 	public Boolean and(Boolean a, Boolean b) throws Exception {
 		return a && b;
@@ -90,6 +96,11 @@ public class CVCompEnv extends BooleanCompEnv {
 		return Utils.tobooleanArray(out);
 	}
 
+	@Override
+	public boolean[] outputToBob(Boolean[] out) throws Exception {
+		return Utils.tobooleanArray(out);
+	}
+	
 	@Override
 	public CompEnv<Boolean> getNewInstance(InputStream in, OutputStream os)
 			throws Exception {

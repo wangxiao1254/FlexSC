@@ -37,6 +37,7 @@ public class IntegerLib<T> extends CircuitLib<T> {
 		return res;
 	}
 
+	//tested
 	public T[] add(T[] x, T[] y) throws Exception {
 
 		return add(x, y, false);
@@ -51,37 +52,43 @@ public class IntegerLib<T> extends CircuitLib<T> {
 		ay[0] = y;
 		return sub(x, y);
 	}
-
+	
+	//tested
 	public T[] sub(T[] x, T[] y) throws Exception {
 		assert(x != null && y != null && x.length == y.length) : "sub: bad inputs.";
 
 		return add(x, not(y), true);
 	}
 
+	//tested
 	public T[] incrementByOne(T[] x) throws Exception {
 		T[] one = zeros(x.length);
 		one[0] = SIGNAL_ONE;
 		return add(x, one);
 	}
 
+	//tested
 	public T[] decrementByOne(T[] x) throws Exception {
 		T[] one = zeros(x.length);
 		one[0] = SIGNAL_ONE;
 		return sub(x, one);
 	}
 
+	//tested
 	public T[] conditionalIncreament(T[] x, T flag) throws Exception {
 		T[] one = zeros(x.length);
 		one[0] = mux(SIGNAL_ZERO, SIGNAL_ONE, flag);
 		return add(x, one);
 	}
 
+	//tested
 	public T[] conditionalDecrement(T[] x, T flag) throws Exception {
 		T[] one = zeros(x.length);
 		one[0] = mux(SIGNAL_ZERO, SIGNAL_ONE, flag);
 		return sub(x, one);
 	}
 
+	//tested
 	public T geq(T[] x, T[] y) throws Exception {
 		assert(x.length == y.length) : "bad input";
 
@@ -89,18 +96,19 @@ public class IntegerLib<T> extends CircuitLib<T> {
 		return not(result[result.length-1]);
 	}
 
+	//tested
 	public T leq(T[] x, T[] y) throws Exception {
 		return geq(y, x);
 	}
 
+	//tested
 	public T[] multiply(T[] x, T[] y) throws Exception {
-		assert(x.length == y.length) : "bad input";
-		return Arrays.copyOf(multiplyInternal(x, y), x.length);
+		return Arrays.copyOf(multiplyInternal(x, y), x.length);//res;
 	}
 
 	// This multiplication does not truncate the length of x and y
 	public T[] multiplyFull(T[] x, T[] y) throws Exception {
-		return multiplyInternal(x, y);
+		return multiplyInternal(x, y);//res;
 	}
 
 	private T[] multiplyInternal(T[] x, T[] y) throws Exception {
@@ -118,6 +126,7 @@ public class IntegerLib<T> extends CircuitLib<T> {
 		return res;
 	}
 
+	//tested
 	public T[] absolute(T[] x) throws Exception {
 		T reachedOneSignal = SIGNAL_ZERO;
 		T[] result = zeros(x.length);
@@ -129,6 +138,7 @@ public class IntegerLib<T> extends CircuitLib<T> {
 		return mux(x, result, x[x.length-1]);
 	}
 
+	//tested
 	public T[] divide(T[] x, T[] y) throws Exception {
 		T[] absoluteX = absolute(x);
 		T[] dividend = zeros(x.length + y.length);
@@ -150,33 +160,37 @@ public class IntegerLib<T> extends CircuitLib<T> {
 			divisor = rightShift(divisor);
 		}
 
-		//		return quotient;
+//		return quotient;
 		return addSign(Arrays.copyOf(quotient, x.length), xor(x[x.length-1], y[y.length-1]));
 	}
 
 
 	public T[] reminder(T[] x, T[] y) throws Exception {
-		//can be better.
-		T[] q = divide(x, y);
-		return sub(x, multiply(y, q));
-		/*
-		Signal[] absoluteX = absolute(x);
-		Signal[] dividend = zeros(x.length + y.length);
+		T Xneg = x[x.length-1];
+		T[] absoluteX = absolute(x);
+		T[] absoluteY = absolute(y);
+		T[] res = reminderInternal(absoluteX, absoluteY);
+		return mux(res, sub(toSignals(0), res), Xneg);
+	}
+	
+	//x,y must in positive.
+	public T[] reminderInternal(T[] x, T[] y) throws Exception {
+		T[] absoluteX = x;
+		T[] dividend = zeros(x.length + y.length);
 		System.arraycopy(absoluteX, 0, dividend, 0, absoluteX.length);
-		Signal[] absoluteY = absolute(y);
-		Signal[] divisor = zeros(x.length + y.length);
+		T[] absoluteY = y;
+		T[] divisor = zeros(x.length + y.length);
 		System.arraycopy(absoluteY, 0, divisor, x.length, absoluteY.length);
 
-		Signal[] zero = zeros(dividend.length);
+		T[] zero = zeros(dividend.length);
 		for(int i = 0; i < x.length+1; ++i) {
-			Signal divisorIsLEQ = leq(divisor, dividend);
-			Signal[] temp = mux(zero, divisor, divisorIsLEQ);
+			T divisorIsLEQ = leq(divisor, dividend);
+			T[] temp = mux(zero, divisor, divisorIsLEQ);
 			dividend = sub(dividend, temp);	
 			divisor = rightShift(divisor);
 		}
 
-		//return dividend;
-		return addSign(dividend, xor(x[x.length-1], y[y.length-1]));*/
+		return Arrays.copyOf(dividend, x.length);
 	}
 
 	private T[] addSign(T[] x, T sign) throws Exception {
@@ -194,6 +208,7 @@ public class IntegerLib<T> extends CircuitLib<T> {
 
 	}
 
+	//tested
 	public T[] commonPrefix(T[] x, T[] y) throws Exception {
 		assert(x != null && y!= null) : "multiply: bad inputs";
 		T[] result = xor(x, y);
@@ -204,6 +219,7 @@ public class IntegerLib<T> extends CircuitLib<T> {
 		return result;
 	}
 
+	//tested
 	public T[] leadingZeros(T[] x) throws Exception {
 		assert(x!= null) : "leading zeros: bad inputs";
 
@@ -215,6 +231,7 @@ public class IntegerLib<T> extends CircuitLib<T> {
 		return numberOfOnes(not(result));
 	}
 
+	//tested
 	public T[] lengthOfCommenPrefix(T[] x, T [] y) throws Exception {
 		assert(x!= null) : "lengthOfCommenPrefix : bad inputs";
 
@@ -234,6 +251,7 @@ public class IntegerLib<T> extends CircuitLib<T> {
 		return rightPublicShift(x, 1);
 	}
 
+	//tested
 	public T[] leftPublicShift(T[] x, int s) {
 		assert(x!= null && s < x.length) : "leftshift: bad inputs";
 
@@ -244,6 +262,7 @@ public class IntegerLib<T> extends CircuitLib<T> {
 		return res;
 	}
 
+	//tested
 	public T[] rightPublicShift(T[] x, int s) {
 		assert(x!= null && s < x.length) : "leftshift: bad inputs";
 
@@ -254,6 +273,7 @@ public class IntegerLib<T> extends CircuitLib<T> {
 		return res;
 	}
 
+	//tested
 	public T[] conditionalLeftPublicShift(T[] x, int s, T sign) throws Exception {
 		assert(x!= null && s < x.length) : "leftshift: bad inputs";
 
@@ -265,6 +285,7 @@ public class IntegerLib<T> extends CircuitLib<T> {
 		return res;
 	}
 
+	//tested
 	public T[] conditionalRightPublicShift(T[] x, int s, T sign) throws Exception {
 		assert(x!= null && s < x.length) : "rightshift: bad inputs";
 
@@ -275,6 +296,7 @@ public class IntegerLib<T> extends CircuitLib<T> {
 	}
 
 
+	//tested
 	public T[] leftPrivateShift(T[] x, T[] lengthToShift) throws Exception {
 		T[] res = Arrays.copyOf(x, x.length);
 
@@ -289,6 +311,7 @@ public class IntegerLib<T> extends CircuitLib<T> {
 		return mux(res, zeros(x.length), clear);
 	}
 
+	//tested
 	public T[] rightPrivateShift(T[] x, T[] lengthToShift) throws Exception {
 		T[] res = Arrays.copyOf(x, x.length);
 
@@ -327,6 +350,7 @@ public class IntegerLib<T> extends CircuitLib<T> {
 		return not(xor(x, y));
 	}
 
+	//tested
 	public T eq(T[] x, T[] y) throws Exception {
 		assert(x != null && y != null && x.length == y.length) : "CircuitLib.eq[]: bad inputs.";
 
@@ -404,6 +428,67 @@ public class IntegerLib<T> extends CircuitLib<T> {
 		return res;
 	}
 
+	public T[] unSignedMultiply(T[] x, T[] y) throws Exception {
+		assert(x != null && y!= null) : "multiply: bad inputs";	
+
+		T[] res = zeros(x.length+y.length);
+		T[] zero = zeros(x.length);
+		T[] longerX = Arrays.copyOf(x, x.length);
+		System.arraycopy(mux(zero, longerX, y[0]), 0, res, 0, x.length);
+
+		for(int i = 1; i < y.length; ++i) {
+			T[] toAdd = mux(zero, longerX, y[i]);
+			T[] tmp = unSignedAdd(Arrays.copyOfRange(res, i, i+x.length), toAdd);
+			System.arraycopy(tmp, 0, res, i, tmp.length);
+		}
+		return res;
+	}
+
+	public T[] karatsubaMultiply(T[]x, T[]y) throws Exception {	
+		if(x.length <= 18)
+			return unSignedMultiply(x, y);
+
+		int length = (x.length + y.length);
+
+		T[] xlo = Arrays.copyOfRange(x, 0, x.length/2);
+		T[] xhi = Arrays.copyOfRange(x, x.length/2, x.length);
+		T[] ylo = Arrays.copyOfRange(y, 0, y.length/2);
+		T[] yhi = Arrays.copyOfRange(y, y.length/2, y.length);
+
+
+		int nextlength = Math.max(x.length/2, x.length-x.length/2);
+		//nextlength = nextlength/2+nextlength%2;
+		xlo = padSignal(xlo, nextlength);
+		xhi = padSignal(xhi, nextlength);
+		ylo = padSignal(ylo, nextlength);
+		yhi = padSignal(yhi, nextlength);
+
+
+		T[] z0 = karatsubaMultiply(xlo, ylo);
+		T[] z2 = karatsubaMultiply(xhi, yhi);
+		//System.out.println(z0.length+" "+z2.length);
+
+		T[] z1 = sub(
+				padSignal(
+						karatsubaMultiply(
+								unSignedAdd(xlo, xhi),
+								unSignedAdd(ylo, yhi)
+								)
+								, 2*nextlength+2)
+								, padSignal(
+										unSignedAdd( padSignal(z2,2*nextlength), 
+												padSignal(z0,2*nextlength) ) 
+												, 2*nextlength+2)
+				);
+		z1 = padSignal(z1, length);
+		z1 = leftPublicShift(z1, x.length/2);
+
+		T[] z0Pad = padSignal(z0, length);
+		T[] z2Pad = padSignal(z2, length);
+		z2Pad = leftPublicShift(z2Pad, 2*(x.length/2));
+		return add(add(z0Pad, z1), z2Pad);
+	}
+
 	public T[] min(T[] x, T[] y) throws Exception {
 		T leq = leq(x, y);
 		return mux(y, x, leq);
@@ -415,6 +500,8 @@ public class IntegerLib<T> extends CircuitLib<T> {
 		for (int i = 0; i < x.length/2; i++) {
 			root = leftShift(root);
 			rem = add(leftPublicShift(rem, 2), rightPublicShift(x, x.length - 2));
+			//if (Party.Alice.equals(env.getParty()))
+			//		System.out.println(Utils.toInt(Utils.tobooleanArray((Boolean[]) root)) + "\t" + Utils.toInt(Utils.tobooleanArray((Boolean[]) rem)));
 			x = leftPublicShift(x, 2);
 			T[] oldRoot = root;
 			root = incrementByOne(root);
