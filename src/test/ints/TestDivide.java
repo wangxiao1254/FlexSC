@@ -23,7 +23,7 @@ public class TestDivide extends Test_2Input1Output<GCSignal>{
 			b = (b == 0) ? 1 : b;
 			runThreads(new Helper(a, b){
 				public GCSignal[] secureCompute(GCSignal[] Signala, GCSignal[] Signalb, CompEnv<GCSignal> e) throws Exception {
-					return new IntegerLib<GCSignal>(e).divide(Signala ,Signalb);}
+					return new IntegerLib<GCSignal>(e).div(Signala ,Signalb);}
 
 				public int plainCompute(int x, int y) {
 					return x/y;}

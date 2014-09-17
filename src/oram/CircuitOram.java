@@ -57,6 +57,19 @@ public class CircuitOram<T> extends TreeBasedOramParty<T> {
 		scQueue = prepareBlocks(queue, queue);		
 
 	}
+	
+	public CircuitOram(CompEnv<T> env, int N, int dataSize) throws Exception {
+		super(env, N, dataSize, 3);
+		lib = new CircuitOramLib<T>(lengthOfIden, lengthOfPos, lengthOfData, logN, capacity, env);
+		queueCapacity = 30;
+		queue = new PlainBlock[queueCapacity];
+
+		for(int i = 0; i < queue.length; ++i) 
+			queue[i] = getDummyBlock(p == Party.Alice);
+
+		scQueue = prepareBlocks(queue, queue);		
+
+	}
 
 	protected void ControlEviction() throws Exception {
 		flushOneTime(nextPath());
@@ -130,6 +143,8 @@ public class CircuitOram<T> extends TreeBasedOramParty<T> {
 	}
 	
 	public T[] conditionalReadAndRemove(T[] scIden, T[] pos, T condition) throws Exception {
+		scIden = Arrays.copyOf(scIden, lengthOfIden);
+
 		T[] posToUse = lib.mux(lib.randBools(pos.length), pos, condition);
 		boolean[] path = lib.declassifyToBoth(posToUse);
 		PlainBlock[][] blocks = getPath(path);
@@ -147,6 +162,8 @@ public class CircuitOram<T> extends TreeBasedOramParty<T> {
 
 
 	public void conditionalPutBack(T[] scIden, T[] scNewPos, T[] scData, T condition) throws Exception {
+		scIden = Arrays.copyOf(scIden, lengthOfIden);
+
 		Block<T> b = new Block<T>(scIden, scNewPos, scData, lib.SIGNAL_ZERO);
 		lib.conditionalAdd(scQueue, b, condition);
 		os.flush();

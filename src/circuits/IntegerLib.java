@@ -139,7 +139,7 @@ public class IntegerLib<T> extends CircuitLib<T> {
 	}
 
 	//tested
-	public T[] divide(T[] x, T[] y) throws Exception {
+	public T[] div(T[] x, T[] y) throws Exception {
 		T[] absoluteX = absolute(x);
 		T[] dividend = zeros(x.length + y.length);
 		System.arraycopy(absoluteX, 0, dividend, 0, absoluteX.length);
@@ -165,7 +165,7 @@ public class IntegerLib<T> extends CircuitLib<T> {
 	}
 
 
-	public T[] reminder(T[] x, T[] y) throws Exception {
+	public T[] mod(T[] x, T[] y) throws Exception {
 		T Xneg = x[x.length-1];
 		T[] absoluteX = absolute(x);
 		T[] absoluteY = absolute(y);

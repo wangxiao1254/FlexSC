@@ -23,7 +23,7 @@ public class TestRemainder extends Test_2Input1Output<GCSignal>{
 			b = (b == 0) ? 1 : b;
 			runThreads(new Helper(rnd.nextInt()%(1<<15), b){
 				public GCSignal[] secureCompute(GCSignal[] Signala, GCSignal[] Signalb, CompEnv<GCSignal> e) throws Exception {
-					return new IntegerLib<GCSignal>(e).reminder(Signala ,Signalb);}
+					return new IntegerLib<GCSignal>(e).mod(Signala ,Signalb);}
 
 				public int plainCompute(int x, int y) {
 					return x%y;}
