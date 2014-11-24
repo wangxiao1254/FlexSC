@@ -1,5 +1,3 @@
-// Copyright (C) 2014 by Xiao Shaun Wang <wangxiao@cs.umd.edu>
-
 package gc;
 
 import java.io.InputStream;
@@ -11,7 +9,7 @@ import flexsc.Party;
 
 public abstract class GCCompEnv extends CompEnv<GCSignal> {
 	public GCCompEnv(InputStream is, OutputStream os, Party p) {
-		super(is, os, p, Mode.REAL);
+		super(is, os, p, Mode.OPT);
 	}
 
 	public GCSignal ONE() {
