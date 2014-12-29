@@ -52,6 +52,14 @@ public class TrivialPrivateOram<T> extends OramParty<T> {
 
 		return finalRes;
 	}
+	
+	public T[] read(int index) {
+		return result[index].data;
+	}
+	
+	public void write(int index, T[] d) {
+		result[index].data = d;
+	}
 
 	public T[] read(T[] scIden) {
 		scIden = Arrays.copyOf(scIden, lengthOfIden);

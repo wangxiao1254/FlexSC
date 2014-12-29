@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
 
+import flexsc.Party;
+
 public class Utils {
 	public static Boolean[] toBooleanArray(boolean[] a) {
 		Boolean[] res = new Boolean[a.length];
@@ -166,5 +168,6 @@ public class Utils {
 		a /= Math.pow(2, offset);
 		return a;
 	}
-
+	
+	
 }

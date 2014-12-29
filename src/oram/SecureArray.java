@@ -8,8 +8,8 @@ import flexsc.CompEnv;
 public class SecureArray<T> {
 	static final int threshold = 256;
 	boolean useTrivialOram = false;
-	TrivialPrivateOram<T> trivialOram = null;
-	RecursiveCircuitOram<T> circuitOram = null;
+	public TrivialPrivateOram<T> trivialOram = null;
+	public RecursiveCircuitOram<T> circuitOram = null;
 	public int lengthOfIden;
 
 	public SecureArray(CompEnv<T> env, int N, int dataSize) throws Exception {

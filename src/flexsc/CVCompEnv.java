@@ -13,6 +13,7 @@ public class CVCompEnv extends BooleanCompEnv {
 		this.p = p;
 	}
 
+	public int numOfAnds = 0;
 	@Override
 	public Boolean inputOfAlice(boolean in) {
 		Boolean res = null;
@@ -64,6 +65,7 @@ public class CVCompEnv extends BooleanCompEnv {
 
 	@Override
 	public Boolean and(Boolean a, Boolean b) {
+		numOfAnds ++;
 		return a && b;
 	}
 
