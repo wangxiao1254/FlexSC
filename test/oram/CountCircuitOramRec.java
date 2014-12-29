@@ -100,9 +100,9 @@ public class CountCircuitOramRec {
 //					System.out.println(Flag.sw.ands + " " + t / 1000000000.0
 //							+ " " + Flag.sw.ands / t * 1000);
 //					Flag.sw.addCounter();
-
-					Runtime rt = Runtime.getRuntime();
-					double usedMB = (rt.totalMemory() - rt.freeMemory()) / 1024.0 / 1024.0;
+//
+//					Runtime rt = Runtime.getRuntime();
+//					double usedMB = (rt.totalMemory() - rt.freeMemory()) / 1024.0 / 1024.0;
 //					System.out.println("mem: " + usedMB);
 				}
 

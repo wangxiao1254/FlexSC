@@ -99,13 +99,13 @@ public class TestCircuitOramRec {
 					Flag.sw.startTotal();
 					client.write(client.baseOram.lib.toSignals(element), scData);
 					double t = Flag.sw.stopTotal();
-//					System.out.println(Flag.sw.ands + " " + t / 1000000000.0
-//							+ " " + Flag.sw.ands / t * 1000);
+					System.out.println(Flag.sw.ands + " " + t / 1000000000.0
+							+ " " + Flag.sw.ands / t * 1000);
 					Flag.sw.addCounter();
 
 					Runtime rt = Runtime.getRuntime();
 					double usedMB = (rt.totalMemory() - rt.freeMemory()) / 1024.0 / 1024.0;
-//					System.out.println("mem: " + usedMB);
+					System.out.println("mem: " + usedMB);
 				}
 
 				for (int i = 0; i < readCount; ++i) {
