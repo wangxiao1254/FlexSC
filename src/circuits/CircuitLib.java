@@ -151,7 +151,6 @@ public class CircuitLib<T> {
 		return env.xor(x, SIGNAL_ONE);
 	}
 
-	// tested
 	public T[] not(T[] x) {
 		assert (x != null) : "CircuitLib.not[]: bad input";
 

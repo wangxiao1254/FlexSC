@@ -87,7 +87,6 @@ public class TrivialPrivateOram<T> extends OramParty<T> {
 		T[] pos = env.newTArray(1);
 		pos[0] = lib.SIGNAL_ONE;
 		Block<T> scNewBlock = new Block<T>(iden, pos, data, lib.SIGNAL_ZERO);
-//		lib.add(result, scNewBlock);
 		lib.conditionalAdd(result, scNewBlock, condition);
 	}
 

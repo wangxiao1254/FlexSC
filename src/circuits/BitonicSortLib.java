@@ -46,7 +46,6 @@ public class BitonicSortLib<T> extends IntegerLib<T> {
 
 		T[] s2 = mux(data[j], data[i], swap);
 		s2 = xor(s2, data[i]);
-//		System.out.println("!!"+data[j].length+" " +s2.length);
 		T[] di = xor(data[j], s2);
 		T[] dj = xor(data[i], s2);
 		data[i] = di;
@@ -83,8 +82,6 @@ public class BitonicSortLib<T> extends IntegerLib<T> {
 		s = xor(s, key[i]);
 		T[] ki = xor(key[j], s);
 		T[] kj = xor(key[i], s);
-//		T[] ki = mux(key[i], key[j], swap);
-//		T[] kj = mux(key[j], key[i], swap);
 		key[i] = ki;
 		key[j] = kj;
 	}
@@ -133,7 +130,6 @@ public class BitonicSortLib<T> extends IntegerLib<T> {
 
 		T[] s2 = mux(data[j], data[i], swap);
 		s2 = xor(s2, data[i]);
-//		System.out.println("!!"+data[j].length+" " +s2.length);
 		T[] di = xor(data[j], s2);
 		T[] dj = xor(data[i], s2);
 		data[i] = di;
@@ -177,7 +173,6 @@ public class BitonicSortLib<T> extends IntegerLib<T> {
 
 		T s2 = mux(data[j], data[i], swap);
 		s2 = xor(s2, data[i]);
-//		System.out.println("!!"+data[j].length+" " +s2.length);
 		T di = xor(data[j], s2);
 		T dj = xor(data[i], s2);
 		data[i] = di;

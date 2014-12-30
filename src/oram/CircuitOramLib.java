@@ -48,47 +48,6 @@ public class CircuitOramLib<T> extends BucketLib<T> {
 		return result;
 	}
 
-	public void print(T[][] data, T[] bot) {
-		if (env.getParty() == Party.Bob || env instanceof gc.GCCompEnv)
-			return;
-		for (int i = 0; i < data.length; ++i) {
-			if ((Boolean) bot[i]) {
-				System.out.print("d ");
-			} else
-				System.out.print(Utils.toInt(Utils
-						.tobooleanArray((Boolean[]) data[i])) + " ");
-		}
-		System.out.print("\n");
-	}
-
-	public void print(T[] data, T bot) {
-		if (env.getParty() == Party.Bob || env instanceof gc.GCCompEnv)
-			return;
-
-		if ((Boolean) bot) {
-			System.out.print("d ");
-		} else
-			System.out
-					.print(Utils.toInt(Utils.tobooleanArray((Boolean[]) data))
-							+ " ");
-		System.out.print("\n");
-	}
-
-	public void print(String s, T[] data, T bot) {
-
-		if (env.getParty() == Party.Bob)
-			return;
-
-		System.out.print(s);
-		if ((Boolean) bot) {
-			System.out.print("d ");
-		} else
-			System.out
-					.print(Utils.toInt(Utils.tobooleanArray((Boolean[]) data))
-							+ " ");
-		System.out.print("\n");
-	}
-
 	public void flush(Block<T>[][] scPath, boolean[] path, Block<T>[] scQueue) {
 		// make path to signal
 		T[] pathSignal = env.newTArray(path.length);
@@ -202,5 +161,46 @@ public class CircuitOramLib<T> extends BucketLib<T> {
 			lBot = mux(lBot, targetBot[i + 1], notBot);
 			conditionalAdd(scPath[i], holdTmp, firstIf);
 		}
+	}
+	
+	public void print(T[][] data, T[] bot) {
+		if (env.getParty() == Party.Bob || env instanceof gc.GCCompEnv)
+			return;
+		for (int i = 0; i < data.length; ++i) {
+			if ((Boolean) bot[i]) {
+				System.out.print("d ");
+			} else
+				System.out.print(Utils.toInt(Utils
+						.tobooleanArray((Boolean[]) data[i])) + " ");
+		}
+		System.out.print("\n");
+	}
+
+	public void print(T[] data, T bot) {
+		if (env.getParty() == Party.Bob || env instanceof gc.GCCompEnv)
+			return;
+
+		if ((Boolean) bot) {
+			System.out.print("d ");
+		} else
+			System.out
+					.print(Utils.toInt(Utils.tobooleanArray((Boolean[]) data))
+							+ " ");
+		System.out.print("\n");
+	}
+
+	public void print(String s, T[] data, T bot) {
+
+		if (env.getParty() == Party.Bob)
+			return;
+
+		System.out.print(s);
+		if ((Boolean) bot) {
+			System.out.print("d ");
+		} else
+			System.out
+					.print(Utils.toInt(Utils.tobooleanArray((Boolean[]) data))
+							+ " ");
+		System.out.print("\n");
 	}
 }

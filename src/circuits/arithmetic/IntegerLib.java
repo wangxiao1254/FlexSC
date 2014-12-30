@@ -266,7 +266,6 @@ public class IntegerLib<T> extends CircuitLib<T> implements ArithmeticLib<T> {
 		T[] res = env.newTArray(x.length);
 		System.arraycopy(mux(Arrays.copyOfRange(x, 0, s), zeros(s), sign), 0,
 				res, 0, s);
-		// System.arraycopy(sign, s, res, s, s);
 		System.arraycopy(
 				mux(Arrays.copyOfRange(x, s, x.length),
 						Arrays.copyOfRange(x, 0, x.length), sign), 0, res, s,
@@ -395,7 +394,6 @@ public class IntegerLib<T> extends CircuitLib<T> implements ArithmeticLib<T> {
 			return res;
 		T[] left = numberOfOnesN(Arrays.copyOfRange(res, 0, res.length/2));
 		T[] right = numberOfOnesN(Arrays.copyOfRange(res, res.length/2, res.length));
-//		System.out.println(res.length/2+" "+left.length);
 		return unSignedAdd(left, right);
 	}
 
@@ -451,7 +449,6 @@ public class IntegerLib<T> extends CircuitLib<T> implements ArithmeticLib<T> {
 
 		T[] z0 = karatsubaMultiply(xlo, ylo);
 		T[] z2 = karatsubaMultiply(xhi, yhi);
-		// System.out.println(z0.length+" "+z2.length);
 
 		T[] z1 = sub(
 				padSignal(
@@ -539,18 +536,4 @@ public class IntegerLib<T> extends CircuitLib<T> implements ArithmeticLib<T> {
 	public int numBits() {
 		return width;
 	}
-	
-//	public T[][] randomPermute(T[][] x, ) {
-//		BigInteger[] res = new BigInteger[x.length];
-//		for(int i = 0; i < x.length; ++i) {
-//			T[] rnd = randBools(x[i].length);
-//			T[] xMrnd = sub(x[i], rnd);
-//			boolean[] alice = env.outputToAlice(rnd);
-//			boolean[] bob = env.outputToBob(xMrnd);
-//			if(env.getParty() == Party.Alice)
-//				res[i] =  Utils.toBigInteger(alice);
-//			else
-//				res[i] = Utils.toBigInteger(bob);
-//		}
-//	}
 }

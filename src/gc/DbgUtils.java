@@ -15,7 +15,7 @@ public class DbgUtils {
 			throws Exception {
 		if (env instanceof GCGen) {
 			bs.send(((GCGen) env).os);
-			((GCGen) env).R.send(((GCGen) env).os);
+			GCGen.R.send(((GCGen) env).os);
 		} else {
 			int x;
 			GCSignal glb = GCSignal.receive(((GCEva) env).is);
@@ -34,7 +34,7 @@ public class DbgUtils {
 
 	static void debugLabel(CompEnv<GCSignal> env, GCSignal bs, String msg) {
 		if (env instanceof GCGen) {
-			System.err.println(String.format("[%s] %s, %s",  msg, bs.toHexStr(), ((GCGen) env).R.xor(bs).toHexStr()));
+			System.err.println(String.format("[%s] %s, %s",  msg, bs.toHexStr(), GCGen.R.xor(bs).toHexStr()));
 		} else
 			System.out.println(String.format("[%s] %s",  msg, bs.toHexStr()));
 	}

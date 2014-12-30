@@ -27,7 +27,7 @@ public abstract class OramParty<T> {
 	public BucketLib<T> lib;
 	boolean[] dummyArray;
 
-	public OramParty(CompEnv<T> env, int N, int dataSize) {
+	void setParameters(CompEnv<T> env, int N, int dataSize) {
 		this.env = env;
 		this.is = env.is;
 		this.os = env.os;
@@ -45,6 +45,9 @@ public abstract class OramParty<T> {
 		this.N = 1 << logN;
 		lengthOfData = dataSize;
 		lengthOfIden = logN;
+	}
+	public OramParty(CompEnv<T> env, int N, int dataSize) {
+		setParameters(env, N, dataSize);
 		lengthOfPos = logN - 1;
 		p = env.p;
 		mode = env.m;
@@ -53,21 +56,7 @@ public abstract class OramParty<T> {
 	}
 
 	public OramParty(CompEnv<T> env, int N, int dataSize, int lengthOfPos) {
-		this.env = env;
-		this.is = env.is;
-		this.os = env.os;
-
-		this.dataSize = dataSize;
-		int a = 1;
-		logN = 1;
-		while (a < N) {
-			a *= 2;
-			++logN;
-		}
-		--logN;
-		this.N = 1 << logN;
-		lengthOfData = dataSize;
-		lengthOfIden = logN;
+		setParameters(env, N, dataSize);
 		this.lengthOfPos = lengthOfPos;
 		p = env.p;
 		mode = env.m;
@@ -142,7 +131,6 @@ public abstract class OramParty<T> {
 	}
 
 	public Block<T>[] inputBucketOfServer(PlainBlock[] b) {
-		// System.out.println(b.length);
 		T[] TArray = env.inputOfBob(PlainBlock.toBooleanArray(b));
 		return toBlocks(TArray, lengthOfIden, lengthOfPos, lengthOfData,
 				b.length);// new Block<T>(TArray,

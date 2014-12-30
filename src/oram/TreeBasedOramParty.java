@@ -112,7 +112,6 @@ public abstract class TreeBasedOramParty<T> extends OramParty<T> {
 	public PlainBlock[][] preparePlainPath(Block<T>[][] blocks) {
 		Block<T>[][] randomSCPath = lib.newBlockMatrix(blocks.length);
 
-		// this part can potentially be much better :)!!! io!
 		PlainBlock[][] randomPath = new PlainBlock[blocks.length][];
 		for (int i = 0; i < randomPath.length; ++i) {
 			randomPath[i] = randomBucket(blocks[i].length);
