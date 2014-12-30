@@ -7,9 +7,6 @@ import java.security.SecureRandom;
 import org.junit.Assert;
 import org.junit.Test;
 
-import ot.NPOTReceiver;
-import ot.NPOTSender;
-
 public class TestNPOT {
 	GCSignal[] m;
 	boolean c;

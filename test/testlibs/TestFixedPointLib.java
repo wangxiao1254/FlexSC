@@ -1,5 +1,6 @@
 package testlibs;
 
+import flexsc.CompEnv;
 import harness.TestFixedPoint;
 
 import java.util.Random;
@@ -7,7 +8,6 @@ import java.util.Random;
 import org.junit.Test;
 
 import circuits.arithmetic.FixedPointLib;
-import flexsc.CompEnv;
 
 //import gc.T;
 
@@ -28,7 +28,7 @@ public class TestFixedPointLib extends TestFixedPoint {
 
 				@Override
 				public <T> T[] secureCompute(T[] a, T[] b, int offset,
-						CompEnv<T> env) throws Exception {
+						CompEnv<T> env)  {
 					return new FixedPointLib<T>(env, width, offset).add(a, b);
 				}
 			});
@@ -45,7 +45,7 @@ public class TestFixedPointLib extends TestFixedPoint {
 			TestFixedPoint.runThreads(new Helper(d1, d2) {
 				@Override
 				public <T>T[] secureCompute(T[] a, T[] b,
-						int offset, CompEnv<T> env) throws Exception {
+						int offset, CompEnv<T> env) {
 					return new FixedPointLib<T>(env, width, offset).sub(a, b);
 				}
 				@Override
@@ -67,7 +67,7 @@ public class TestFixedPointLib extends TestFixedPoint {
 
 				@Override
 				public <T>T[] secureCompute(T[] a, T[] b,
-						int offset, CompEnv<T> env) throws Exception {
+						int offset, CompEnv<T> env) {
 					return new FixedPointLib<T>(env, width, offset)
 							.multiply(a, b);
 				}
@@ -93,7 +93,7 @@ public class TestFixedPointLib extends TestFixedPoint {
 
 				@Override
 				public<T> T[] secureCompute(T[] a, T[] b,
-						int offset, CompEnv<T> env) throws Exception {
+						int offset, CompEnv<T> env) {
 					return new FixedPointLib<T>(env, width, offset).div(
 							a, b);
 				}
@@ -119,7 +119,7 @@ public class TestFixedPointLib extends TestFixedPoint {
 
 				@Override
 				public <T>T[] secureCompute(T[] a, T[] b,
-						int offset, CompEnv<T> env) throws Exception {
+						int offset, CompEnv<T> env) {
 					return new FixedPointLib<T>(env, width, offset).sqrt(a);
 				}
 

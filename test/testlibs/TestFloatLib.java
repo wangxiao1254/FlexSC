@@ -27,8 +27,7 @@ public class TestFloatLib extends TestHarness {
 					return a;
 				}
 				@Override
-				public <T> T[] secureCompute(T[] a, T[] b, FloatLib<T> env)
-						throws Exception {
+				public <T> T[] secureCompute(T[] a, T[] b, FloatLib<T> env) {
 					return a;
 				}
 			});
@@ -48,8 +47,7 @@ public class TestFloatLib extends TestHarness {
 				}
 
 				@Override
-				public <T> T[] secureCompute(T[] a, T[] b, FloatLib<T> env)
-						throws Exception {
+				public <T> T[] secureCompute(T[] a, T[] b, FloatLib<T> env) {
 					return env.add(a, b);
 				}
 			});
@@ -63,8 +61,7 @@ public class TestFloatLib extends TestHarness {
 			}
 
 			@Override
-			public <T> T[] secureCompute(T[] a, T[] b, FloatLib<T> env)
-					throws Exception {
+			public <T> T[] secureCompute(T[] a, T[] b, FloatLib<T> env) {
 				return env.add(a, b);
 			}
 		});
@@ -85,8 +82,7 @@ public class TestFloatLib extends TestHarness {
 				}
 
 				@Override
-				public <T> T[] secureCompute(T[] a, T[] b, FloatLib<T> env)
-						throws Exception {
+				public <T> T[] secureCompute(T[] a, T[] b, FloatLib<T> env) {
 					return env.sub(a, b);
 				}
 			});
@@ -99,8 +95,7 @@ public class TestFloatLib extends TestHarness {
 			}
 
 			@Override
-			public <T> T[] secureCompute(T[] a, T[] b, FloatLib<T> env)
-					throws Exception {
+			public <T> T[] secureCompute(T[] a, T[] b, FloatLib<T> env) {
 				return env.sub(a, b);
 			}
 		});
@@ -121,8 +116,7 @@ public class TestFloatLib extends TestHarness {
 				}
 
 				@Override
-				public <T> T[] secureCompute(T[] a, T[] b, FloatLib<T> env)
-						throws Exception {
+				public <T> T[] secureCompute(T[] a, T[] b, FloatLib<T> env) {
 					return env.div(a, b);
 				}
 			});
@@ -144,8 +138,7 @@ public class TestFloatLib extends TestHarness {
 				}
 
 				@Override
-				public <T> T[] secureCompute(T[] a, T[] b, FloatLib<T> env)
-						throws Exception {
+				public <T> T[] secureCompute(T[] a, T[] b, FloatLib<T> env) {
 					return env.multiply(a, b);
 				}
 			});
@@ -165,8 +158,7 @@ public class TestFloatLib extends TestHarness {
 				}
 
 				@Override
-				public <T> T[] secureCompute(T[] a, T[] b, FloatLib<T> env)
-						throws Exception {
+				public <T> T[] secureCompute(T[] a, T[] b, FloatLib<T> env) {
 					return env.sqrt(a);
 				}
 			});

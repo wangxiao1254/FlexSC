@@ -24,7 +24,7 @@ public class TestIntegerLib extends TestHarness {
 			Test_2Input1Output.runThreads(new Helper(rnd.nextInt() % (1 << 31), rnd.nextInt()
 					% (1 << 31)) {
 				public<T> T[] secureCompute(T[] Signala,
-						T[] Signalb, CompEnv<T> e) throws Exception {
+						T[] Signalb, CompEnv<T> e)  {
 					return new IntegerLib<T>(e).add(Signala, Signalb);
 				}
 
@@ -42,7 +42,7 @@ public class TestIntegerLib extends TestHarness {
 			Test_2Input1Output.runThreads(new Helper(rnd.nextInt() % (1 << 30), rnd.nextInt()
 					% (1 << 30)) {
 				public<T> T[] secureCompute(T[] Signala,
-						T[] Signalb, CompEnv<T> e) throws Exception {
+						T[] Signalb, CompEnv<T> e)  {
 					return new IntegerLib<T>(e).sub(Signala, Signalb);
 				}
 
@@ -62,7 +62,7 @@ public class TestIntegerLib extends TestHarness {
 			b = (b == 0) ? 1 : b;
 			Test_2Input1Output.runThreads(new Helper(a, b) {
 				public<T> T[] secureCompute(T[] Signala,
-						T[] Signalb, CompEnv<T> e) throws Exception {
+						T[] Signalb, CompEnv<T> e)  {
 					return new IntegerLib<T>(e).div(Signala, Signalb);
 				}
 
@@ -82,7 +82,7 @@ public class TestIntegerLib extends TestHarness {
 			b = (b == 0) ? 1 : b;
 			Test_2Input1Output.runThreads(new Helper(a, b) {
 				public<T> T[] secureCompute(T[] Signala,
-						T[] Signalb, CompEnv<T> e) throws Exception {
+						T[] Signalb, CompEnv<T> e)  {
 					return new IntegerLib<T>(e).multiply(Signala, Signalb);
 				}
 
@@ -101,7 +101,7 @@ public class TestIntegerLib extends TestHarness {
 			b = (b == 0) ? 1 : b;
 			Test_2Input1Output.runThreads(new Helper(rnd.nextInt() % (1 << 15), b) {
 				public<T> T[] secureCompute(T[] Signala,
-						T[] Signalb, CompEnv<T> e) throws Exception {
+						T[] Signalb, CompEnv<T> e)  {
 					return new IntegerLib<T>(e).mod(Signala, Signalb);
 				}
 
@@ -119,7 +119,7 @@ public class TestIntegerLib extends TestHarness {
 			Test_2Input1Output.runThreads(new Helper(rnd.nextInt() % (1 << 30), rnd.nextInt()
 					% (1 << 30)) {
 				public<T> T[] secureCompute(T[] Signala,
-						T[] Signalb, CompEnv<T> e) throws Exception {
+						T[] Signalb, CompEnv<T> e)  {
 					T[] res = e.newTArray(1);
 					res[0] = new IntegerLib<T>(e).eq(
 							Signala, Signalb);
@@ -136,7 +136,7 @@ public class TestIntegerLib extends TestHarness {
 			int a = rnd.nextInt(1 << 30);
 			Test_2Input1Output.runThreads(new Helper(a, a) {
 				public<T> T[] secureCompute(T[] Signala,
-						T[] Signalb, CompEnv<T> e) throws Exception {
+						T[] Signalb, CompEnv<T> e)  {
 					T[] res = e.newTArray(1);
 					res[0] = new IntegerLib<T>(e).eq(
 							Signala, Signalb);
@@ -157,7 +157,7 @@ public class TestIntegerLib extends TestHarness {
 			Test_2Input1Output.runThreads(new Helper(rnd.nextInt() % (1 << 30), rnd.nextInt()
 					% (1 << 30)) {
 				public<T> T[] secureCompute(T[] Signala,
-						T[] Signalb, CompEnv<T> e) throws Exception {
+						T[] Signalb, CompEnv<T> e)  {
 					T[] res = e.newTArray(1);
 					res[0] = new IntegerLib<T>(e).geq(
 							Signala, Signalb);
@@ -174,7 +174,7 @@ public class TestIntegerLib extends TestHarness {
 			int a = rnd.nextInt() % (1 << 30);
 			Test_2Input1Output.runThreads(new Helper(a, a) {
 				public<T> T[] secureCompute(T[] Signala,
-						T[] Signalb, CompEnv<T> e) throws Exception {
+						T[] Signalb, CompEnv<T> e)  {
 					T[] res = e.newTArray(1);
 					res[0] = new IntegerLib<T>(e).geq(
 							Signala, Signalb);
@@ -195,7 +195,7 @@ public class TestIntegerLib extends TestHarness {
 			Test_2Input1Output.runThreads(new Helper(rnd.nextInt() % (1 << 30), rnd.nextInt()
 					% (1 << 30)) {
 				public<T> T[] secureCompute(T[] Signala,
-						T[] Signalb, CompEnv<T> e) throws Exception {
+						T[] Signalb, CompEnv<T> e)  {
 					T[] res = e.newTArray(1);
 					res[0] = new IntegerLib<T>(e).leq(
 							Signala, Signalb);
@@ -212,7 +212,7 @@ public class TestIntegerLib extends TestHarness {
 			int a = rnd.nextInt(1 << 30);
 			Test_2Input1Output.runThreads(new Helper(a, a) {
 				public<T> T[] secureCompute(T[] Signala,
-						T[] Signalb, CompEnv<T> e) throws Exception {
+						T[] Signalb, CompEnv<T> e)  {
 					T[] res = e.newTArray(1);
 					res[0] = new IntegerLib<T>(e).leq(
 							Signala, Signalb);
@@ -232,7 +232,7 @@ public class TestIntegerLib extends TestHarness {
 			Test_2Input1Output.runThreads(new Helper(rnd.nextInt(1 << 30), 0) {
 				@Override
 				public<T> T[] secureCompute(T[] Signala,
-						T[] Signalb, CompEnv<T> e) throws Exception {
+						T[] Signalb, CompEnv<T> e)  {
 					return new IntegerLib<T>(e).sqrt(Signala);
 				}
 
@@ -251,7 +251,7 @@ public class TestIntegerLib extends TestHarness {
 		for (int i = 0; i < testCases; i++) {
 			Test_2Input1Output.runThreads(new Helper(rnd.nextInt(1 << 30), 0) {
 				public<T> T[] secureCompute(T[] Signala,
-						T[] Signalb, CompEnv<T> e) throws Exception {
+						T[] Signalb, CompEnv<T> e)  {
 					return new IntegerLib<T>(e).absolute(Signala);
 				}
 
@@ -269,7 +269,7 @@ public class TestIntegerLib extends TestHarness {
 		for (int i = 0; i < testCases; i++) {
 			Test_2Input1Output.runThreads(new Helper(rnd.nextInt(1 << 30), 0) {
 				public<T> T[] secureCompute(T[] Signala,
-						T[] Signalb, CompEnv<T> e) throws Exception {
+						T[] Signalb, CompEnv<T> e)  {
 					return new IntegerLib<T>(e).incrementByOne(Signala);
 				}
 
@@ -287,7 +287,7 @@ public class TestIntegerLib extends TestHarness {
 		for (int i = 0; i < testCases; i++) {
 			Test_2Input1Output.runThreads(new Helper(rnd.nextInt(1 << 30), 0) {
 				public<T> T[] secureCompute(T[] Signala,
-						T[] Signalb, CompEnv<T> e) throws Exception {
+						T[] Signalb, CompEnv<T> e)  {
 					return new IntegerLib<T>(e).decrementByOne(Signala);
 				}
 
@@ -305,7 +305,7 @@ public class TestIntegerLib extends TestHarness {
 		for (int i = 0; i < testCases; i++) {
 			Test_2Input1Output.runThreads(new Helper(rnd.nextInt(1 << 30), 4) {
 				public<T> T[] secureCompute(T[] Signala,
-						T[] Signalb, CompEnv<T> e) throws Exception {
+						T[] Signalb, CompEnv<T> e)  {
 					return new IntegerLib<T>(e).leftPrivateShift(Signala, Signalb);
 				}
 

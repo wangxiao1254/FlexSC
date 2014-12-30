@@ -12,4 +12,16 @@ public enum Mode {
 	COUNT,
 	//Half Gates
 	OPT;
+
+	public static Mode getMode(String optionValue) {
+		if(optionValue.equals("VERIFY")) {
+			return VERIFY;
+		} else if(optionValue.equals("REAL")) {
+			return REAL;
+		} else if(optionValue.equals("COUNT")) {
+			return COUNT;
+		} else if(optionValue.equals("OPT")) {
+			return OPT;
+		} else return null;
+	}
 }

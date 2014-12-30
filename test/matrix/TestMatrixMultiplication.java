@@ -21,8 +21,7 @@ public class TestMatrixMultiplication extends TestHarness {
 
 				@Override
 				public <T>T[][][] secureCompute(T[][][] a,
-						T[][][] b, DenseMatrixLib<T> lib)
-						throws Exception {
+						T[][][] b, DenseMatrixLib<T> lib) {
 					return lib.multiply(a, b);
 				}
 

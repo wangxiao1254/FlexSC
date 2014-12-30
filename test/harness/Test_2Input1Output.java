@@ -2,11 +2,12 @@ package harness;
 
 import org.junit.Assert;
 
+import util.EvaRunnable;
+import util.GenRunnable;
 import util.Utils;
 import flexsc.CompEnv;
 import flexsc.Mode;
 import flexsc.PMCompEnv;
-import flexsc.Party;
 
 public class Test_2Input1Output extends TestHarness {
 
@@ -23,85 +24,82 @@ public class Test_2Input1Output extends TestHarness {
 			b = Utils.fromInt(bb, 32);
 		}
 
-		public abstract<T> T[] secureCompute(T[] Signala, T[] Signalb, CompEnv<T> e)
-				throws Exception;
+		public abstract<T> T[] secureCompute(T[] Signala, T[] Signalb, CompEnv<T> e);
 
 		public abstract int plainCompute(int x, int y);
 	}
 
-	public static class GenRunnable<T> extends network.Server implements Runnable {
+	public static class GenRunnableTest2O1I<T> extends GenRunnable<T> {
+		public double andgates;
+		public double encs;
+		
 		boolean[] z;
 		Helper h;
-
-		GenRunnable(Helper h) {
+		public GenRunnableTest2O1I(Helper h) {
 			this.h = h;
 		}
+		
+		T[] a;
+		T[] b;
+		T[] d;
+		@Override
+		public void prepareInput(CompEnv<T> gen) {
+			a = gen.inputOfAlice(h.a);
+			b = gen.inputOfBob(new boolean[32]);
+		}
 
-		public void run() {
-			try {
-				listen(54321);
-				@SuppressWarnings("unchecked")
-				CompEnv<T> gen = CompEnv.getEnv(m, Party.Alice, is, os);
+		@Override
+		public void secureCompute(CompEnv<T> gen) {
+			d = h.secureCompute(a, b, gen);
+		}
 
-				T[] a = gen.inputOfAlice(h.a);
-				T[] b = gen.inputOfBob(new boolean[32]);
-
-				T[] d = h.secureCompute(a, b, gen);
-				os.flush();
-
-				z = gen.outputToAlice(d);
-
-				disconnect();
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.exit(1);
+		@Override
+		public void prepareOutput(CompEnv<T> gen) {
+			z = gen.outputToAlice(d);
+			if (m == Mode.COUNT) {
+					((PMCompEnv) gen).statistic.finalize();
+					andgates = ((PMCompEnv) gen).statistic.andGate;
+					encs = ((PMCompEnv) gen).statistic.NumEncAlice;
+				System.out.println(andgates + " " + encs);
+			} else {
+				Assert.assertEquals(h.plainCompute(h.intA, h.intB),
+						Utils.toSignedInt(z));
 			}
 		}
 	}
 
-	public static class EvaRunnable<T> extends network.Client implements Runnable {
-		Helper h;
-		public double andgates;
-		public double encs;
-
-		EvaRunnable(Helper h) {
+	public static class EvaRunnableTest2O1I<T> extends EvaRunnable<T> {		
+		EvaRunnableTest2O1I(Helper h) {
 			this.h = h;
 		}
 
-		public void run() {
-			try {
-				connect("localhost", 54321);
-				@SuppressWarnings("unchecked")
-				CompEnv<T> env = CompEnv.getEnv(m, Party.Bob, is, os);
+		Helper h;
+		T[] a;
+		T[] b;
+		T[] d;
 
-				T[] a = env.inputOfAlice(new boolean[32]);
-				T[] b = env.inputOfBob(h.b);
+		@Override
+		public void prepareInput(CompEnv<T> env) {
+			a = env.inputOfAlice(new boolean[32]);
+			b = env.inputOfBob(h.b);
+		}
 
-				if (m == Mode.COUNT) {
-					((PMCompEnv) env).statistic.flush();
-					;
-				}
-				T[] d = h.secureCompute(a, b, env);
-				if (m == Mode.COUNT) {
-					((PMCompEnv) env).statistic.finalize();
-					andgates = ((PMCompEnv) env).statistic.andGate;
-					encs = ((PMCompEnv) env).statistic.NumEncAlice;
-				}
+		@Override
+		public void secureCompute(CompEnv<T> env) {
+			d = h.secureCompute(a, b, env);
+		}
 
-				env.outputToAlice(d);
-				os.flush();
-
-				disconnect();
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.exit(1);
-			}
+		@Override
+		public void prepareOutput(CompEnv<T> env) {
+			env.outputToAlice(d);
 		}
 	}
 
 	static public <T>void runThreads(Helper h) throws Exception {
-		GenRunnable<T> gen = new GenRunnable<T>(h);
-		EvaRunnable<T> env = new EvaRunnable<T>(h);
+		GenRunnable<T> gen = new GenRunnableTest2O1I<T>(h);
+		gen.setParameter(m, 54321);
+		EvaRunnable<T> env = new EvaRunnableTest2O1I<T>(h);
+		env.setParameter(m, "localhost", 54321);
 		Thread tGen = new Thread(gen);
 		Thread tEva = new Thread(env);
 		tGen.start();
@@ -109,15 +107,5 @@ public class Test_2Input1Output extends TestHarness {
 		tEva.start();
 		tGen.join();
 		tEva.join();
-
-		if (m == Mode.COUNT) {
-			System.out.println(env.andgates + " " + env.encs);
-		} else {
-			Assert.assertEquals(h.plainCompute(h.intA, h.intB),
-					Utils.toSignedInt(gen.z));
-		}
-		// System.out.println(Arrays.toString(gen.z));
-
 	}
-
 }

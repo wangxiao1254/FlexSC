@@ -19,8 +19,7 @@ public class TestMatrixAdd extends TestHarness {
 			TestMatrix.runThreads(new Helper(d1, d2) {
 				@Override
 				public <T>T[][][] secureCompute(T[][][] a,
-						T[][][] b, DenseMatrixLib<T> lib)
-						throws Exception {
+						T[][][] b, DenseMatrixLib<T> lib) {
 					return lib.add(a, b);
 				}
 

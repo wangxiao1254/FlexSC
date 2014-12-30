@@ -8,9 +8,6 @@ import java.util.Arrays;
 import org.junit.Assert;
 import org.junit.Test;
 
-import ot.NPOTReceiver;
-import ot.NPOTSender;
-
 public class TestNPOTMany {
 	static int n = 50000;
 	GCSignal[][] m;

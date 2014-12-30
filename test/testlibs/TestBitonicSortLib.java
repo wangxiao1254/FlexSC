@@ -23,8 +23,7 @@ public class TestBitonicSortLib extends TestHarness {
 				a[j] = rnd.nextInt() % (1 << 30);
 
 			TestSortHarness.runThreads(new Helper(a) {
-				public <T>T[][] secureCompute(T[][] Signala,
-						CompEnv<T> e) throws Exception {
+				public <T>T[][] secureCompute(T[][] Signala, CompEnv<T> e) {
 					BitonicSortLib<T> lib = new BitonicSortLib<T>(e);
 					lib.sort(Signala, lib.SIGNAL_ONE);
 					return Signala;

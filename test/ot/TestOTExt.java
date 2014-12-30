@@ -7,9 +7,6 @@ import java.security.SecureRandom;
 import org.junit.Assert;
 import org.junit.Test;
 
-import ot.OTExtReceiver;
-import ot.OTExtSender;
-
 public class TestOTExt {
 	static int n = 100000;
 	GCSignal[][] m;

@@ -4,13 +4,14 @@ import java.util.Random;
 
 import org.junit.Assert;
 
+import util.EvaRunnable;
+import util.GenRunnable;
 import circuits.arithmetic.DenseMatrixLib;
 import circuits.arithmetic.FixedPointLib;
 import circuits.arithmetic.FloatLib;
 import flexsc.CompEnv;
 import flexsc.Mode;
 import flexsc.PMCompEnv;
-import flexsc.Party;
 
 
 public class TestMatrix extends TestHarness {
@@ -29,7 +30,7 @@ public class TestMatrix extends TestHarness {
 		}
 
 		public abstract<T> T[][][] secureCompute(T[][][] a, T[][][] b,
-				DenseMatrixLib<T> lib) throws Exception;
+				DenseMatrixLib<T> lib) ;
 
 		public abstract double[][] plainCompute(double[][] a, double[][] b);
 	}
@@ -58,144 +59,139 @@ public class TestMatrix extends TestHarness {
 		System.out.print("]\n");
 	}
 
-	public static class GenRunnable<T> extends network.Server implements Runnable {
+	
+	public static class GenRunnableTestMatrix<T> extends GenRunnable<T> {
+		public double andgates;
+		public double encs;
+		
+		double[][] z;
+		DenseMatrixLib<T> lib;
+		Helper h;
+		public double error;
+		public GenRunnableTestMatrix(Helper h) {
+			this.h = h;
+		}
+		
+		T[][][] fgc1;
+		T[][][] fgc2;
+		T[][][] re;
+		@Override
+		public void prepareInput(CompEnv<T> gen) {
+			if (testFixedPoint)
+				lib = new DenseMatrixLib<T>(gen, new FixedPointLib<T>(gen, len, offset));
+			else
+				lib = new DenseMatrixLib<T>(gen, new FloatLib<T>(gen, VLength,PLength));
+
+			fgc1 = gen.newTArray(h.a.length, h.a[0].length, 1);
+			fgc2 = gen.newTArray(h.b.length, h.b[0].length, 1);
+			for (int i = 0; i < h.a.length; ++i)
+				for (int j = 0; j < h.a[0].length; ++j) 
+						fgc1[i][j] = lib.lib.inputOfAlice(h.a[i][j]);
+				
+			for (int i = 0; i < h.b.length; ++i)
+				for (int j = 0; j < h.b[0].length; ++j)
+						fgc2[i][j] = lib.lib.inputOfAlice(h.b[i][j]);
+		}
+
+		@Override
+		public void secureCompute(CompEnv<T> gen) {
+			re = h.secureCompute(fgc1, fgc2, lib);
+		}
+
+		@Override
+		public void prepareOutput(CompEnv<T> gen) {
+			z = new double[re.length][re[0].length];
+			for (int i = 0; i < re.length; ++i)
+				for (int j = 0; j < re[0].length; ++j)
+						z[i][j] = lib.lib.outputToAlice(re[i][j]);
+
+			if (m == Mode.COUNT) {
+					((PMCompEnv) gen).statistic.finalize();
+					andgates = ((PMCompEnv) gen).statistic.andGate;
+					encs = ((PMCompEnv) gen).statistic.NumEncAlice;
+				System.out.println(andgates + " " + encs);
+			} else {
+				double[][] result = h.plainCompute(h.a, h.b);
+
+				for (int i = 0; i < result.length; ++i)
+					for (int j = 0; j < result[0].length; ++j) {
+						double error = 0;
+						if (Math.abs(result[i][j]) > 0.1)
+							error = Math.abs((result[i][j] - z[i][j])
+									/ z[i][j]);
+						else
+							error = Math.abs((result[i][j] - z[i][j]));
+
+						if (error > error)
+							System.out.print(error + " " + z[i][j] + " "
+									+ result[i][j] + "(" + i + "," + j + ")\n");
+						Assert.assertTrue(error < error);
+					}
+			}
+		}
+	}
+
+	public static class EvaRunnableTestMatrix<T> extends EvaRunnable<T> {		
+		EvaRunnableTestMatrix(Helper h) {
+			this.h = h;
+		}
+
 		Helper h;
 		double[][] z;
 		DenseMatrixLib<T> lib;
+		T[][][] fgc1;
+		T[][][] fgc2;
+		T[][][] re;
+		@Override
+		public void prepareInput(CompEnv<T> env) {
+			if (testFixedPoint)
+				lib = new DenseMatrixLib<T>(env, new FixedPointLib<T>(env, len, offset));
+			else
+				lib = new DenseMatrixLib<T>(env, new FloatLib<T>(env, VLength,PLength));
+						
 
-		GenRunnable(Helper h) {
-			this.h = h;
+
+			fgc1 = env.newTArray(h.a.length, h.a[0].length, 1);
+			fgc2 = env.newTArray(h.b.length, h.b[0].length, 1);
+			for (int i = 0; i < h.a.length; ++i)
+				for (int j = 0; j < h.a[0].length; ++j)
+						fgc1[i][j] = lib.lib.inputOfAlice(h.a[i][j]);
+				
+			for (int i = 0; i < h.b.length; ++i)
+				for (int j = 0; j < h.b[0].length; ++j)
+					fgc2[i][j] = lib.lib.inputOfAlice(h.b[i][j]);
+			}
+
+		@Override
+		public void secureCompute(CompEnv<T> env) {
+			re = h.secureCompute(fgc1, fgc2, lib);
 		}
 
-		public void run() {
-			try {
-				listen(54321);
-				@SuppressWarnings("unchecked")
-				CompEnv<T> gen = CompEnv.getEnv(m, Party.Alice, is, os);
-
-				// PrintMatrix(h.a);
-				if (testFixedPoint)
-					lib = new DenseMatrixLib<T>(gen, new FixedPointLib<T>(gen, len, offset));
-				else
-					lib = new DenseMatrixLib<T>(gen, new FloatLib<T>(gen, VLength,PLength));
-
-				T[][][] fgc1 = gen.newTArray(h.a.length, h.a[0].length, 1);
-				T[][][] fgc2 = gen.newTArray(h.b.length, h.b[0].length, 1);
-				for (int i = 0; i < h.a.length; ++i)
-					for (int j = 0; j < h.a[0].length; ++j) 
-							fgc1[i][j] = lib.lib.inputOfAlice(h.a[i][j]);
-					
-				for (int i = 0; i < h.b.length; ++i)
-					for (int j = 0; j < h.b[0].length; ++j)
-							fgc2[i][j] = lib.lib.inputOfAlice(h.b[i][j]);
-					
-
-				T[][][] re = h.secureCompute(fgc1, fgc2, lib);
-				z = new double[re.length][re[0].length];
-				for (int i = 0; i < re.length; ++i)
-					for (int j = 0; j < re[0].length; ++j)
-							z[i][j] = lib.lib.outputToAlice(re[i][j]);
-
-				disconnect();
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.exit(1);
-			}
+		@Override
+		public void prepareOutput(CompEnv<T> env) {
+			for (int i = 0; i < re.length; ++i)
+				for (int j = 0; j < re[0].length; ++j)
+					env.outputToAlice(re[i][j]);
 		}
 	}
 
-	public static class EvaRunnable<T> extends network.Client implements Runnable {
-		Helper h;
-		DenseMatrixLib<T> lib;
-		public double andgates;
-		public double encs;
-
-		EvaRunnable(Helper h) {
-			this.h = h;
-		}
-
-		public void run() {
-			try {
-				connect("localhost", 54321);
-				@SuppressWarnings("unchecked")
-				CompEnv<T> env = CompEnv.getEnv(m, Party.Bob, is, os);
-
-				if (testFixedPoint)
-					lib = new DenseMatrixLib<T>(env, new FixedPointLib<T>(env, len, offset));
-				else
-					lib = new DenseMatrixLib<T>(env, new FloatLib<T>(env, VLength,PLength));
-							
-
-
-				T[][][] fgc1 = env.newTArray(h.a.length, h.a[0].length, 1);
-				T[][][] fgc2 = env.newTArray(h.b.length, h.b[0].length, 1);
-				for (int i = 0; i < h.a.length; ++i)
-					for (int j = 0; j < h.a[0].length; ++j)
-							fgc1[i][j] = lib.lib.inputOfAlice(h.a[i][j]);
-					
-				for (int i = 0; i < h.b.length; ++i)
-					for (int j = 0; j < h.b[0].length; ++j)
-						fgc2[i][j] = lib.lib.inputOfAlice(h.b[i][j]);
-
-				if (m == Mode.COUNT) {
-					((PMCompEnv) env).statistic.flush();
-				}
-
-				T[][][] re = h.secureCompute(fgc1, fgc2, lib);
-				if (m == Mode.COUNT) {
-					((PMCompEnv) env).statistic.finalize();
-					andgates = ((PMCompEnv) env).statistic.andGate;
-					encs = ((PMCompEnv) env).statistic.NumEncAlice;
-				}
-
-				for (int i = 0; i < re.length; ++i)
-					for (int j = 0; j < re[0].length; ++j)
-						env.outputToAlice(re[i][j]);
-
-				disconnect();
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.exit(1);
-			}
-		}
-	}
-
-	public static <T>void runThreads(Helper h, double errorLim) throws Exception {
-		GenRunnable<T> gen = new GenRunnable<T>(h);
-		EvaRunnable<T> env = new EvaRunnable<T>(h);
-
+	static public <T>void runThreads(Helper h, double error) throws Exception {
+		GenRunnableTestMatrix<T> gen = new GenRunnableTestMatrix<T>(h);
+		gen.error = error;
+		gen.setParameter(m, 54321);
+		EvaRunnable<T> env = new EvaRunnableTestMatrix<T>(h);
+		env.setParameter(m, "localhost", 54321);
 		Thread tGen = new Thread(gen);
 		Thread tEva = new Thread(env);
 		tGen.start();
-		Thread.sleep(1);
+		Thread.sleep(5);
 		tEva.start();
 		tGen.join();
-
-		double[][] result = h.plainCompute(h.a, h.b);
-
-		 PrintMatrix(result);
-		 PrintMatrix(gen.z);
-		if (m == Mode.COUNT) {
-			System.out.println(env.andgates + " " + env.encs);
-		} else {
-
-			for (int i = 0; i < result.length; ++i)
-				for (int j = 0; j < result[0].length; ++j) {
-					double error = 0;
-					if (Math.abs(result[i][j]) > 0.1)
-						error = Math.abs((result[i][j] - gen.z[i][j])
-								/ gen.z[i][j]);
-					else
-						error = Math.abs((result[i][j] - gen.z[i][j]));
-
-					if (error > errorLim)
-						System.out.print(error + " " + gen.z[i][j] + " "
-								+ result[i][j] + "(" + i + "," + j + ")\n");
-					Assert.assertTrue(error < errorLim);
-				}
-		}
+		tEva.join();
 	}
-	public static <T>void runThreads(Helper h) throws Exception {
-		runThreads(h, 0.01);
+	
+	static public <T>void runThreads(Helper h) throws Exception {
+		runThreads(h, 1e-3);
 	}
+
 }

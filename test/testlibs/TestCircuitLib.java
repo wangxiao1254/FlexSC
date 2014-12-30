@@ -24,7 +24,7 @@ public class TestCircuitLib extends TestHarness {
 			BigInteger a = new BigInteger(TestBigInteger.LENGTH, rnd);
 			BigInteger b = new BigInteger(TestBigInteger.LENGTH, rnd);
 			TestBigInteger.runThreads(new TestBigInteger.Helper(a, b) {
-				public <T>T[] secureCompute(T[] Signala, T[] Signalb, CompEnv<T> e) throws Exception {
+				public <T>T[] secureCompute(T[] Signala, T[] Signalb, CompEnv<T> e) {
 					return new IntegerLib<T>(e).hammingDistance(Signala, Signalb);}
 
 				public BigInteger plainCompute(BigInteger x, BigInteger y) {
@@ -40,7 +40,7 @@ public class TestCircuitLib extends TestHarness {
 		}
 	}
 	
-	//@Test
+	@Test
 	public void testRightPublicShift() throws Exception {
 		
 
@@ -48,7 +48,7 @@ public class TestCircuitLib extends TestHarness {
 			final int shift = Math.abs(rnd.nextInt() % 32);
 			Test_2Input1Output.runThreads(new Test_2Input1Output.Helper(rnd.nextInt(1 << 30), 0) {
 				public <T>T[] secureCompute(T[] Signala,
-						T[] Signalb, CompEnv<T> e) throws Exception {
+						T[] Signalb, CompEnv<T> e) {
 					return new IntegerLib<T>(e).rightPublicShift(Signala,
 							shift);
 				}
@@ -60,7 +60,7 @@ public class TestCircuitLib extends TestHarness {
 		}
 	}
 
-	//@Test
+	@Test
 	public void testConditionalLeftPublicShift() throws Exception {
 		
 
@@ -68,7 +68,7 @@ public class TestCircuitLib extends TestHarness {
 			final int shift = Math.abs(rnd.nextInt() % 32);
 			Test_2Input1Output.runThreads(new Test_2Input1Output.Helper(rnd.nextInt(1 << 30), 0) {
 				public<T> T[] secureCompute(T[] Signala,
-						T[] Signalb, CompEnv<T> e) throws Exception {
+						T[] Signalb, CompEnv<T> e) {
 					IntegerLib<T> lib = new IntegerLib<T>(e);
 					return lib.conditionalLeftPublicShift(Signala, shift,
 							lib.SIGNAL_ONE);
@@ -81,7 +81,7 @@ public class TestCircuitLib extends TestHarness {
 
 			Test_2Input1Output.runThreads(new Test_2Input1Output.Helper(rnd.nextInt(1 << 30), 0) {
 				public<T> T[] secureCompute(T[] Signala,
-						T[] Signalb, CompEnv<T> e) throws Exception {
+						T[] Signalb, CompEnv<T> e) {
 					IntegerLib<T> lib = new IntegerLib<T>(e);
 					return lib.conditionalLeftPublicShift(Signala, shift,
 							lib.SIGNAL_ZERO);
@@ -95,7 +95,7 @@ public class TestCircuitLib extends TestHarness {
 		}
 	}
 
-	//@Test
+	@Test
 	public void testConditionalRightPublicShift() throws Exception {
 		
 
@@ -103,7 +103,7 @@ public class TestCircuitLib extends TestHarness {
 			final int shift = Math.abs(rnd.nextInt() % 32);
 			Test_2Input1Output.runThreads(new Test_2Input1Output.Helper(rnd.nextInt(1 << 30), 0) {
 				public<T> T[] secureCompute(T[] Signala,
-						T[] Signalb, CompEnv<T> e) throws Exception {
+						T[] Signalb, CompEnv<T> e) {
 					IntegerLib<T> lib = new IntegerLib<T>(e);
 					return lib.conditionalRightPublicShift(Signala, shift,
 							lib.SIGNAL_ONE);
@@ -116,7 +116,7 @@ public class TestCircuitLib extends TestHarness {
 
 			Test_2Input1Output.runThreads(new Test_2Input1Output.Helper(rnd.nextInt(1 << 30), 0) {
 				public<T> T[] secureCompute(T[] Signala,
-						T[] Signalb, CompEnv<T> e) throws Exception {
+						T[] Signalb, CompEnv<T> e) {
 					IntegerLib<T> lib = new IntegerLib<T>(e);
 					return lib.conditionalRightPublicShift(Signala, shift,
 							lib.SIGNAL_ZERO);
@@ -130,7 +130,7 @@ public class TestCircuitLib extends TestHarness {
 		}
 	}
 
-	//@Test
+	@Test
 	public void testLeftPrivateShift() throws Exception {
 		
 
@@ -138,7 +138,7 @@ public class TestCircuitLib extends TestHarness {
 			int shift = rnd.nextInt(1 << 5);
 			Test_2Input1Output.runThreads(new Test_2Input1Output.Helper(rnd.nextInt(1 << 30), shift) {
 				public <T>T[] secureCompute(T[] Signala,
-						T[] Signalb, CompEnv<T> e) throws Exception {
+						T[] Signalb, CompEnv<T> e) {
 					return new IntegerLib<T>(e).leftPrivateShift(Signala,
 							Signalb);
 				}
@@ -150,7 +150,7 @@ public class TestCircuitLib extends TestHarness {
 		}
 	}
 
-	//@Test
+	@Test
 	public void testLeftPublicShift() throws Exception {
 		
 
@@ -158,7 +158,7 @@ public class TestCircuitLib extends TestHarness {
 			final int shift = Math.abs(rnd.nextInt() % 32);
 			Test_2Input1Output.runThreads(new Test_2Input1Output.Helper(rnd.nextInt(1 << 30), 0) {
 				public<T> T[] secureCompute(T[] Signala,
-						T[] Signalb, CompEnv<T> e) throws Exception {
+						T[] Signalb, CompEnv<T> e) {
 					return new IntegerLib<T>(e).leftPublicShift(Signala,
 							shift);
 				}
@@ -199,14 +199,14 @@ public class TestCircuitLib extends TestHarness {
 		return res;
 	}
 
-	//@Test
+	@Test
 	public void testLengthOfCommenPrefix() throws Exception {
 		
 
 		for (int i = 0; i < testCases; i++) {
 			Test_2Input1Output.runThreads(new Test_2Input1Output.Helper(rnd.nextInt(1 << 30), rnd.nextInt(1 << 30)) {
 				public<T> T[] secureCompute(T[] Signala,
-						T[] Signalb, CompEnv<T> e) throws Exception {
+						T[] Signalb, CompEnv<T> e) {
 					return new IntegerLib<T>(e).lengthOfCommenPrefix(
 							Signala, Signalb);
 				}
@@ -218,7 +218,7 @@ public class TestCircuitLib extends TestHarness {
 		}
 	}
 
-	//@Test
+	@Test
 	public void testRightPrivateShift() throws Exception {
 		
 
@@ -226,7 +226,7 @@ public class TestCircuitLib extends TestHarness {
 			int shift = rnd.nextInt(1 << 5);
 			Test_2Input1Output.runThreads(new Test_2Input1Output.Helper(rnd.nextInt(1 << 30), shift) {
 				public<T> T[] secureCompute(T[] Signala,
-						T[] Signalb, CompEnv<T> e) throws Exception {
+						T[] Signalb, CompEnv<T> e) {
 					return new IntegerLib<T>(e).rightPrivateShift(
 							Signala, Signalb);
 				}
@@ -238,7 +238,7 @@ public class TestCircuitLib extends TestHarness {
 		}
 	}
 
-	//@Test
+	@Test
 	public void testAllCases() throws Exception {
 
 		for (int i = 0; i < 1; i++) {
@@ -247,8 +247,7 @@ public class TestCircuitLib extends TestHarness {
 				// possible inputs,
 				// excluding selection
 				// signal
-				public <T>T[] secureCompute(T[] a, T[] b,
-						CompEnv<T> e) throws Exception {
+				public <T>T[] secureCompute(T[] a, T[] b, CompEnv<T> e) {
 					CircuitLib<T> lib = new CircuitLib<T>(e);
 					return lib.mux(a, b, lib.SIGNAL_ONE);
 				}
@@ -265,8 +264,7 @@ public class TestCircuitLib extends TestHarness {
 				// possible inputs,
 				// excluding selection
 				// signal
-				public<T> T[] secureCompute(T[] a, T[] b,
-						CompEnv<T> e) throws Exception {
+				public<T> T[] secureCompute(T[] a, T[] b, CompEnv<T> e) {
 					CircuitLib<T> lib = new CircuitLib<T>(e);
 					return lib.mux(a, b, lib.SIGNAL_ZERO);
 				}

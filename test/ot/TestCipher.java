@@ -6,8 +6,6 @@ import java.math.BigInteger;
 
 import org.junit.Test;
 
-import ot.Cipher;
-
 public class TestCipher {
 
 	@Test

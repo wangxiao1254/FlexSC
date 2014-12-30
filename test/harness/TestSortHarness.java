@@ -2,10 +2,12 @@ package harness;
 
 import org.junit.Assert;
 
+import util.EvaRunnable;
+import util.GenRunnable;
 import util.Utils;
 import flexsc.CompEnv;
 import flexsc.Mode;
-import flexsc.Party;
+import flexsc.PMCompEnv;
 
 
 public class TestSortHarness extends TestHarness {
@@ -21,91 +23,94 @@ public class TestSortHarness extends TestHarness {
 				a[i] = Utils.fromInt(aa[i], 32);
 		}
 
-		public abstract<T> T[][] secureCompute(T[][] Signala, CompEnv<T> e)
-				throws Exception;
+		public abstract<T> T[][] secureCompute(T[][] Signala, CompEnv<T> e);
 
 		public abstract int[] plainCompute(int[] intA2);
 	}
 
-	public static class GenRunnable<T> extends network.Server implements Runnable {
+	public static class GenRunnableTestSort<T> extends GenRunnable<T> {
+		public double andgates;
+		public double encs;
+
 		boolean[][] z;
 		Helper h;
-
-		GenRunnable(Helper h) {
+		public GenRunnableTestSort(Helper h) {
 			this.h = h;
 		}
 
-		public void run() {
-			try {
-				listen(54321);
-				@SuppressWarnings("unchecked")
-				CompEnv<T> gen = CompEnv.getEnv(m, Party.Alice, is, os);
+		T[][] a;
+		T[][] d;
+		@Override
+		public void prepareInput(CompEnv<T> gen) {
+			a = gen.newTArray(h.a.length, h.a[0].length);// new
+			// T[h.a.length][h.a[0].length];
+			for (int i = 0; i < a.length; ++i)
+				a[i] = gen.inputOfBob(new boolean[32]);
+		}
 
-				T[][] a = gen.newTArray(h.a.length, h.a[0].length);// new
-																	// T[h.a.length][h.a[0].length];
-				for (int i = 0; i < a.length; ++i)
-					a[i] = gen.inputOfBob(new boolean[32]);
+		@Override
+		public void secureCompute(CompEnv<T> gen) {
+			d = h.secureCompute(a, gen);		
+		}
 
-				T[][] d = h.secureCompute(a, gen);
-				os.flush();
-
-				z = new boolean[d.length][d[0].length];
-				for (int i = 0; i < d.length; i++)
-					z[i] = gen.outputToAlice(d[i]);
-				os.flush();
-
-				disconnect();
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.exit(1);
+		@Override
+		public void prepareOutput(CompEnv<T> gen) {
+			z = new boolean[d.length][d[0].length];
+			for (int i = 0; i < d.length; i++)
+				z[i] = gen.outputToAlice(d[i]);
+			if (m == Mode.COUNT) {
+				((PMCompEnv) gen).statistic.finalize();
+				andgates = ((PMCompEnv) gen).statistic.andGate;
+				encs = ((PMCompEnv) gen).statistic.NumEncAlice;
+				System.out.println(andgates + " " + encs);
+			} else {
+				for (int i = 0; i < z.length - 1; ++i) {
+					Assert.assertTrue(Utils.toInt(z[i]) < Utils.toInt(z[i + 1]));
+				}
 			}
 		}
 	}
 
-	public static class EvaRunnable<T> extends network.Client implements Runnable {
+	public static class EvaRunnableTestSort<T> extends EvaRunnable<T> {		
+		EvaRunnableTestSort(Helper h) {
+			this.h = h;
+		}
+
 		Helper h;
+		T[][] a;
+		T[][] d;
 
-		EvaRunnable(Helper h) {
-			this.h = h;
+		@Override
+		public void prepareInput(CompEnv<T> env) {
+			a = env.newTArray(h.a.length, h.a[0].length);
+			for (int i = 0; i < a.length; ++i)
+				a[i] = env.inputOfBob(h.a[i]);
 		}
 
-		public void run() {
-			try {
-				connect("localhost", 54321);
-				@SuppressWarnings("unchecked")
-				CompEnv<T> eva = CompEnv.getEnv(m, Party.Bob, is, os);
+		@Override
+		public void secureCompute(CompEnv<T> env) {
+			d = h.secureCompute(a, env);
+		}
 
-				T[][] a = eva.newTArray(h.a.length, h.a[0].length);
-				for (int i = 0; i < a.length; ++i)
-					a[i] = eva.inputOfBob(h.a[i]);
-
-				T[][] d = h.secureCompute(a, eva);
-
-				for (int i = 0; i < d.length; i++)
-					eva.outputToAlice(d[i]);
-				os.flush();
-
-				disconnect();
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.exit(1);
-			}
+		@Override
+		public void prepareOutput(CompEnv<T> env) {
+			for (int i = 0; i < d.length; i++)
+				env.outputToAlice(d[i]);
 		}
 	}
 
-	public static <T>void runThreads(Helper helper) throws Exception {
-		GenRunnable<T> gen = new GenRunnable<T>(helper);
-		EvaRunnable<T> eva = new EvaRunnable<T>(helper);
+	static public <T>void runThreads(Helper h) throws Exception {
+		GenRunnable<T> gen = new GenRunnableTestSort<T>(h);
+		gen.setParameter(m, 54321);
+		EvaRunnable<T> env = new EvaRunnableTestSort<T>(h);
+		env.setParameter(m, "localhost", 54321);
 		Thread tGen = new Thread(gen);
-		Thread tEva = new Thread(eva);
+		Thread tEva = new Thread(env);
 		tGen.start();
 		Thread.sleep(5);
 		tEva.start();
 		tGen.join();
-
-		for (int i = 0; i < gen.z.length - 1; ++i) {
-			Assert.assertTrue(Utils.toInt(gen.z[i]) < Utils.toInt(gen.z[i + 1]));
-		}
+		tEva.join();
 	}
 
 }
