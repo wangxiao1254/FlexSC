@@ -4,6 +4,7 @@ package circuits;
 import java.io.IOException;
 import java.util.Arrays;
 
+import network.Server;
 import flexsc.CompEnv;
 import flexsc.Mode;
 import flexsc.Party;
@@ -61,19 +62,18 @@ public class CircuitLib<T> {
 		boolean[] pos = env.outputToAlice(x);
 		try {
 			if (env.getParty() == Party.Alice) {
-
-				env.os.write(new byte[] { (byte) pos.length });
+//				env.os.write(new byte[] { (byte) pos.length });
 				byte[] tmp = new byte[pos.length];
 				for (int i = 0; i < pos.length; ++i)
 					tmp[i] = (byte) (pos[i] ? 1 : 0);
 				env.os.write(tmp);
 				env.flush();
 			} else {
-				byte[] l = new byte[1];
-				env.is.read(l);
-				byte tmp[] = new byte[l[0]];
-				env.is.read(tmp);
-				pos = new boolean[l[0]];
+				//byte[] l = new byte[1];
+				//env.is.read(l);
+				byte tmp[] = Server.readBytes(env.is, x.length);//new byte[l[0]];
+				//env.is.read(tmp);
+				pos = new boolean[x.length];
 				for (int k = 0; k < tmp.length; ++k) {
 					pos[k] = ((tmp[k] - 1) == 0);
 				}

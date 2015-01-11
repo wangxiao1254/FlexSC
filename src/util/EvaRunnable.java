@@ -27,6 +27,8 @@ public abstract  class EvaRunnable<T> extends network.Client implements Runnable
 	public void run() {
 		try {
 			connect(host, port);
+			System.out.println("connected");
+
 			@SuppressWarnings("unchecked")
 			CompEnv<T> env = CompEnv.getEnv(m, Party.Bob, is, os);
 			prepareInput(env);
