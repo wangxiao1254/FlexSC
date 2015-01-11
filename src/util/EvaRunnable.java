@@ -70,7 +70,10 @@ public abstract  class EvaRunnable<T> extends network.Client implements Runnable
 		Class<?> clazz = Class.forName(cmd.getOptionValue('c')+"$Evaluator");
 		EvaRunnable run = (EvaRunnable) clazz.newInstance();
 		run.setParameter(Mode.getMode(cmd.getOptionValue('m')), cmd.getOptionValue('h'), new Integer(cmd.getOptionValue('p')));
+		Flag.sw.startTotal();
 		run.run();
+		Flag.sw.stopTotal();
 		Flag.sw.print();
+
 	}
 }
