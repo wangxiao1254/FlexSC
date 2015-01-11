@@ -32,12 +32,15 @@ public abstract  class EvaRunnable<T> extends network.Client implements Runnable
 
 			@SuppressWarnings("unchecked")
 			CompEnv<T> env = CompEnv.getEnv(m, Party.Bob, is, os);
+			
+			Flag.sw.startTotal();
 			prepareInput(env);
 			os.flush();
 			secureCompute(env);
 			os.flush();
 			prepareOutput(env);
 			os.flush();
+			Flag.sw.stopTotal();
 
 			disconnect();
 		} catch (Exception e) {
@@ -70,9 +73,7 @@ public abstract  class EvaRunnable<T> extends network.Client implements Runnable
 		Class<?> clazz = Class.forName(cmd.getOptionValue('c')+"$Evaluator");
 		EvaRunnable run = (EvaRunnable) clazz.newInstance();
 		run.setParameter(Mode.getMode(cmd.getOptionValue('m')), cmd.getOptionValue('h'), new Integer(cmd.getOptionValue('p')));
-		Flag.sw.startTotal();
 		run.run();
-		Flag.sw.stopTotal();
 		Flag.sw.print();
 
 	}
