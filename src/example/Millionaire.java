@@ -9,7 +9,7 @@ import circuits.arithmetic.IntegerLib;
 import flexsc.CompEnv;
 
 public class Millionaire {
-	public static class millionaireGen<T> extends GenRunnable<T> {
+	public static class Generator<T> extends GenRunnable<T> {
 
 		T[] inputA;
 		T[] inputB;
@@ -35,7 +35,7 @@ public class Millionaire {
 		}
 	}
 	
-	public static class millionaireEva<T> extends EvaRunnable<T> {
+	public static class Evaluator<T> extends EvaRunnable<T> {
 		T[] inputA;
 		T[] inputB;
 		T scResult;

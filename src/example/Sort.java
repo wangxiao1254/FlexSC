@@ -7,7 +7,7 @@ import circuits.BitonicSortLib;
 import flexsc.CompEnv;
 
 public class Sort {
-	public static class hammingDistanceeGen<T> extends GenRunnable<T> {
+	public static class Generator<T> extends GenRunnable<T> {
 
 		T[][] inputB;
 		
@@ -28,7 +28,7 @@ public class Sort {
 		}
 	}
 	
-	public static class millionaireEva<T> extends EvaRunnable<T> {
+	public static class Evaluator<T> extends EvaRunnable<T> {
 		T[][] inputB;
 		T[] scResult;
 		

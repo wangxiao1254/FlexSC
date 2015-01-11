@@ -6,7 +6,7 @@ import circuits.arithmetic.IntegerLib;
 import flexsc.CompEnv;
 
 public class HammingDistance {
-	public static class hammingDistanceeGen<T> extends GenRunnable<T> {
+	public static class Generator<T> extends GenRunnable<T> {
 
 		T[] inputA;
 		T[] inputB;
@@ -33,7 +33,7 @@ public class HammingDistance {
 		}
 	}
 	
-	public static class millionaireEva<T> extends EvaRunnable<T> {
+	public static class Evaluator<T> extends EvaRunnable<T> {
 		T[] inputA;
 		T[] inputB;
 		T[] scResult;

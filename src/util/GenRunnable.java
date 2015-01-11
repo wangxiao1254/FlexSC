@@ -60,7 +60,7 @@ public abstract class GenRunnable<T> extends network.Server implements Runnable 
 			printUtility();
 			System.exit(1);
 		}
-		Class<?> clazz = Class.forName(cmd.getOptionValue('c'));
+		Class<?> clazz = Class.forName(cmd.getOptionValue('c')+"$Generator");
 		GenRunnable run = (GenRunnable) clazz.newInstance();
 		run.setParameter(Mode.getMode(cmd.getOptionValue('m')), new Integer(cmd.getOptionValue('p')));
 		run.run();
