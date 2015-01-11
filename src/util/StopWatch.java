@@ -23,7 +23,7 @@ public class StopWatch {
 	double stopTimeGCIO = 0;
 	public double elapsedTimeGCIO = 0;
 	boolean countTime;
-	long counter = 0;
+	long counter = 1;
 
 	public StopWatch(boolean countTime) {
 		this.countTime = countTime;
@@ -112,7 +112,7 @@ public class StopWatch {
 		startTimeGCIO = 0;
 		stopTimeGCIO = 0;
 		elapsedTimeGCIO = 0;
-		counter = 0;
+		counter = 1;
 
 	}
 

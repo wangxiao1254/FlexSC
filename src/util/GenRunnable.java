@@ -7,6 +7,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 
 import flexsc.CompEnv;
+import flexsc.Flag;
 import flexsc.Mode;
 import flexsc.Party;
 
@@ -64,5 +65,6 @@ public abstract class GenRunnable<T> extends network.Server implements Runnable 
 		GenRunnable run = (GenRunnable) clazz.newInstance();
 		run.setParameter(Mode.getMode(cmd.getOptionValue('m')), new Integer(cmd.getOptionValue('p')));
 		run.run();
+		Flag.sw.print();
 	}
 }
