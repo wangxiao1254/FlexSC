@@ -9,7 +9,7 @@ public class Reciever<T> extends network.Server implements Runnable {
 			listen(54321);
 
 			while(true) {
-				byte[] res = new byte[1024*128*1024];//1024*1024bits
+				byte[] res = new byte[1024*128*8];//1024*1024bits
 				os.write(res);
 			}
 		} catch (Exception e) {
