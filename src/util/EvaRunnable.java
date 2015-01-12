@@ -1,5 +1,7 @@
 package util;
 
+import network.Client;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
@@ -27,6 +29,7 @@ public abstract  class EvaRunnable<T> extends network.Client implements Runnable
 
 	public void run() {
 		try {
+			
 			connect(host, port);
 			System.out.println("connected");
 
@@ -62,7 +65,7 @@ public abstract  class EvaRunnable<T> extends network.Client implements Runnable
 		opt.addOption("p", true, "Port");
 		opt.addOption("h", true, "Host");
 		opt.addOption("c", true, "Evaluator Class");
-		opt.addOption("h", "help", false, "Help");
+		opt.addOption("help", "help", false, "Help");
 		CommandLineParser parser = new PosixParser();     
 		CommandLine cmd = parser.parse(opt, args);
 		if(!cmd.hasOption("m") || !cmd.hasOption("p") || !cmd.hasOption("h")|| !cmd.hasOption("c")
@@ -75,6 +78,7 @@ public abstract  class EvaRunnable<T> extends network.Client implements Runnable
 		run.setParameter(Mode.getMode(cmd.getOptionValue('m')), cmd.getOptionValue('h'), new Integer(cmd.getOptionValue('p')));
 		run.run();
 		Flag.sw.print();
-
+		if(Flag.countIO)
+			run.printStatistic();
 	}
 }

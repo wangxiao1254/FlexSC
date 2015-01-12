@@ -1,5 +1,7 @@
 package example;
 
+import java.util.Arrays;
+
 import util.EvaRunnable;
 import util.GenRunnable;
 import util.Utils;
@@ -14,8 +16,9 @@ public class Sort {
 		@Override
 		public void prepareInput(CompEnv<T> gen) {
 			inputB = gen.newTArray(4000, 0);
+			T[] scTemp = gen.inputOfBob(new boolean[4000*16]);
 			for(int i = 0; i < inputB.length; ++i)
-				inputB[i] = gen.inputOfBob(new boolean[16]);
+				inputB[i] = Arrays.copyOfRange(scTemp, i*16, i*16+16);
 		}
 		
 		@Override
@@ -35,8 +38,13 @@ public class Sort {
 		@Override
 		public void prepareInput(CompEnv<T> gen) {
 			inputB = gen.newTArray(4000, 0);
+			boolean[] temp = new boolean[4000*16];
+			for(int i = 0; i < 4000; ++i)
+				System.arraycopy(Utils.fromInt(CompEnv.rnd.nextInt(), 16), 0, temp, 16*i, 16);
+			
+			T[] scTemp = gen.inputOfBob(temp);
 			for(int i = 0; i < inputB.length; ++i)
-				inputB[i] = gen.inputOfBob(Utils.fromInt(CompEnv.rnd.nextInt(), 16));
+				inputB[i] = Arrays.copyOfRange(scTemp, i*16, i*16+16);
 		}
 		
 		@Override

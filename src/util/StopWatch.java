@@ -124,6 +124,7 @@ public class StopWatch {
 				+ "\t" + elapsedTimeGCIO / 1000000000.0 / counter + " "
 				+ (elapsedTimeOT - elapsedTimeOTIO) / 1000000000.0 / counter
 				+ "\t" + elapsedTimeOTIO / 1000000000.0 / counter + "\n");
+		System.out.println("Number of Gate:"+ands);
 	}
 
 	public void print(int i) {

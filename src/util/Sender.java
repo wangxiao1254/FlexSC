@@ -10,15 +10,14 @@ public class Sender<T> extends network.Client implements Runnable {
 
 	public void run() {
 		try {
-			connect("localhost", 54321);
+			connect("192.168.1.102", 54321);
 			System.out.println("connected");
 
-			double t = System.nanoTime();
 			while(true) {
+				double t = System.nanoTime();
 				Server.readBytes(is, 1024*128*8);
 				double t2 = System.nanoTime();
 				System.out.println(1024*8/(t2-t)*1000000000);
-				t = t2;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
