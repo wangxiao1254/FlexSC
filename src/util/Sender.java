@@ -15,9 +15,9 @@ public class Sender<T> extends network.Client implements Runnable {
 
 			double t = System.nanoTime();
 			while(true) {
-				Server.readBytes(is, 1024*128);
+				Server.readBytes(is, 1024*128*1024);
 				double t2 = System.nanoTime();
-				System.out.println((t2-t)/1000000000);
+				System.out.println(1024*1024/(t2-t)*1000000000);
 				t = t2;
 			}
 		} catch (Exception e) {
