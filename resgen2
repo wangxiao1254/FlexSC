@@ -1,18 +1,2 @@
-wangxiao@ubuntu:~/git/FlexSC$ java -cp bin:lib/* util.GenRunnable -p 54321 -m OPT -c example.HammingDistance
-[Z@1517dc0c
-Total Time 	 GC CPU Time	 GCIO Time	 OTCPU Time	 OTIO Time
-
-1.983470011	0.133531429	0.007431782 0.043268069	1.390807927
-
-Number of Gate:0
-wangxiao@ubuntu:~/git/FlexSC$ sudo wondershaper clear wlan0
-Wondershaper queues have been cleared.
-wangxiao@ubuntu:~/git/FlexSC$ 
-wangxiao@ubuntu:~/git/FlexSC$ java -cp bin:lib/* util.GenRunnable -p 54321 -m OPT -c example.HammingDistance
-[Z@48f4104f
-Total Time 	 GC CPU Time	 GCIO Time	 OTCPU Time	 OTIO Time
-
-1.153805202	0.13023453	0.007319048 0.066684633	0.579670026
-
-Number of Gate:0
-
+100.286039118	9.124434299	85.838229479 0.420076727	3.796321026
+53.467117181	9.018564188	41.289455827 0.32988304	1.849258504
