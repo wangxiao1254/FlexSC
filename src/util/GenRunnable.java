@@ -1,10 +1,11 @@
 package util;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.Options;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.Scanner;
+
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.cli.PosixParser;
 
 import flexsc.CompEnv;
 import flexsc.Flag;
@@ -15,17 +16,29 @@ public abstract class GenRunnable<T> extends network.Server implements Runnable 
 
 	Mode m;
 	int port;
+	protected String[] args;
+	public void setParameter(Mode m, int port, String[] args) {
+		this.m = m;
+		this.port = port;
+		this.args = args;
+	}
+	
 	public void setParameter(Mode m, int port) {
 		this.m = m;
 		this.port = port;
 	}
+	
 	public abstract void prepareInput(CompEnv<T> gen);
 	public abstract void secureCompute(CompEnv<T> gen);
 	public abstract void prepareOutput(CompEnv<T> gen);
 
 	public void run() {
 		try {
+			System.out.println("connecting");
 			listen(port);
+			System.out.println("connected");
+
+
 			@SuppressWarnings("unchecked")
 			CompEnv<T> env = CompEnv.getEnv(m, Party.Alice, is, os);
 			Flag.sw.startTotal();
@@ -43,28 +56,36 @@ public abstract class GenRunnable<T> extends network.Server implements Runnable 
 		}
 	}
 
-	public static void printUtility() {
-		  System.err
-        .println("Usage: java -cp bin:lib/* util.EvaRunnable -p port -m mode -c Path to class"
-                + "Mode: REAL|COUNT|VERIFY|OPT");
-	}
 	
 	@SuppressWarnings("rawtypes")
 	public static void main(String[] args) throws ParseException, ClassNotFoundException, InstantiationException, IllegalAccessException { 
-		Options opt = new Options();
-		opt.addOption("m", true, "Mode");
-		opt.addOption("p", true, "Port");
-		opt.addOption("c", true, "Generator Class");
-		CommandLineParser parser = new PosixParser();     
-		CommandLine cmd = parser.parse(opt, args);
-		if(!cmd.hasOption("m") || !cmd.hasOption("p") || !cmd.hasOption("c")
-				|| Mode.getMode(cmd.getOptionValue('m')) == null) {
-			printUtility();
-			System.exit(1);
+		File file = new File("Config.conf");
+		Scanner scanner;
+		int port=0;
+		Mode mode=null;
+		
+		try {
+			scanner = new Scanner(file);
+			while(scanner.hasNextLine()) {
+				String a = scanner.nextLine();
+				String[] content = a.split(":");
+				if(content.length == 2) {
+					if(content[0].equals("Port"))
+						port = new Integer(content[1].replace(" ", ""));
+					else if(content[0].equals("Mode"))
+						mode = Mode.getMode(content[1].replace(" ", ""));
+					else{}
+				}	 
+			}
+			scanner.close();			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		Class<?> clazz = Class.forName(cmd.getOptionValue('c')+"$Generator");
+		
+		Class<?> clazz = Class.forName(args[0]+"$Generator");
 		GenRunnable run = (GenRunnable) clazz.newInstance();
-		run.setParameter(Mode.getMode(cmd.getOptionValue('m')), new Integer(cmd.getOptionValue('p')));
+		run.setParameter(mode, port, Arrays.copyOfRange(args, 1, args.length));
 		run.run();
 		Flag.sw.print();
 	}

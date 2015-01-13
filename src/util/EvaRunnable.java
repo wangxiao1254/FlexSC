@@ -1,12 +1,11 @@
 package util;
 
-import network.Client;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.Scanner;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.cli.PosixParser;
 
 import flexsc.CompEnv;
 import flexsc.Flag;
@@ -20,16 +19,24 @@ public abstract  class EvaRunnable<T> extends network.Client implements Runnable
 	Mode m;
 	int port;
 	String host;
+	protected String[] args;
+
+	public void setParameter(Mode m, String host, int port, String[] args){
+		this.m = m;
+		this.port = port;
+		this.host = host;
+		this.args = args;
+	}
 
 	public void setParameter(Mode m, String host, int port){
 		this.m = m;
 		this.port = port;
 		this.host = host;
 	}
-
+	
 	public void run() {
 		try {
-			
+			System.out.println("connecting");
 			connect(host, port);
 			System.out.println("connected");
 
@@ -52,30 +59,38 @@ public abstract  class EvaRunnable<T> extends network.Client implements Runnable
 		}
 	}
 
-	public static void printUtility() {
-		  System.err
-          .println("Usage: java -cp bin:lib/* util.EvaRunnable -p port -h host -m mode -c Path to class\n"
-                  + "Mode: REAL|COUNT|VERIFY|OPT");
-	}
-
 	@SuppressWarnings("rawtypes")
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ParseException, ClassNotFoundException {
-		Options opt = new Options();
-		opt.addOption("m", true, "Mode");
-		opt.addOption("p", true, "Port");
-		opt.addOption("h", true, "Host");
-		opt.addOption("c", true, "Evaluator Class");
-		opt.addOption("help", "help", false, "Help");
-		CommandLineParser parser = new PosixParser();     
-		CommandLine cmd = parser.parse(opt, args);
-		if(!cmd.hasOption("m") || !cmd.hasOption("p") || !cmd.hasOption("h")|| !cmd.hasOption("c")
-				|| Mode.getMode(cmd.getOptionValue('m')) == null) {
-			printUtility();
-			System.exit(1);
+		File file = new File("Config.conf");
+		Scanner scanner;
+		String host = null;
+		int port = 0;
+		Mode mode = null;
+		
+		try {
+			scanner = new Scanner(file);
+			while(scanner.hasNextLine()) {
+				String a = scanner.nextLine();
+				String[] content = a.split(":");
+				if(content.length == 2) {
+					if(content[0].equals("Host"))
+						host = content[1].replace(" ", "");
+					else if(content[0].equals("Port"))
+						port = new Integer(content[1].replace(" ", ""));
+					else if(content[0].equals("Mode"))
+						mode = Mode.getMode(content[1].replace(" ", ""));
+					else{}
+				}
+			}
+			scanner.close();			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		Class<?> clazz = Class.forName(cmd.getOptionValue('c')+"$Evaluator");
+		
+		Class<?> clazz = Class.forName(args[0]+"$Evaluator");
 		EvaRunnable run = (EvaRunnable) clazz.newInstance();
-		run.setParameter(Mode.getMode(cmd.getOptionValue('m')), cmd.getOptionValue('h'), new Integer(cmd.getOptionValue('p')));
+		run.setParameter(mode, host, port, Arrays.copyOfRange(args, 1, args.length));
 		run.run();
 		Flag.sw.print();
 		if(Flag.countIO)

@@ -4,7 +4,73 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
 
+import flexsc.CompEnv;
+
 public class Utils {
+	public static <T> T[] flatten(CompEnv<T> env, T[][][] data) {
+		T[] res = env.newTArray(data[0][0].length*data[0].length*data.length);
+		int width = data[0][0].length;
+		int current = 0;
+		for(int i = 0; i <data.length; ++i) {
+			for(int j = 0; j < data[0].length; ++j){
+				System.arraycopy(data[i][j], 0, res, current, width);
+				current += width;
+			}
+		}
+		return res;
+	}
+
+	public static boolean[] flatten(boolean[][][] data) {
+		boolean[] res = new boolean[data[0][0].length*data[0].length*data.length];
+		int width = data[0][0].length;
+		int current = 0;
+		for(int i = 0; i <data.length; ++i) {
+			for(int j = 0; j < data[0].length; ++j){
+				System.arraycopy(data[i][j], 0, res, current, width);
+				current += width;
+			}
+		}
+		return res;
+	}
+
+	public static <T> T[] flatten(CompEnv<T> env, T[][] data) {
+		T[] res = env.newTArray(data[0].length*data.length);
+		int current = 0;
+		for(int i = 0; i <data.length; ++i) {
+			System.arraycopy(data[i], 0, res, current, data[0].length);
+			current += data[0].length;
+		}
+		return res;
+	}
+
+	public static  boolean[] flatten(boolean[][] data) {
+		boolean[] res = new boolean[data[0].length*data.length];
+		int current = 0;
+		for(int i = 0; i <data.length; ++i) {
+			System.arraycopy(data[i], 0, res, current, data[0].length);
+			current += data[0].length;
+		}
+		return res;
+	}
+
+	public static<T> void unflatten(boolean[] data, boolean[][][]res) {
+		int width = res[0].length;
+		int current = 0;
+		for(int i = 0; i < res.length; ++i) 
+			for(int j = 0; j < res.length; ++j) { 
+				res[i][j] = Arrays.copyOfRange(data, current, current+width);
+				current += width;
+			}
+
+	}
+
+	public static<T> void unflatten(T[] data, T[][]res) {
+		int width = res[0].length;
+		for(int i = 0; i < res.length; ++i) {
+			res[i] = Arrays.copyOfRange(data, width*i, width*i+i);
+		}
+	}
+
 	public static Boolean[] toBooleanArray(boolean[] a) {
 		Boolean[] res = new Boolean[a.length];
 		for (int i = 0; i < a.length; i++)
@@ -32,7 +98,7 @@ public class Utils {
 		for (int i = 0; i < value.length; i++)
 			res = (value[i]) ? (res | (1 << i)) : res;
 
-		return res;
+			return res;
 	}
 
 	public static long toUnSignedInt(boolean[] v) {
@@ -74,7 +140,7 @@ public class Utils {
 		for (int i = 0; i < value.length; i++)
 			res = (value[i]) ? (res | (1 << i)) : res;
 
-		return res;
+			return res;
 	}
 
 	public static double toFloat(boolean[] value, int widthV, int widthP) {
@@ -133,7 +199,7 @@ public class Utils {
 	}
 
 	final static int[] mask = { 0b00000001, 0b00000010, 0b00000100, 0b00001000,
-			0b00010000, 0b00100000, 0b01000000, 0b10000000 };
+		0b00010000, 0b00100000, 0b01000000, 0b10000000 };
 
 	public static boolean[] fromBigInteger(BigInteger bd, int length) {
 		byte[] b = bd.toByteArray();
@@ -166,6 +232,6 @@ public class Utils {
 		a /= Math.pow(2, offset);
 		return a;
 	}
-	
-	
+
+
 }
