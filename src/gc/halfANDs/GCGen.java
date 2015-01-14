@@ -57,6 +57,7 @@ public class GCGen extends GCGenComp {
 	
 	public GCSignal and(GCSignal a, GCSignal b) {
 		++ands;
+		++Flag.sw.ands;
 		Flag.sw.startGC();
 		GCSignal res;
 		if (a.isPublic() && b.isPublic())

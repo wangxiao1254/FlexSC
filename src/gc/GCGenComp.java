@@ -119,6 +119,7 @@ public abstract class GCGenComp extends GCCompEnv{
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.exit(1);
 		}
 		return false;
 	}

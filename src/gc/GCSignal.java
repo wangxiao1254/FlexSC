@@ -71,6 +71,7 @@ public class GCSignal {
 			os.write(bytes);
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 

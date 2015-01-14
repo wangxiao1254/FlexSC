@@ -53,11 +53,11 @@ public class Utils {
 		return res;
 	}
 
-	public static<T> void unflatten(boolean[] data, boolean[][][]res) {
-		int width = res[0].length;
+	public static<T> void unflatten(T[] data, T[][][]res) {
+		int width = res[0][0].length;
 		int current = 0;
 		for(int i = 0; i < res.length; ++i) 
-			for(int j = 0; j < res.length; ++j) { 
+			for(int j = 0; j < res[0].length; ++j) { 
 				res[i][j] = Arrays.copyOfRange(data, current, current+width);
 				current += width;
 			}
