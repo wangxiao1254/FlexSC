@@ -46,7 +46,7 @@ public class Utils {
 	public static  boolean[] flatten(boolean[][] data) {
 		boolean[] res = new boolean[data[0].length*data.length];
 		int current = 0;
-		for(int i = 0; i <data.length; ++i) {
+		for(int i = 0; i < data.length; ++i) {
 			System.arraycopy(data[i], 0, res, current, data[0].length);
 			current += data[0].length;
 		}
@@ -67,7 +67,7 @@ public class Utils {
 	public static<T> void unflatten(T[] data, T[][]res) {
 		int width = res[0].length;
 		for(int i = 0; i < res.length; ++i) {
-			res[i] = Arrays.copyOfRange(data, width*i, width*i+i);
+			res[i] = Arrays.copyOfRange(data, width*i, width*i+width);
 		}
 	}
 

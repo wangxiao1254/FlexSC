@@ -82,6 +82,7 @@ public class GCSignal {
 			b = Server.readBytes(ois, len);
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.exit(1);
 		}
 		return new GCSignal(b);
 	}
