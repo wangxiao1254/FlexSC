@@ -64,9 +64,16 @@ public class TestSortHarness extends TestHarness {
 				encs = ((PMCompEnv) gen).statistic.NumEncAlice;
 				System.out.println(andgates + " " + encs);
 			} else {
+				boolean asc = true;
+				boolean dec = true;
 				for (int i = 0; i < z.length - 1; ++i) {
-					Assert.assertTrue(Utils.toInt(z[i]) < Utils.toInt(z[i + 1]));
+//					System.out.println(Utils.toInt(z[i]));
+					asc = asc && Utils.toInt(z[i]) <= Utils.toInt(z[i + 1]);
+					dec = dec && Utils.toInt(z[i]) >= Utils.toInt(z[i + 1]);
 				}
+				Assert.assertTrue(asc || dec);
+				
+				
 			}
 		}
 	}

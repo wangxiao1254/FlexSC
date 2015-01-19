@@ -23,7 +23,7 @@ public class BitonicSortLib<T> extends IntegerLib<T> {
 		}
 	}
 
-	private void bitonicMergeWithPayload(T[][] key, T[][] data, int lo, int n,
+	protected void bitonicMergeWithPayload(T[][] key, T[][] data, int lo, int n,
 			T dir) {
 		if (n > 1) {
 			int m = greatestPowerOfTwoLessThan(n);
@@ -65,7 +65,7 @@ public class BitonicSortLib<T> extends IntegerLib<T> {
 		}
 	}
 
-	private void bitonicMerge(T[][] key, int lo, int n, T dir) {
+	protected void bitonicMerge(T[][] key, int lo, int n, T dir) {
 		if (n > 1) {
 			int m = greatestPowerOfTwoLessThan(n);
 			for (int i = lo; i < lo + n - m; i++)
