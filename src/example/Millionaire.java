@@ -9,6 +9,12 @@ import circuits.arithmetic.IntegerLib;
 import flexsc.CompEnv;
 
 public class Millionaire {
+	
+	
+	static public<T> T compute(CompEnv<T> gen, T[] inputA, T[] inputB){
+		return new IntegerLib<T>(gen).geq(inputA, inputB);
+	}
+	
 	public static class Generator<T> extends GenRunnable<T> {
 
 		T[] inputA;
@@ -26,9 +32,9 @@ public class Millionaire {
 		
 		@Override
 		public void secureCompute(CompEnv<T> gen) {
-			scResult = new IntegerLib<T>(gen).geq(inputA, inputB);
-			
+			scResult = compute(gen, inputA, inputB);
 		}
+		
 		@Override
 		public void prepareOutput(CompEnv<T> gen) {
 			System.out.println(gen.outputToAlice(scResult));
@@ -51,7 +57,7 @@ public class Millionaire {
 		
 		@Override
 		public void secureCompute(CompEnv<T> gen) {
-			scResult = new IntegerLib<T>(gen).geq(inputA, inputB);
+			scResult = compute(gen, inputA, inputB);
 		}
 		
 		@Override

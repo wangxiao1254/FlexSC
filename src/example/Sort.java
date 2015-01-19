@@ -9,10 +9,14 @@ import circuits.BitonicSortLib;
 import flexsc.CompEnv;
 
 public class Sort {
+	static public<T> void compute(CompEnv<T> gen, T[][] inputB){
+		BitonicSortLib<T> lib = new  BitonicSortLib<T>(gen); 
+		lib.sort(inputB, lib.SIGNAL_ONE);
+	}
+	
 	public static class Generator<T> extends GenRunnable<T> {
-
 		T[][] inputB;
-		
+
 		@Override
 		public void prepareInput(CompEnv<T> gen) {
 			inputB = gen.newTArray(4000, 0);
@@ -23,8 +27,7 @@ public class Sort {
 		
 		@Override
 		public void secureCompute(CompEnv<T> gen) {
-			BitonicSortLib<T> lib = new  BitonicSortLib<T>(gen); 
-			lib.sort(inputB, lib.SIGNAL_ONE);
+			compute(gen, inputB);
 		}
 		@Override
 		public void prepareOutput(CompEnv<T> gen) {
@@ -49,8 +52,7 @@ public class Sort {
 		
 		@Override
 		public void secureCompute(CompEnv<T> gen) {
-			BitonicSortLib<T> lib = new  BitonicSortLib<T>(gen); 
-			lib.sort(inputB, lib.SIGNAL_ONE);
+			compute(gen, inputB);
 		}
 		
 		@Override
