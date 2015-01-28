@@ -23,11 +23,11 @@ public class Millionaire {
 		
 		@Override
 		public void prepareInput(CompEnv<T> gen) {
-			Scanner scanner = new Scanner(System.in);
-			inputA = gen.inputOfAlice(Utils.fromInt(scanner.nextInt(), 32));
+//			Scanner scanner = new Scanner(System.in);
+			inputA = gen.inputOfAlice(Utils.fromInt(new Integer(args[0]), 32));
 			gen.flush();
 			inputB = gen.inputOfBob(new boolean[32]);
-			scanner.close();
+//			scanner.close();
 		}
 		
 		@Override
@@ -48,11 +48,11 @@ public class Millionaire {
 		
 		@Override
 		public void prepareInput(CompEnv<T> gen) {
-			Scanner scanner = new Scanner(System.in);
+//			Scanner scanner = new Scanner(System.in);
 			inputA = gen.inputOfAlice(new boolean[32]);
 			gen.flush();
-			inputB = gen.inputOfBob(Utils.fromInt(scanner.nextInt(), 32));
-			scanner.close();
+			inputB = gen.inputOfBob(Utils.fromInt(new Integer(args[0]), 32));
+//			scanner.close();
 		}
 		
 		@Override

@@ -9,8 +9,8 @@ public class FloatLib<T> implements ArithmeticLib<T> {
 
 	CompEnv<T> env;
 	IntegerLib<T> lib;
-	int VLength;
-	int PLength;
+	public int VLength;
+	public int PLength;
 
 	public FloatLib(CompEnv<T> e, int VLength, int PLength) {
 		this.env = e;
@@ -27,7 +27,7 @@ public class FloatLib<T> implements ArithmeticLib<T> {
 		return env.inputOfBob(Utils.fromFloat(d, VLength, PLength));
 	}
 
-	private T[] pack(Representation<T> f) {
+	public  T[] pack(Representation<T> f) {
 		assert (f.v.length == VLength && f.p.length == PLength) : "pack: not compatiable";
 		T[] res = env.newTArray(1 + f.v.length + f.p.length);
 		res[0] = f.s;
@@ -36,7 +36,7 @@ public class FloatLib<T> implements ArithmeticLib<T> {
 		return res;
 	}
 
-	private Representation<T> unpack(T[] data) {
+	public Representation<T> unpack(T[] data) {
 		assert (data.length == VLength + PLength + 1) : "unpack: not compatiable";
 
 		T[] v = Arrays.copyOfRange(data, 1, 1 + VLength);
@@ -44,7 +44,7 @@ public class FloatLib<T> implements ArithmeticLib<T> {
 		return new Representation<T>(data[0], v, p);
 	}
 
-	static class Representation<T> {
+	public static class Representation<T> {
 		public T s;
 		public T[] v;
 		public T[] p;
