@@ -40,6 +40,7 @@ public abstract  class EvaRunnable<T> extends network.Client implements Runnable
 			connect(host, port);
 			System.out.println("connected");
 
+			double s = System.nanoTime();
 			@SuppressWarnings("unchecked")
 			CompEnv<T> env = CompEnv.getEnv(m, Party.Bob, is, os);
 			
@@ -51,7 +52,8 @@ public abstract  class EvaRunnable<T> extends network.Client implements Runnable
 			prepareOutput(env);
 			os.flush();
 			Flag.sw.stopTotal();
-
+			System.out.println("Gen running time:"+(System.nanoTime()-s)/1e9);
+			System.out.println("Number Of Gates:"+Flag.sw.ands);
 			disconnect();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -92,7 +94,7 @@ public abstract  class EvaRunnable<T> extends network.Client implements Runnable
 		EvaRunnable run = (EvaRunnable) clazz.newInstance();
 		run.setParameter(mode, host, port, Arrays.copyOfRange(args, 1, args.length));
 		run.run();
-		Flag.sw.print();
+//		Flag.sw.print();
 		if(Flag.countIO)
 			run.printStatistic();
 	}

@@ -65,7 +65,7 @@ public class CVCompEnv extends BooleanCompEnv {
 
 	@Override
 	public Boolean and(Boolean a, Boolean b) {
-		numOfAnds ++;
+		++Flag.sw.ands;
 		return a && b;
 	}
 

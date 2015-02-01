@@ -1,7 +1,5 @@
 package example;
 
-import java.util.Scanner;
-
 import util.EvaRunnable;
 import util.GenRunnable;
 import util.Utils;
@@ -23,11 +21,9 @@ public class Millionaire {
 		
 		@Override
 		public void prepareInput(CompEnv<T> gen) {
-//			Scanner scanner = new Scanner(System.in);
 			inputA = gen.inputOfAlice(Utils.fromInt(new Integer(args[0]), 32));
 			gen.flush();
 			inputB = gen.inputOfBob(new boolean[32]);
-//			scanner.close();
 		}
 		
 		@Override
@@ -48,11 +44,9 @@ public class Millionaire {
 		
 		@Override
 		public void prepareInput(CompEnv<T> gen) {
-//			Scanner scanner = new Scanner(System.in);
 			inputA = gen.inputOfAlice(new boolean[32]);
 			gen.flush();
 			inputB = gen.inputOfBob(Utils.fromInt(new Integer(args[0]), 32));
-//			scanner.close();
 		}
 		
 		@Override

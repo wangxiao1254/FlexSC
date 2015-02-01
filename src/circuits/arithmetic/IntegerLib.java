@@ -512,19 +512,25 @@ public class IntegerLib<T> extends CircuitLib<T> implements ArithmeticLib<T> {
 
 	@Override
 	public T[] toSecureInt(T[] a, IntegerLib<T> lib) {
-		// TODO Auto-generated method stub
-		return null;
+		return a;
 	}
 
+	// not fully implemented, more cases to consider
 	@Override
 	public T[] toSecureFloat(T[] a, FloatLib<T> lib) {
-		return null;
+//		if(a.length <= lib.VLength) {
+			T[] v = padSignal(a, lib.VLength);
+			T[] p = leadingZeros(v);
+			v = leftPrivateShift(v, p);
+			p = padSignal(p, lib.PLength);
+			p = sub(zeros(p.length), p);
+//		}
+		return lib.pack(new FloatLib.Representation<T>(SIGNAL_ZERO, v, p));
 	}
 
 	@Override
 	public T[] toSecureFixPoint(T[] a, FixedPointLib<T> lib) {
-		// TODO Auto-generated method stub
-		return null;
+		return leftPublicShift(padSignal(a, lib.width), lib.offset);
 	}
 
 	@Override

@@ -37,8 +37,8 @@ public abstract class GenRunnable<T> extends network.Server implements Runnable 
 			System.out.println("connecting");
 			listen(port);
 			System.out.println("connected");
-
-
+			
+			double s = System.nanoTime();
 			@SuppressWarnings("unchecked")
 			CompEnv<T> env = CompEnv.getEnv(m, Party.Alice, is, os);
 			Flag.sw.startTotal();
@@ -49,6 +49,7 @@ public abstract class GenRunnable<T> extends network.Server implements Runnable 
 			prepareOutput(env);
 			os.flush();
 			Flag.sw.stopTotal();
+			System.out.println("Eva running time:"+(System.nanoTime()-s)/1e9);
 			disconnect();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -87,6 +88,6 @@ public abstract class GenRunnable<T> extends network.Server implements Runnable 
 		GenRunnable run = (GenRunnable) clazz.newInstance();
 		run.setParameter(mode, port, Arrays.copyOfRange(args, 1, args.length));
 		run.run();
-		Flag.sw.print();
+//		Flag.sw.print();
 	}
 }
