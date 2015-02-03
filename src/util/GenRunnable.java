@@ -28,9 +28,9 @@ public abstract class GenRunnable<T> extends network.Server implements Runnable 
 		this.port = port;
 	}
 	
-	public abstract void prepareInput(CompEnv<T> gen);
-	public abstract void secureCompute(CompEnv<T> gen);
-	public abstract void prepareOutput(CompEnv<T> gen);
+	public abstract void prepareInput(CompEnv<T> gen) throws Exception;
+	public abstract void secureCompute(CompEnv<T> gen) throws Exception;
+	public abstract void prepareOutput(CompEnv<T> gen) throws Exception;
 
 	public void run() {
 		try {
@@ -49,8 +49,10 @@ public abstract class GenRunnable<T> extends network.Server implements Runnable 
 			prepareOutput(env);
 			os.flush();
 			Flag.sw.stopTotal();
-			System.out.println("Eva running time:"+(System.nanoTime()-s)/1e9);
+			double e = System.nanoTime();
 			disconnect();
+			System.out.println("Gen running time:"+(e-s)/1e9);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
