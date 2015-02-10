@@ -39,7 +39,7 @@ public class TestCircuitOramRec {
 		System.out.print("\n");
 	}
 
-	final static int writeCount = 10;//1 << 7;
+	final static int writeCount = 2;//1 << 7;
 	final static int readCount = 0;//(1 << 7);
 
 	public TestCircuitOramRec() {
@@ -83,7 +83,7 @@ public class TestCircuitOramRec {
 						+ " " + capacity + " " + dataSize);
 
 				@SuppressWarnings("unchecked")
-				CompEnv<GCSignal> env = CompEnv.getEnv(Mode.REAL, Party.Alice,
+				CompEnv<GCSignal> env = CompEnv.getEnv(Mode.OPT, Party.Alice,
 						is, os);
 				RecursiveCircuitOram<GCSignal> client = new RecursiveCircuitOram<GCSignal>(
 						env, N, dataSize, cutoff, recurFactor, capacity, 80);
@@ -99,13 +99,13 @@ public class TestCircuitOramRec {
 					Flag.sw.startTotal();
 					client.write(client.baseOram.lib.toSignals(element), scData);
 					double t = Flag.sw.stopTotal();
-					System.out.println(Flag.sw.ands + " " + t / 1000000000.0
-							+ " " + Flag.sw.ands / t * 1000);
+//					System.out.println(Flag.sw.ands + " " + t / 1000000000.0
+//							+ " " + Flag.sw.ands / t * 1000);
 					Flag.sw.addCounter();
 
-					Runtime rt = Runtime.getRuntime();
-					double usedMB = (rt.totalMemory() - rt.freeMemory()) / 1024.0 / 1024.0;
-					System.out.println("mem: " + usedMB);
+//					Runtime rt = Runtime.getRuntime();
+//					double usedMB = (rt.totalMemory() - rt.freeMemory()) / 1024.0 / 1024.0;
+//					System.out.println("mem: " + usedMB);
 				}
 
 				for (int i = 0; i < readCount; ++i) {
@@ -158,7 +158,7 @@ public class TestCircuitOramRec {
 						+ " " + capacity + " " + dataSize);
 
 				@SuppressWarnings("unchecked")
-				CompEnv<GCSignal> env = CompEnv.getEnv(Mode.REAL, Party.Bob,
+				CompEnv<GCSignal> env = CompEnv.getEnv(Mode.OPT, Party.Bob,
 						is, os);
 				RecursiveCircuitOram<GCSignal> server = new RecursiveCircuitOram<GCSignal>(
 						env, N, dataSize, cutoff, recurFactor, capacity, 80);

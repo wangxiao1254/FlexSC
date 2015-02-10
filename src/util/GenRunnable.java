@@ -62,7 +62,8 @@ public abstract class GenRunnable<T> extends network.Server implements Runnable 
 	
 	@SuppressWarnings("rawtypes")
 	public static void main(String[] args) throws ParseException, ClassNotFoundException, InstantiationException, IllegalAccessException { 
-		File file = new File("Config.conf");
+		File file = new File(args[0], "Config.conf");
+
 		Scanner scanner;
 		int port=0;
 		Mode mode=null;
@@ -86,9 +87,9 @@ public abstract class GenRunnable<T> extends network.Server implements Runnable 
 			e.printStackTrace();
 		}
 		
-		Class<?> clazz = Class.forName(args[0]+"$Generator");
+		Class<?> clazz = Class.forName(args[1]+"$Generator");
 		GenRunnable run = (GenRunnable) clazz.newInstance();
-		run.setParameter(mode, port, Arrays.copyOfRange(args, 1, args.length));
+		run.setParameter(mode, port, Arrays.copyOfRange(args, 2, args.length));
 		run.run();
 //		Flag.sw.print();
 	}
