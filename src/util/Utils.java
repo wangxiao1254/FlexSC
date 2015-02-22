@@ -7,6 +7,16 @@ import java.util.Arrays;
 import flexsc.CompEnv;
 
 public class Utils {
+	public static int logFloor(int n) {
+		int w = 0;
+		n--;
+		while(n > 0) {
+			w ++;
+			n >>= 1;
+		}
+		return w == 0 ? 1 : w;
+	}
+
 	public static <T> T[] flatten(CompEnv<T> env, T[][][] data) {
 		T[] res = env.newTArray(data[0][0].length*data[0].length*data.length);
 		int width = data[0][0].length;

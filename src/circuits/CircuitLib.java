@@ -31,8 +31,21 @@ public class CircuitLib<T> {
 			a >>= 1;
 		}
 		return result;
+		
 	}
 
+	public T[] enforceBits(T[] a, int length) {
+		if(length > a.length)
+			return padSignal(a, length);
+		else
+			return Arrays.copyOfRange(a, 0, length);
+	}
+
+	 public T[] enforceBits(T a, int length) {
+         T[] ret = zeros(length);
+         ret[0] = a;
+         return ret;
+   }
 	public T[] randBools(int length) {
 		if(env.m == Mode.COUNT) {
 			return zeros(length);
