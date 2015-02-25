@@ -1,3 +1,4 @@
-tc qdisc del dev $1 root
-tc qdisc add dev $1 root handle 1:0 tbf rate $2kbit buffer 1600 limit 3000
-tc qdisc add dev $1 parent 1:0 handle 10: netem delay 100ms loss 0%
+tc qdisc del dev eth0 root
+tc qdisc add dev eth0 handle 1: root htb default 11
+tc class add dev eth0 parent 1: classid 1:1 htb rate $1mbit
+tc class add dev eth0 parent 1:1 classid 1:11 htb rate $1mbit

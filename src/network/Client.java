@@ -1,7 +1,5 @@
 package network;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -22,26 +20,20 @@ public class Client {
 	public void connect(String server, int port) throws Exception {
 		while (true) {
 			try {
-				sock = new java.net.Socket(server, port); // create socket and
-															// connect
+				sock = new java.net.Socket(server, port); // create socket and connect
 				if (sock != null)
 					break;
 			} catch (IOException e) {
 				Thread.sleep(100);
 			}
 		}
-
+		
 		if (Flag.countIO) {
-			cos = new CountingOutputStream(sock.getOutputStream());
-			cis = new CountingInputStream(sock.getInputStream());
-			os = new BufferedOutputStream(cos, Server.bufferSize);
-			is = new BufferedInputStream(cis, Server.bufferSize);
+			os = new CountingOutputStream(sock.getOutputStream());
+			is = new CountingInputStream(sock.getInputStream());
 		} else {
-			os = new BufferedOutputStream(sock.getOutputStream(),
-					Server.bufferSize);
-			is = new BufferedInputStream(sock.getInputStream(),
-					Server.bufferSize);
-
+			os = sock.getOutputStream();
+			is = sock.getInputStream();
 		}
 	}
 

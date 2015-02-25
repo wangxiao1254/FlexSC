@@ -148,7 +148,7 @@ public class Utils {
 	public static long toLong(boolean[] value) {
 		long res = 0;
 		for (int i = 0; i < value.length; i++)
-			res = (value[i]) ? (res | (1 << i)) : res;
+			res = (value[i]) ? (res | (1L << i)) : res;
 
 			return res;
 	}

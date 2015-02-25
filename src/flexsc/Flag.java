@@ -9,5 +9,6 @@ public class Flag {
 	public static boolean CountTime = true;
 	public static StopWatch sw = new StopWatch(CountTime);
 	public static boolean countIO = true;
-	public static boolean FakeOT = false;
+	public static boolean FakeOT = true;
+	public static boolean ProprocessOT = true;
 }

@@ -142,6 +142,7 @@ public abstract class CompEnv<T> {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 

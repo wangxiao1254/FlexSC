@@ -6,6 +6,7 @@ import java.io.OutputStream;
 
 import ot.FakeOTReceiver;
 import ot.OTExtReceiver;
+import ot.OTPreprocessReceiver;
 import ot.OTReceiver;
 import flexsc.Flag;
 import flexsc.Party;
@@ -21,6 +22,8 @@ public abstract class GCEvaComp extends GCCompEnv{
 
 		if (Flag.FakeOT)
 			rcv = new FakeOTReceiver(is, os);
+		else if (Flag.ProprocessOT)
+			rcv = new OTPreprocessReceiver(is, os);
 		else
 			rcv = new OTExtReceiver(is, os);
 		
