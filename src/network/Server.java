@@ -32,7 +32,6 @@ public class Server {
 	}
 
 	static public byte[] readBytes(InputStream is, int len) throws IOException {
-
 		byte[] temp = new byte[len];
 		int remain = len;
 		while (0 < remain) {

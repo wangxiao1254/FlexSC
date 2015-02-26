@@ -35,9 +35,8 @@ public class GCSignal {
 		assert (bs.length <= len) : "Losing entropy when constructing signals.";
 		byte[] b = new byte[len];
 		Arrays.fill(b, (byte) ((bs[0] < 0) ? 0xff : 0));
-		System.arraycopy(bs, 0, b, len - Math.min(len, bs.length),
-				Math.min(len, bs.length));
-		Arrays.copyOf(bs, len);
+		int newlen = len < bs.length ? len : bs.length;
+		System.arraycopy(bs, 0, b, len - newlen, newlen);
 		return new GCSignal(b);
 	}
 

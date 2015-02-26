@@ -24,7 +24,7 @@ public class Client {
 				if (sock != null)
 					break;
 			} catch (IOException e) {
-				Thread.sleep(100);
+				Thread.sleep(10);
 			}
 		}
 		

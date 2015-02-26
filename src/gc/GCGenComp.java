@@ -3,12 +3,12 @@ package gc;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.security.SecureRandom;
 
 import ot.FakeOTSender;
 import ot.OTExtSender;
 import ot.OTPreprocessSender;
 import ot.OTSender;
+import flexsc.CompEnv;
 import flexsc.Flag;
 import flexsc.Party;
 
@@ -16,7 +16,7 @@ public abstract class GCGenComp extends GCCompEnv{
 
 	static public GCSignal R = null;
 	static {
-		R = GCSignal.freshLabel(new SecureRandom());
+		R = GCSignal.freshLabel(CompEnv.rnd);
 		R.setLSB();
 	}
 
