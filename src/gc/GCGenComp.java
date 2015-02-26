@@ -73,11 +73,12 @@ public abstract class GCGenComp extends GCCompEnv{
 		for (int i = 0; i < x.length; ++i) {
 			pairs[i] = genPair();
 			result[i] = pairs[i][0];
+			pairs[i][x[i] ? 1 : 0].send(os);
 		}
 		
 		Flag.sw.startOTIO();
-		for (int i = 0; i < x.length; ++i)
-			pairs[i][x[i] ? 1 : 0].send(os);
+//		for (int i = 0; i < x.length; ++i)
+			
 		flush();
 		Flag.sw.stopOTIO();
 		Flag.sw.stopOT();

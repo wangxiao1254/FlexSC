@@ -99,13 +99,14 @@ public class OTExtReceiver extends OTReceiver {
 					msgPairs[i][0], choices.length);
 			cphPairs[i][1] = cipher.encrypt(keyPairs[i][1].bytes,
 					msgPairs[i][1], choices.length);
-		}
-
-		Flag.sw.startOTIO();
-		for (int i = 0; i < SecurityParameter.k1; i++) {
 			RWBigInteger.writeBI(os, cphPairs[i][0]);
 			RWBigInteger.writeBI(os, cphPairs[i][1]);
 		}
+
+		Flag.sw.startOTIO();
+//		for (int i = 0; i < SecurityParameter.k1; i++) {
+		
+//		}
 		os.flush();
 		Flag.sw.stopOTIO();
 
@@ -115,13 +116,14 @@ public class OTExtReceiver extends OTReceiver {
 		GCSignal[][] y = new GCSignal[choices.length][2];
 
 		Flag.sw.startOTIO();
-		for (int i = 0; i < choices.length; i++) {
-			y[i][0] = GCSignal.receive(is);
-			y[i][1] = GCSignal.receive(is);
-		}
+//		for (int i = 0; i < choices.length; i++) {
+		
+//		}
 		Flag.sw.stopOTIO();
 
 		for (int i = 0; i < choices.length; i++) {
+			y[i][0] = GCSignal.receive(is);
+			y[i][1] = GCSignal.receive(is);
 			int sigma = choices[i] ? 1 : 0;
 			res[i] = cipher.dec(GCSignal.newInstance(tT.data[i].toByteArray()),
 					y[i][sigma], i);

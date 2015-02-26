@@ -134,13 +134,14 @@ public class OTExtSender extends OTSender {
 			y[i][1] = cipher.enc(
 					GCSignal.newInstance(tQ.data[i].xor(biS).toByteArray()),
 					msgPairs[i][1], i);
-		}
-
-		Flag.sw.startOTIO();
-		for (int i = 0; i < numOfPairs; i++) {
 			y[i][0].send(os);
 			y[i][1].send(os);
 		}
+
+		Flag.sw.startOTIO();
+//		for (int i = 0; i < numOfPairs; i++) {
+		
+//		}
 		os.flush();
 		Flag.sw.stopOTIO();
 
