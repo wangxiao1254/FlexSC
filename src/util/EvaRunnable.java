@@ -40,10 +40,11 @@ public abstract  class EvaRunnable<T> extends network.Client implements Runnable
 			connect(host, port);
 			System.out.println("connected");
 
-			double s = System.nanoTime();
+			System.out.println("Start Preprocessing");
 			@SuppressWarnings("unchecked")
 			CompEnv<T> env = CompEnv.getEnv(m, Party.Bob, is, os);
-			
+			System.out.println("Start Online");
+			double s = System.nanoTime();			
 			Flag.sw.startTotal();
 			prepareInput(env);
 			os.flush();

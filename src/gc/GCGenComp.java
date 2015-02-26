@@ -160,9 +160,9 @@ public abstract class GCGenComp extends GCCompEnv{
 		if (a.isPublic() && b.isPublic())
 			return new GCSignal(a.v ^ b.v);
 		else if (a.isPublic())
-			return a.v ? not(b) : new GCSignal(b);
+			return a.v ? not(b) : b;
 		else if (b.isPublic())
-			return b.v ? not(a) : new GCSignal(a);
+			return b.v ? not(a) : a;
 		else {
 			return a.xor(b);
 		}
