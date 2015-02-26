@@ -29,6 +29,7 @@ public class CVCompEnv extends BooleanCompEnv {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.exit(1);
 		}
 		return res;
 	}
@@ -49,6 +50,7 @@ public class CVCompEnv extends BooleanCompEnv {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.exit(1);
 		}
 
 		return res;

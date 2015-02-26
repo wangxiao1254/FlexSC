@@ -29,8 +29,8 @@ public class Client {
 		}
 		
 		if (Flag.countIO) {
-			os = new CountingOutputStream(sock.getOutputStream());
-			is = new CountingInputStream(sock.getInputStream());
+			os=cos = new CountingOutputStream(sock.getOutputStream());
+			is=cis = new CountingInputStream(sock.getInputStream());
 		} else {
 			os = sock.getOutputStream();
 			is = sock.getInputStream();
