@@ -3,6 +3,7 @@ package gc;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 
 import ot.FakeOTReceiver;
 import ot.OTExtReceiver;
@@ -50,6 +51,15 @@ public abstract class GCEvaComp extends GCCompEnv{
 	}
 
 	public GCSignal[] inputOfBob(boolean[] x) {
+		GCSignal[] ret = new GCSignal[x.length];
+		for(int i = 0; i < x.length; i+=Flag.OTBlockSize) {
+			GCSignal[] tmp = inputOfBobInter(Arrays.copyOfRange(x, i, Math.min(i+Flag.OTBlockSize, x.length)));
+			System.arraycopy(tmp, 0, ret, i, tmp.length);
+		}
+		return ret;
+	}
+	
+	public GCSignal[] inputOfBobInter(boolean[] x) {
 		Flag.sw.startOT();
 		GCSignal[] signal = null;
 		try {

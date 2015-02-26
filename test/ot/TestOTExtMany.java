@@ -8,7 +8,7 @@ import java.util.Random;
 import org.junit.Test;
 
 public class TestOTExtMany {
-	static final int n = 10000000;
+	static final int n = 1024*200;
 	GCSignal[][] m;
 	boolean[] c;
 	GCSignal[] rcvd;

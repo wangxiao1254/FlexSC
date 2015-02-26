@@ -40,11 +40,10 @@ public abstract  class EvaRunnable<T> extends network.Client implements Runnable
 			connect(host, port);
 			System.out.println("connected");
 
-			System.out.println("Start Preprocessing");
 			@SuppressWarnings("unchecked")
 			CompEnv<T> env = CompEnv.getEnv(m, Party.Bob, is, os);
-			System.out.println("Start Online");
-			double s = System.nanoTime();			
+			
+			double s = System.nanoTime();
 			Flag.sw.startTotal();
 			prepareInput(env);
 			os.flush();
@@ -96,7 +95,8 @@ public abstract  class EvaRunnable<T> extends network.Client implements Runnable
 		EvaRunnable run = (EvaRunnable) clazz.newInstance();
 		run.setParameter(mode, host, port, Arrays.copyOfRange(args, 2, args.length));
 		run.run();
-//		Flag.sw.print();
+		if(Flag.CountTime)
+			Flag.sw.print();
 		if(Flag.countIO)
 			run.printStatistic();
 	}

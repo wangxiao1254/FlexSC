@@ -44,7 +44,7 @@ public class OTPreprocessSender  extends OTSender {
 				e.printStackTrace();
 			}
 			bufferusage +=l;
-			System.out.println(bufferusage/(double)bufferSize);
+			System.out.println("preprocessing OT"+bufferusage/(double)bufferSize);
 		}
 		try {
 			os.flush();

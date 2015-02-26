@@ -10,5 +10,7 @@ public class Flag {
 	public static StopWatch sw = new StopWatch(CountTime);
 	public static boolean countIO = false;
 	public static boolean FakeOT = true;
-	public static boolean ProprocessOT = true;
+	public static boolean ProprocessOT = false;
+	public static int OTBlockSize = 1024*200;
+	
 }

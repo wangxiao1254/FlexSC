@@ -37,10 +37,9 @@ public abstract class GenRunnable<T> extends network.Server implements Runnable 
 			System.out.println("connecting");
 			listen(port);
 			System.out.println("connected");
-			System.out.println("Start Preprocessing");
+			
 			@SuppressWarnings("unchecked")
 			CompEnv<T> env = CompEnv.getEnv(m, Party.Alice, is, os);
-			System.out.println("Start Online");
 			
 			double s = System.nanoTime();
 			Flag.sw.startTotal();
@@ -93,6 +92,7 @@ public abstract class GenRunnable<T> extends network.Server implements Runnable 
 		GenRunnable run = (GenRunnable) clazz.newInstance();
 		run.setParameter(mode, port, Arrays.copyOfRange(args, 2, args.length));
 		run.run();
-//		Flag.sw.print();
+		if(Flag.CountTime)
+			Flag.sw.print();
 	}
 }

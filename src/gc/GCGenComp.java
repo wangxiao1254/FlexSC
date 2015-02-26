@@ -3,6 +3,7 @@ package gc;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 
 import ot.FakeOTSender;
 import ot.OTExtSender;
@@ -83,6 +84,15 @@ public abstract class GCGenComp extends GCCompEnv{
 	}
 
 	public GCSignal[] inputOfBob(boolean[] x) {
+		GCSignal[] ret = new GCSignal[x.length];
+		for(int i = 0; i < x.length; i+=Flag.OTBlockSize) {
+			GCSignal[] tmp = inputOfBobInter(Arrays.copyOfRange(x, i, Math.min(i+Flag.OTBlockSize, x.length)));
+			System.arraycopy(tmp, 0, ret, i, tmp.length);
+		}
+		return ret;
+	}
+	
+	public GCSignal[] inputOfBobInter(boolean[] x) {
 		Flag.sw.startOT();
 		GCSignal[][] pair = new GCSignal[x.length][2];
 		for (int i = 0; i < x.length; ++i)
