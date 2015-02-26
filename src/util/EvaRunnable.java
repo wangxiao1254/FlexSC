@@ -64,7 +64,7 @@ public abstract  class EvaRunnable<T> extends network.Client implements Runnable
 
 	@SuppressWarnings("rawtypes")
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ParseException, ClassNotFoundException {
-		File file = new File(args[0], "Config.conf");
+		File file = new File("Config.conf");
 		Scanner scanner;
 		String host = null;
 		int port = 0;
@@ -91,9 +91,9 @@ public abstract  class EvaRunnable<T> extends network.Client implements Runnable
 			e.printStackTrace();
 		}
 		
-		Class<?> clazz = Class.forName(args[1]+"$Evaluator");
+		Class<?> clazz = Class.forName(args[0]+"$Evaluator");
 		EvaRunnable run = (EvaRunnable) clazz.newInstance();
-		run.setParameter(mode, host, port, Arrays.copyOfRange(args, 2, args.length));
+		run.setParameter(mode, host, port, Arrays.copyOfRange(args, 1, args.length));
 		run.run();
 		if(Flag.CountTime)
 			Flag.sw.print();
