@@ -76,8 +76,7 @@ public class BitonicSortLib<T> extends IntegerLib<T> {
 	}
 
 	private void compare(T[][] key, int i, int j, T dir) {
-		T greater = not(leq(key[i], key[j]));
-		T swap = eq(greater, dir);
+		T swap = eq(not(leq(key[i], key[j])), dir);
 		T[] s = mux(key[j], key[i], swap);
 		s = xor(s, key[i]);
 		T[] ki = xor(key[j], s);

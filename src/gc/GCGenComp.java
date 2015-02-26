@@ -168,7 +168,7 @@ public abstract class GCGenComp extends GCCompEnv{
 
 	public GCSignal xor(GCSignal a, GCSignal b) {
 		if (a.isPublic() && b.isPublic())
-			return new GCSignal(a.v ^ b.v);
+			return  ((a.v ^ b.v) ?_ONE:_ZERO);
 		else if (a.isPublic())
 			return a.v ? not(b) : b;
 		else if (b.isPublic())
@@ -180,7 +180,7 @@ public abstract class GCGenComp extends GCCompEnv{
 
 	public GCSignal not(GCSignal a) {
 		if (a.isPublic())
-			return new GCSignal(!a.v);
+			return ((!a.v) ?_ONE:_ZERO);//new GCSignal(!a.v);
 		else
 			return R.xor(a);
 	}

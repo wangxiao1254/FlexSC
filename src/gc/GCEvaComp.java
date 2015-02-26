@@ -128,20 +128,20 @@ public abstract class GCEvaComp extends GCCompEnv{
 
 	public GCSignal xor(GCSignal a, GCSignal b) {
 		if (a.isPublic() && b.isPublic())
-			return new GCSignal(a.v ^ b.v);
+			return  ((a.v ^ b.v) ?_ONE:_ZERO);
 		else if (a.isPublic())
-			return a.v ? not(b) : new GCSignal(b);
+			return a.v ? not(b) : b;
 		else if (b.isPublic())
-			return b.v ? not(a) : new GCSignal(a);
+			return b.v ? not(a) : a;
 		else
 			return a.xor(b);
 	}
 
 	public GCSignal not(GCSignal a) {
 		if (a.isPublic())
-			return new GCSignal(!a.v);
+			return ((!a.v) ?_ONE:_ZERO);//new GCSignal(!a.v);
 		else {
-			return new GCSignal(a);
+			return a;//new GCSignal(a);
 		}
 	}
 }
