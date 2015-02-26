@@ -1,5 +1,7 @@
 package network;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -18,8 +20,8 @@ public class Server {
 		sock = new ServerSocket(port); // create socket and bind to port
 		clientSock = sock.accept(); // wait for client to connect
 
-		os = clientSock.getOutputStream();
-		is = clientSock.getInputStream();
+		os = new BufferedOutputStream(clientSock.getOutputStream());
+		is = new BufferedInputStream(clientSock.getInputStream());
 	}
 
 	public void disconnect() throws Exception {

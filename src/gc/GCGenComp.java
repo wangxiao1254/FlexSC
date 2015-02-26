@@ -74,6 +74,7 @@ public abstract class GCGenComp extends GCCompEnv{
 			pairs[i] = genPair();
 			result[i] = pairs[i][0];
 		}
+		
 		Flag.sw.startOTIO();
 		for (int i = 0; i < x.length; ++i)
 			pairs[i][x[i] ? 1 : 0].send(os);

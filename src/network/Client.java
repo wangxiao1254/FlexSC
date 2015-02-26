@@ -1,5 +1,7 @@
 package network;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -29,11 +31,13 @@ public class Client {
 		}
 		
 		if (Flag.countIO) {
-			os=cos = new CountingOutputStream(sock.getOutputStream());
-			is=cis = new CountingInputStream(sock.getInputStream());
+			cos = new CountingOutputStream(sock.getOutputStream());
+			cis = new CountingInputStream(sock.getInputStream());
+			os = new BufferedOutputStream(cos);
+			is = new BufferedInputStream(cis);
 		} else {
-			os = sock.getOutputStream();
-			is = sock.getInputStream();
+			os = new BufferedOutputStream(sock.getOutputStream());
+			is = new BufferedInputStream(sock.getInputStream());
 		}
 	}
 
