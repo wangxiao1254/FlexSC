@@ -27,8 +27,8 @@ public class GCGen extends GCGenComp {
 		labelR[0] = b;
 		labelR[1] = R.xor(labelR[0]);
 
-		int cL = a.getLSB() ? 1 : 0;
-		int cR = b.getLSB() ? 1 : 0;
+		int cL = a.getLSB();
+		int cR = b.getLSB();
 
 		// first half gate
 		GCSignal G1 = gb.hash(labelL[0], gid, false);
@@ -61,7 +61,7 @@ public class GCGen extends GCGenComp {
 		Flag.sw.startGC();
 		GCSignal res;
 		if (a.isPublic() && b.isPublic())
-			res = new GCSignal(a.v && b.v);
+			res = ((a.v && b.v)? _ONE: _ZERO);
 		else if (a.isPublic())
 			res = a.v ? b : _ZERO;
 		else if (b.isPublic())

@@ -44,8 +44,8 @@ public class GCEva extends GCEvaComp {
 		else {
 			receiveGTT();
 
-			int i0 = a.getLSB() ? 1 : 0;
-			int i1 = b.getLSB() ? 1 : 0;
+			int i0 = a.getLSB();
+			int i1 = b.getLSB();
 
 			res = gb.dec(a, b, gid, gtt[i0][i1]);
 			gid++;

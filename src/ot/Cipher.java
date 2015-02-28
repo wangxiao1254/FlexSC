@@ -61,8 +61,10 @@ public final class Cipher {
 		return cph.xor(getPaddingOfLength(j, key, cphLength));
 	}
 
+	ByteBuffer buffer = ByteBuffer.allocate(4);
 	private BigInteger getPaddingOfLength(int j, byte[] key, int padLength) {
-		sha1.update(ByteBuffer.allocate(4).putInt(j).array());
+		buffer.clear();
+		sha1.update(buffer.putInt(j));
 		sha1.update(key);
 
 		byte[] pad = new byte[(padLength - 1) / 8 + 1];
@@ -88,9 +90,11 @@ public final class Cipher {
 		return getPadding(key, k).xor(c);
 	}
 
+	ByteBuffer buffer2 = ByteBuffer.allocate(4);
 	private GCSignal getPadding(GCSignal key, int k) {
+		buffer2.clear();
 		sha1.update(key.bytes);
-		sha1.update(ByteBuffer.allocate(4).putInt(k).array());
+		sha1.update(buffer2.putInt(k));
 		GCSignal ret = GCSignal.newInstance(sha1.digest());
 		return ret;
 	}

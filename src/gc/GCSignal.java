@@ -60,8 +60,8 @@ public class GCSignal {
 		bytes[0] |= 1;
 	}
 
-	public boolean getLSB() {
-		return (bytes[0] & 1) == 1;
+	public int getLSB() {
+		return (bytes[0] & 1);
 	}
 
 	// 'send' and 'receive' are supposed to be used only for secret signals
