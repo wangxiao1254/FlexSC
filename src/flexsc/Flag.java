@@ -11,6 +11,6 @@ public class Flag {
 	public static boolean countIO = false;
 	public static boolean FakeOT = false;
 	public static boolean ProprocessOT = false;
-	public static int OTBlockSize = 1024*200;
+	public static int OTBlockSize = 1024*64;
 	
 }
