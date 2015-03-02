@@ -12,6 +12,7 @@ import circuits.arithmetic.FloatLib;
 import flexsc.CompEnv;
 import flexsc.Mode;
 import flexsc.PMCompEnv;
+import gc.BadLabelException;
 
 
 public class TestMatrix extends TestHarness {
@@ -99,7 +100,7 @@ public class TestMatrix extends TestHarness {
 		}
 
 		@Override
-		public void prepareOutput(CompEnv<T> gen) {
+		public void prepareOutput(CompEnv<T> gen) throws BadLabelException {
 			z = new double[re.length][re[0].length];
 			for (int i = 0; i < re.length; ++i)
 				for (int j = 0; j < re[0].length; ++j)
@@ -168,7 +169,7 @@ public class TestMatrix extends TestHarness {
 		}
 
 		@Override
-		public void prepareOutput(CompEnv<T> env) {
+		public void prepareOutput(CompEnv<T> env) throws BadLabelException {
 			for (int i = 0; i < re.length; ++i)
 				for (int j = 0; j < re[0].length; ++j)
 					env.outputToAlice(re[i][j]);

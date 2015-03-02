@@ -9,6 +9,7 @@ import circuits.arithmetic.FloatLib;
 import flexsc.CompEnv;
 import flexsc.Mode;
 import flexsc.PMCompEnv;
+import gc.BadLabelException;
 
 public class TestFloat extends TestHarness {
 	public static int widthV = 24, widthP = 8;
@@ -52,7 +53,7 @@ public class TestFloat extends TestHarness {
 		}
 
 		@Override
-		public void prepareOutput(CompEnv<T> gen) {
+		public void prepareOutput(CompEnv<T> gen) throws BadLabelException {
 			z = Utils.toFloat(gen.outputToAlice(d), widthV, widthP);
 			if (m == Mode.COUNT) {
 					((PMCompEnv) gen).statistic.finalize();
@@ -98,7 +99,7 @@ public class TestFloat extends TestHarness {
 		}
 
 		@Override
-		public void prepareOutput(CompEnv<T> env) {
+		public void prepareOutput(CompEnv<T> env) throws BadLabelException {
 			env.outputToAlice(d);
 		}
 	}

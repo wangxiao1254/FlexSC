@@ -8,6 +8,7 @@ import network.Server;
 import flexsc.CompEnv;
 import flexsc.Mode;
 import flexsc.Party;
+import gc.BadLabelException;
 import gc.GCSignal;
 
 public class CircuitLib<T> {
@@ -60,7 +61,7 @@ public class CircuitLib<T> {
 		return resSC;
 	}
 
-	public boolean[] declassifyToAlice(T[] x) {
+	public boolean[] declassifyToAlice(T[] x) throws BadLabelException {
 		return env.outputToAlice(x);
 	}
 
@@ -68,7 +69,7 @@ public class CircuitLib<T> {
 		return env.outputToBob(x);
 	}
 
-	public boolean[] declassifyToBoth(T[] x) {
+	public boolean[] declassifyToBoth(T[] x) throws BadLabelException {
 		if(env.m == Mode.COUNT){
 			return new boolean[x.length];
 		}

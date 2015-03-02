@@ -5,6 +5,7 @@ import util.GenRunnable;
 import util.Utils;
 import circuits.arithmetic.IntegerLib;
 import flexsc.CompEnv;
+import gc.BadLabelException;
 
 public class Millionaire {
 	
@@ -32,7 +33,7 @@ public class Millionaire {
 		}
 		
 		@Override
-		public void prepareOutput(CompEnv<T> gen) {
+		public void prepareOutput(CompEnv<T> gen) throws BadLabelException {
 			System.out.println(gen.outputToAlice(scResult));
 		}
 	}
@@ -55,7 +56,7 @@ public class Millionaire {
 		}
 		
 		@Override
-		public void prepareOutput(CompEnv<T> gen) {
+		public void prepareOutput(CompEnv<T> gen) throws BadLabelException {
 			gen.outputToAlice(scResult);
 		}
 	}

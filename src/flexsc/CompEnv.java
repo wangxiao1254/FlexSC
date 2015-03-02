@@ -1,6 +1,8 @@
 // Copyright (C) 2014 by Xiao Shaun Wang <wangxiao@cs.umd.edu>
 package flexsc;
 
+import gc.BadLabelException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -69,7 +71,7 @@ public abstract class CompEnv<T> {
 
 	public abstract T inputOfBob(boolean in);
 
-	public abstract boolean outputToAlice(T out);
+	public abstract boolean outputToAlice(T out) throws BadLabelException;
 
 	public abstract boolean outputToBob(T out);
 
@@ -110,7 +112,7 @@ public abstract class CompEnv<T> {
 	}
 
 	
-	public abstract boolean[] outputToAlice(T[] out);
+	public abstract boolean[] outputToAlice(T[] out) throws BadLabelException;
 
 	public abstract boolean[] outputToBob(T[] out);
 

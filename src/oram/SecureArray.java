@@ -4,6 +4,7 @@ package oram;
 import java.util.Arrays;
 
 import flexsc.CompEnv;
+import gc.BadLabelException;
 
 public class SecureArray<T> {
 	static final int threshold = 256;
@@ -23,7 +24,7 @@ public class SecureArray<T> {
 		}
 	}
 
-	public T[] readAndRemove(T[] iden) {
+	public T[] readAndRemove(T[] iden) throws BadLabelException {
 		return circuitOram.clients.get(0).readAndRemove(iden, 
 				Arrays.copyOfRange(circuitOram.clients.get(0).lib.declassifyToBoth(iden), 0, circuitOram.clients.get(0).lengthOfPos), false);
 	}
@@ -34,7 +35,7 @@ public class SecureArray<T> {
 			 circuitOram.setInitialValue(inital);
 		
 	}
-	public T[] read(T[] iden) {
+	public T[] read(T[] iden) throws BadLabelException {
 		if (useTrivialOram)
 			return trivialOram.read(iden);
 		else
@@ -48,7 +49,7 @@ public class SecureArray<T> {
 			circuitOram.write(iden, data);
 	}
 	
-	public void conditionalWrite(T[] iden, T[]data, T condition) {
+	public void conditionalWrite(T[] iden, T[]data, T condition) throws BadLabelException {
 		if(useTrivialOram) {
 		T[] readData = trivialOram.readAndRemove(iden);
 		T[] toAdd = trivialOram.lib.mux(readData, data, condition);

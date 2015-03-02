@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import util.Utils;
 import flexsc.CompEnv;
+import gc.BadLabelException;
 
 //http://x86asm.net/articles/fixed-point-arithmetic-and-tricks/
 public class FixedPointLib<T> implements ArithmeticLib<T> {
@@ -101,7 +102,7 @@ public class FixedPointLib<T> implements ArithmeticLib<T> {
 	}
 
 	@Override
-	public double outputToAlice(T[] a) {
+	public double outputToAlice(T[] a) throws BadLabelException {
 		return Utils.toFixPoint(env.outputToAlice(a), offset);
 	}
 

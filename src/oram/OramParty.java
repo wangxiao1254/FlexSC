@@ -8,6 +8,7 @@ import java.util.Arrays;
 import flexsc.CompEnv;
 import flexsc.Mode;
 import flexsc.Party;
+import gc.BadLabelException;
 
 public abstract class OramParty<T> {
 	public int N;
@@ -96,13 +97,13 @@ public abstract class OramParty<T> {
 		return lib.xor(s, c);
 	}
 
-	public PlainBlock preparePlainBlock(Block<T> blocks, Block<T> randomBlock) {
+	public PlainBlock preparePlainBlock(Block<T> blocks, Block<T> randomBlock) throws BadLabelException {
 		PlainBlock result = outputBlock(lib.xor(blocks, randomBlock));
 		return result;
 	}
 
 	public PlainBlock[] preparePlainBlocks(Block<T>[] blocks,
-			Block<T>[] randomBlock) {
+			Block<T>[] randomBlock) throws BadLabelException {
 		PlainBlock[] result = outputBucket(lib.xor(blocks, randomBlock));
 		return result;
 	}
@@ -144,7 +145,7 @@ public abstract class OramParty<T> {
 				b.length);
 	}
 
-	public PlainBlock outputBlock(Block<T> b) {
+	public PlainBlock outputBlock(Block<T> b) throws BadLabelException {
 		boolean[] iden = env.outputToAlice(b.iden);
 		boolean[] pos = env.outputToAlice(b.pos);
 		boolean[] data = env.outputToAlice(b.data);
@@ -153,14 +154,14 @@ public abstract class OramParty<T> {
 		return new PlainBlock(iden, pos, data, isDummy);
 	}
 
-	public PlainBlock[] outputBucket(Block<T>[] b) {
+	public PlainBlock[] outputBucket(Block<T>[] b) throws BadLabelException {
 		PlainBlock[] result = new PlainBlock[b.length];
 		for (int i = 0; i < b.length; ++i)
 			result[i] = outputBlock(b[i]);
 		return result;
 	}
 
-	public PlainBlock[][] outputBuckets(Block<T>[][] b) {
+	public PlainBlock[][] outputBuckets(Block<T>[][] b) throws BadLabelException {
 		PlainBlock[][] result = new PlainBlock[b.length][];
 		for (int i = 0; i < b.length; ++i)
 			result[i] = outputBucket(b[i]);

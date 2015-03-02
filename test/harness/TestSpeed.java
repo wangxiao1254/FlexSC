@@ -8,6 +8,7 @@ import util.Utils;
 import flexsc.CompEnv;
 import flexsc.Mode;
 import flexsc.PMCompEnv;
+import gc.BadLabelException;
 
 public class TestSpeed extends TestHarness {
 
@@ -54,7 +55,7 @@ public class TestSpeed extends TestHarness {
 		}
 
 		@Override
-		public void prepareOutput(CompEnv<T> gen) {
+		public void prepareOutput(CompEnv<T> gen) throws BadLabelException {
 			z = gen.outputToAlice(d);
 			if (m == Mode.COUNT) {
 					((PMCompEnv) gen).statistic.finalize();
@@ -90,7 +91,7 @@ public class TestSpeed extends TestHarness {
 		}
 
 		@Override
-		public void prepareOutput(CompEnv<T> env) {
+		public void prepareOutput(CompEnv<T> env) throws BadLabelException {
 			env.outputToAlice(d);
 		}
 	}

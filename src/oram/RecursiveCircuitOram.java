@@ -9,6 +9,7 @@ import java.util.Arrays;
 
 import flexsc.CompEnv;
 import flexsc.Party;
+import gc.BadLabelException;
 
 public class RecursiveCircuitOram<T> {
 	public TrivialPrivateOram<T> baseOram;
@@ -60,7 +61,7 @@ public class RecursiveCircuitOram<T> {
 				last.lengthOfPos);
 	}
 
-	public T[] read(T[] iden) {
+	public T[] read(T[] iden) throws BadLabelException {
 		T[][] poses = travelToDeep(iden, 1);
 		CircuitOram<T> currentOram = clients.get(0);
 		boolean[] oldPos = baseOram.lib.declassifyToBoth(poses[0]);
@@ -69,7 +70,7 @@ public class RecursiveCircuitOram<T> {
 		return res;
 	}
 
-	public void write(T[] iden, T[] data) {
+	public void write(T[] iden, T[] data) throws BadLabelException {
 		T[][] poses = travelToDeep(iden, 1);
 		CircuitOram<T> currentOram = clients.get(0);
 
@@ -77,7 +78,7 @@ public class RecursiveCircuitOram<T> {
 		currentOram.write(iden, oldPos, poses[1], data);
 	}
 
-	public T[] access(T[] iden, T[] data, T op) {
+	public T[] access(T[] iden, T[] data, T op) throws BadLabelException {
 		T[][] poses = travelToDeep(iden, 1);
 		CircuitOram<T> currentOram = clients.get(0);
 
@@ -85,7 +86,7 @@ public class RecursiveCircuitOram<T> {
 		return currentOram.access(iden, oldPos, poses[1], data, op);
 	}
 
-	public T[][] travelToDeep(T[] iden, int level) {
+	public T[][] travelToDeep(T[] iden, int level) throws BadLabelException {
 		if (level == clients.size()) {
 			T[] baseMap = baseOram.readAndRemove(subIdentifier(iden, baseOram));
 			T[] ithPos = baseOram.lib.rightPublicShift(iden,

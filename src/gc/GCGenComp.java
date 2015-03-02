@@ -115,7 +115,7 @@ public abstract class GCGenComp extends GCCompEnv{
 
 	protected boolean gatesRemain = false;
 
-	public boolean outputToAlice(GCSignal out) {
+	public boolean outputToAlice(GCSignal out) throws BadLabelException {
 		if (gatesRemain) {
 			gatesRemain = false;
 			flush();
@@ -129,14 +129,7 @@ public abstract class GCGenComp extends GCCompEnv{
 		else if (lb.equals(R.xor(out)))
 			return true;
 
-		try {
-			throw new Exception("bad label at final output.");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.exit(1);
-		}
-		return false;
+		throw new BadLabelException("bad label at final output.");
 	}
 
 	public boolean outputToBob(GCSignal out) {
@@ -159,7 +152,7 @@ public abstract class GCGenComp extends GCCompEnv{
 		return result;
 	}
 
-	public boolean[] outputToAlice(GCSignal[] out) {
+	public boolean[] outputToAlice(GCSignal[] out) throws BadLabelException {
 		boolean[] result = new boolean[out.length];
 		for (int i = 0; i < result.length; ++i) {
 			result[i] = outputToAlice(out[i]);

@@ -4,6 +4,7 @@ import util.EvaRunnable;
 import util.GenRunnable;
 import circuits.arithmetic.IntegerLib;
 import flexsc.CompEnv;
+import gc.BadLabelException;
 
 public class HammingDistance {
 	
@@ -33,7 +34,7 @@ public class HammingDistance {
 			scResult = compute(gen, inputA, inputB);
 		}
 		@Override
-		public void prepareOutput(CompEnv<T> gen) {
+		public void prepareOutput(CompEnv<T> gen) throws BadLabelException {
 			System.out.println(gen.outputToAlice(scResult));
 		}
 		
@@ -60,7 +61,7 @@ public class HammingDistance {
 		}
 		
 		@Override
-		public void prepareOutput(CompEnv<T> gen) {
+		public void prepareOutput(CompEnv<T> gen) throws BadLabelException {
 			gen.outputToAlice(scResult);
 		}
 	}

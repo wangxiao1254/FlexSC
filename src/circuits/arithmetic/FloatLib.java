@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import util.Utils;
 import flexsc.CompEnv;
+import gc.BadLabelException;
 
 public class FloatLib<T> implements ArithmeticLib<T> {
 
@@ -229,7 +230,7 @@ public class FloatLib<T> implements ArithmeticLib<T> {
 	}
 
 	@Override
-	public double outputToAlice(T[] a) {
+	public double outputToAlice(T[] a) throws BadLabelException {
 		return Utils.toFloat(env.outputToAlice(a), VLength, PLength);
 	}
 

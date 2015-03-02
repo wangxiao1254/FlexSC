@@ -8,6 +8,7 @@ import util.Utils;
 import flexsc.CompEnv;
 import flexsc.Mode;
 import flexsc.PMCompEnv;
+import gc.BadLabelException;
 
 
 public class TestSortHarness extends TestHarness {
@@ -54,7 +55,7 @@ public class TestSortHarness extends TestHarness {
 		}
 
 		@Override
-		public void prepareOutput(CompEnv<T> gen) {
+		public void prepareOutput(CompEnv<T> gen) throws BadLabelException {
 			z = new boolean[d.length][d[0].length];
 			for (int i = 0; i < d.length; i++)
 				z[i] = gen.outputToAlice(d[i]);
@@ -100,7 +101,7 @@ public class TestSortHarness extends TestHarness {
 		}
 
 		@Override
-		public void prepareOutput(CompEnv<T> env) {
+		public void prepareOutput(CompEnv<T> env) throws BadLabelException {
 			for (int i = 0; i < d.length; i++)
 				env.outputToAlice(d[i]);
 		}
