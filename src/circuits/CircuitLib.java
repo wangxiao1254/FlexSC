@@ -48,7 +48,7 @@ public class CircuitLib<T> {
          return ret;
    }
 	public T[] randBools(int length) {
-		if(env.m == Mode.COUNT) {
+		if(env.mode == Mode.COUNT) {
 			return zeros(length);
 		}
 		boolean[] res = new boolean[length];
@@ -70,7 +70,7 @@ public class CircuitLib<T> {
 	}
 
 	public boolean[] declassifyToBoth(T[] x) throws BadLabelException {
-		if(env.m == Mode.COUNT){
+		if(env.mode == Mode.COUNT){
 			return new boolean[x.length];
 		}
 		boolean[] pos = env.outputToAlice(x);

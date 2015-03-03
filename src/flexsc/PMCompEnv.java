@@ -62,7 +62,7 @@ public class PMCompEnv extends BooleanCompEnv {
 
 	public PMCompEnv(InputStream is, OutputStream os, Party p) {
 		super(is, os, p, Mode.COUNT);
-		this.p = p;
+		this.party = p;
 		t = true;
 		f = false;
 		statistic = new Statistics();

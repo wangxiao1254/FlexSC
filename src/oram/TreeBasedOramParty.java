@@ -14,7 +14,7 @@ public abstract class TreeBasedOramParty<T> extends OramParty<T> {
 		super(env, N, dataSize);
 		this.capacity = capacity;
 
-		if (env.m != Mode.COUNT) {
+		if (env.mode != Mode.COUNT) {
 			tree = new PlainBlock[this.N][capacity];
 
 			PlainBlock b = getDummyBlock(p == Party.Alice);
@@ -27,7 +27,7 @@ public abstract class TreeBasedOramParty<T> extends OramParty<T> {
 
 	protected PlainBlock[][] getPath(boolean[] path) {
 		PlainBlock[][] result = new PlainBlock[logN][];
-		if (env.m == Mode.COUNT) {
+		if (env.mode == Mode.COUNT) {
 			for (int i = 0; i < logN; ++i) {
 				result[i] = new PlainBlock[capacity];
 				for (int j = 0; j < capacity; ++j)
@@ -47,7 +47,7 @@ public abstract class TreeBasedOramParty<T> extends OramParty<T> {
 	}
 
 	protected void putPath(PlainBlock[][] blocks, boolean[] path) {
-		if (env.m == Mode.COUNT)
+		if (env.mode == Mode.COUNT)
 			return;
 		int index = 1;
 		tree[index] = blocks[0];

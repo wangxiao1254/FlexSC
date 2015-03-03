@@ -50,8 +50,8 @@ public abstract class OramParty<T> {
 	public OramParty(CompEnv<T> env, int N, int dataSize) {
 		setParameters(env, N, dataSize);
 		lengthOfPos = logN - 1;
-		p = env.p;
-		mode = env.m;
+		p = env.party;
+		mode = env.mode;
 		init();
 
 	}
@@ -59,8 +59,8 @@ public abstract class OramParty<T> {
 	public OramParty(CompEnv<T> env, int N, int dataSize, int lengthOfPos) {
 		setParameters(env, N, dataSize);
 		this.lengthOfPos = lengthOfPos;
-		p = env.p;
-		mode = env.m;
+		p = env.party;
+		mode = env.mode;
 		init();
 
 	}

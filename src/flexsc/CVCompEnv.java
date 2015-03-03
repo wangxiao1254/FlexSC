@@ -10,7 +10,7 @@ import util.Utils;
 public class CVCompEnv extends BooleanCompEnv {
 	public CVCompEnv(InputStream is, OutputStream os, Party p) {
 		super(is, os, p, Mode.VERIFY);
-		this.p = p;
+		this.party = p;
 	}
 
 	public int numOfAnds = 0;
@@ -19,7 +19,7 @@ public class CVCompEnv extends BooleanCompEnv {
 		Boolean res = null;
 		try {
 			res = in;
-			if (p == Party.Alice)
+			if (party == Party.Alice)
 				os.write(in ? 1 : 0);
 			else {
 				int re = is.read();
@@ -40,7 +40,7 @@ public class CVCompEnv extends BooleanCompEnv {
 		try {
 			os.flush();
 			res = in;
-			if (p == Party.Bob)
+			if (party == Party.Bob)
 				os.write(in ? 1 : 0);
 			else {
 				int re = is.read();

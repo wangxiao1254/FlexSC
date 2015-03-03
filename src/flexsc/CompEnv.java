@@ -57,14 +57,14 @@ public abstract class CompEnv<T> {
 
 	public InputStream is;
 	public OutputStream os;
-	public Party p;
-	public Mode m;
+	public Party party;
+	public Mode mode;
 
 	public CompEnv(InputStream is, OutputStream os, Party p, Mode m) {
 		this.is = is;
 		this.os = os;
-		this.m = m;
-		this.p = p;
+		this.mode = m;
+		this.party = p;
 	}
 
 	public abstract T inputOfAlice(boolean in);
@@ -135,7 +135,7 @@ public abstract class CompEnv<T> {
 	public abstract T newT(boolean v);
 
 	public Party getParty() {
-		return p;
+		return party;
 	}
 
 	public void flush() {

@@ -41,7 +41,7 @@ public class RecursiveCircuitOram<T> {
 			int capacity, int sp) {
 		this.is = env.is;
 		this.os = env.os;
-		this.p = env.p;
+		this.p = env.party;
 		this.cutoff = cutoff;
 		this.recurFactor = recurFactor;
 		this.capacity = capacity;
