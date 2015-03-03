@@ -1,6 +1,7 @@
 package gc.halfANDs;
 
 import flexsc.Flag;
+import flexsc.Mode;
 import gc.GCEvaComp;
 import gc.GCSignal;
 
@@ -11,7 +12,7 @@ public class GCEva extends GCEvaComp {
 	Garbler gb;
 
 	public GCEva(InputStream is, OutputStream os) {
-		super(is, os);
+		super(is, os, Mode.OPT);
 		gb = new Garbler();
 	}
 

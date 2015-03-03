@@ -1,6 +1,7 @@
 package gc.regular;
 
 import flexsc.Flag;
+import flexsc.Mode;
 import gc.GCEvaComp;
 import gc.GCSignal;
 
@@ -12,7 +13,7 @@ public class GCEva extends GCEvaComp {
 	GCSignal[][] gtt = new GCSignal[2][2];
 
 	public GCEva(InputStream is, OutputStream os) {
-		super(is, os);
+		super(is, os, Mode.REAL);
 		gb = new Garbler();
 		gtt[0][0] = GCSignal.ZERO;
 	}

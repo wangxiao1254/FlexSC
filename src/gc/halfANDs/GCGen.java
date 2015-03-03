@@ -1,6 +1,7 @@
 package gc.halfANDs;
 
 import flexsc.Flag;
+import flexsc.Mode;
 import gc.GCGenComp;
 import gc.GCSignal;
 
@@ -12,7 +13,7 @@ public class GCGen extends GCGenComp {
 
 	public long ands = 0;
 	public GCGen(InputStream is, OutputStream os){
-		super(is, os);
+		super(is, os, Mode.OPT);
 		gb = new Garbler();
 	}
 

@@ -1,6 +1,7 @@
 package gc.regular;
 
 import flexsc.Flag;
+import flexsc.Mode;
 import gc.GCGenComp;
 import gc.GCSignal;
 
@@ -11,7 +12,7 @@ public class GCGen extends GCGenComp {
 	Garbler gb;
 
 	public GCGen(InputStream is, OutputStream os) {
-		super(is, os);
+		super(is, os, Mode.REAL);
 		gb = new Garbler();
 	}
 

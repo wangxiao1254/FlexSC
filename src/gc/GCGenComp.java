@@ -11,6 +11,7 @@ import ot.OTPreprocessSender;
 import ot.OTSender;
 import flexsc.CompEnv;
 import flexsc.Flag;
+import flexsc.Mode;
 import flexsc.Party;
 
 public abstract class GCGenComp extends GCCompEnv{
@@ -24,8 +25,8 @@ public abstract class GCGenComp extends GCCompEnv{
 	OTSender snd;
 	protected long gid = 0;
 
-	public GCGenComp(InputStream is, OutputStream os) {
-		super(is, os, Party.Alice);
+	public GCGenComp(InputStream is, OutputStream os, Mode m) {
+		super(is, os, Party.Alice, m);
 
 		if (Flag.FakeOT)
 			snd = new FakeOTSender(80, is, os);

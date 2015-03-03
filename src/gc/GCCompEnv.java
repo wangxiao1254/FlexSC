@@ -8,8 +8,8 @@ import flexsc.Mode;
 import flexsc.Party;
 
 public abstract class GCCompEnv extends CompEnv<GCSignal> {
-	public GCCompEnv(InputStream is, OutputStream os, Party p) {
-		super(is, os, p, Mode.OPT);
+	public GCCompEnv(InputStream is, OutputStream os, Party p, Mode m) {
+		super(is, os, p, m);
 	}
 
 	protected GCSignal _ONE = new GCSignal(true);
