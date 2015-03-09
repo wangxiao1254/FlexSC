@@ -3,12 +3,12 @@
 
 package gc;
 
-import java.io.InputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.security.SecureRandom;
 import java.util.Arrays;
 
-import network.Server;
+import network.Network;
 
 public class GCSignal {
 	public static final int len = 10;
@@ -55,6 +55,12 @@ public class GCSignal {
 			nb[i] = (byte) (bytes[i] ^ lb.bytes[i]);
 		return new GCSignal(nb);
 	}
+	
+	public static void xor(GCSignal l, GCSignal r, GCSignal ret) {
+		for (int i = 0; i < len; i++)
+			ret.bytes[i] = (byte) (l.bytes[i] ^ r.bytes[i]);
+	}	
+	
 
 	public void setLSB() {
 		bytes[0] |= 1;
@@ -65,24 +71,23 @@ public class GCSignal {
 	}
 
 	// 'send' and 'receive' are supposed to be used only for secret signals
-	public void send(OutputStream os) {
-		try {
-			os.write(bytes);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
+	public void send(Network channel) {
+		channel.writeByte(bytes, len);
 	}
 
 	// 'send' and 'receive' are supposed to be used only for secret signals
-	public static GCSignal receive(InputStream ois) {
-		byte[] b = null;
+	public void send(OutputStream os) {
 		try {
-			b = Server.readBytes(ois, len);
-		} catch (Exception e) {
+			os.write(bytes);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.exit(1);
 		}
+	}
+	
+	// 'send' and 'receive' are supposed to be used only for secret signals
+	public static GCSignal receive(Network channel) {
+		byte[] b = channel.readBytes(len);
 		return new GCSignal(b);
 	}
 

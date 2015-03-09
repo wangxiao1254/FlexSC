@@ -3,13 +3,11 @@ package flexsc;
 
 import gc.BadLabelException;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.Security;
 
+import network.Network;
 import rand.ISAACProvider;
 import util.Utils;
 
@@ -27,23 +25,27 @@ public abstract class CompEnv<T> {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static CompEnv getEnv(Mode mode, Party p, InputStream is,
-			OutputStream os) {
+	public static CompEnv getEnv(Mode mode, Party p, Network w) {
 		if (mode == Mode.REAL)
 			if (p == Party.Bob)
-				return new gc.regular.GCEva(is, os);
+				return new gc.regular.GCEva(w);
 			else
-				return new gc.regular.GCGen(is, os);		
+				return new gc.regular.GCGen(w);		
 		else if (mode == Mode.OPT)
 			if (p == Party.Bob)
-				return new gc.halfANDs.GCEva(is, os);
+				return new gc.halfANDs.GCEva(w);
 			else
-				return new gc.halfANDs.GCGen(is, os);
+				return new gc.halfANDs.GCGen(w);
 		else if (mode == Mode.VERIFY)
-			return new CVCompEnv(is, os, p);
+			return new CVCompEnv(w, p);
 		else if (mode == Mode.COUNT)
-			return new PMCompEnv(is, os, p);
-		else {
+			return new PMCompEnv(w, p);
+		else if (mode == Mode.OFFLINE) {
+			if (p == Party.Bob)
+				return new gc.offline.GCEva(w);
+			else
+				return new gc.offline.GCGen(w);
+		} else {
 			try {
 				throw new Exception("not a supported Mode!");
 			} catch (Exception e) {
@@ -52,17 +54,14 @@ public abstract class CompEnv<T> {
 			}
 			return null;
 		}
-
 	}
 
-	public InputStream is;
-	public OutputStream os;
+	public Network channel;
 	public Party party;
 	public Mode mode;
 
-	public CompEnv(InputStream is, OutputStream os, Party p, Mode m) {
-		this.is = is;
-		this.os = os;
+	public CompEnv(Network w, Party p, Mode m) {
+		this.channel = w;
 		this.mode = m;
 		this.party = p;
 	}
@@ -139,27 +138,10 @@ public abstract class CompEnv<T> {
 	}
 
 	public void flush() {
-		try {
-			os.flush();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.exit(1);
-		}
+		channel.flush();
 	}
 
-	public void sync() throws IOException {
-		if (getParty() == Party.Alice) {
-			is.read();
-			os.write(0);
-			os.flush(); // dummy I/O to prevent dropping connection earlier than
-						// protocol payloads are received.
-		} else {
-			os.write(0);
-			os.flush();
-			is.read(); // dummy write to prevent dropping connection earlier
-						// than
-			// protocol payloads are received.
-		}
+	public Mode getMode() {
+		return mode;
 	}
 }

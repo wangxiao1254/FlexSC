@@ -1,4 +1,4 @@
-package gc.regular;
+package gc.offline;
 
 import gc.GCSignal;
 
@@ -11,18 +11,25 @@ public class TestGarbler {
 	GCSignal a = GCSignal.freshLabel(rnd);
 	GCSignal b = GCSignal.freshLabel(rnd);
 	GCSignal m = GCSignal.freshLabel(rnd);
-	GCSignal ret = GCSignal.freshLabel(rnd);
 	Garbler gb = new Garbler();
 	
 	public void test() {
-		gb.enc(a, b, 0, m, ret);
-		
-//		Assert.assertTrue(m.equals(gb.dec(a, b, 0L, gb.enc(a, b, 0L, m))));
+		gb.enc(a, b, 0, m);
 	}
 
 	@Test
 	public void test1000() {
-		for(int i = 0; i<10000; i++)
+		double t1 = System.nanoTime();
+		int len = 1000000;
+		for(int i = 0; i<len; i++)
 			test();
+		double t2 = System.nanoTime();
+		System.out.println(len/(t2-t1)*1000000000.0);
+	}
+	
+	
+	public static void main(String[] args) {
+		TestGarbler a = new TestGarbler();
+		a.test1000();
 	}
 }

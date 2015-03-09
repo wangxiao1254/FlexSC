@@ -30,11 +30,10 @@ public class TestTrivialOram {
 
 				int data[] = new int[N + 1];
 				@SuppressWarnings("unchecked")
-				CompEnv<GCSignal> gen = CompEnv.getEnv(Mode.REAL, Party.Alice,
-						is, os);
-				TrivialPrivateOram<GCSignal> client = new TrivialPrivateOram<GCSignal>(
+				CompEnv<GCSignal> gen = CompEnv.getEnv(Mode.REAL, Party.Alice, this);
+				LinearScanOram<GCSignal> client = new LinearScanOram<GCSignal>(
 						gen, N, dataSize);
-				System.out.println("logN:" + client.logN + ", N:" + client.N);
+//				System.out.println("logN:" + client.N + ", N:" + client.N);
 
 				for (int i = 0; i < writecount; ++i) {
 					int element = i % N;
@@ -87,9 +86,8 @@ public class TestTrivialOram {
 				connect(host, port);
 
 				@SuppressWarnings("unchecked")
-				CompEnv<GCSignal> eva = CompEnv.getEnv(Mode.REAL, Party.Bob,
-						is, os);
-				TrivialPrivateOram<GCSignal> server = new TrivialPrivateOram<GCSignal>(
+				CompEnv<GCSignal> eva = CompEnv.getEnv(Mode.REAL, Party.Bob, this);
+				LinearScanOram<GCSignal> server = new LinearScanOram<GCSignal>(
 						eva, N, dataSize);
 
 				for (int i = 0; i < writecount; ++i) {

@@ -4,16 +4,14 @@ import flexsc.Flag;
 import flexsc.Mode;
 import gc.GCGenComp;
 import gc.GCSignal;
-
-import java.io.InputStream;
-import java.io.OutputStream;
+import network.Network;
 
 public class GCGen extends GCGenComp {
 	Garbler gb;
 
 	public long ands = 0;
-	public GCGen(InputStream is, OutputStream os){
-		super(is, os, Mode.OPT);
+	public GCGen(Network channel){
+		super(channel, Mode.OPT);
 		gb = new Garbler();
 	}
 
@@ -44,8 +42,8 @@ public class GCGen extends GCGenComp {
 		// send the encrypted gate
 		try {
 			Flag.sw.startGCIO();
-			TG.send(os);
-			TE.send(os);
+			TG.send(channel);
+			TE.send(channel);
 			Flag.sw.stopGCIO();
 		} catch (Exception e) {
 			e.printStackTrace();

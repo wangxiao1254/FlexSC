@@ -24,7 +24,7 @@ public class TestNPOT {
 				m = new GCSignal[2];
 				m[0] = GCSignal.freshLabel(rnd);
 				m[1] = GCSignal.freshLabel(rnd);
-				snd = new NPOTSender(80, is, os);
+				snd = new NPOTSender(80, this);
 				snd.send(m);
 				
 				disconnect();
@@ -43,7 +43,7 @@ public class TestNPOT {
 			try {
 				connect("localhost", 54321);
 				
-				rcv = new NPOTReceiver(is, os);
+				rcv = new NPOTReceiver(this);
 				rcvd = rcv.receive(c);
 				
 				disconnect();

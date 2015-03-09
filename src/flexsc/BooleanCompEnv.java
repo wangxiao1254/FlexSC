@@ -1,14 +1,13 @@
 // Copyright (C) 2014 by Xiao Shaun Wang <wangxiao@cs.umd.edu>
 package flexsc;
 
-import java.io.InputStream;
-import java.io.OutputStream;
+import network.Network;
 
 public abstract class BooleanCompEnv extends CompEnv<Boolean> {
 	Boolean t = true;
 	Boolean f = false;
-	public BooleanCompEnv(InputStream is, OutputStream os, Party p, Mode m) {
-		super(is, os, p, m);
+	public BooleanCompEnv(Network cha, Party p, Mode m) {
+		super(cha, p, m);
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package circuits.arithmetic;
 
+
 import util.Pair;
 import flexsc.CompEnv;
 
@@ -172,9 +173,6 @@ public class DenseMatrixLib<T> {
 			newMatrix = multiply(QR.getElement1(), QR.getElement0());
 			QR = QRDecomposition(newMatrix);
 		}
-		// T[][] res = env.newTArray(matrix.length, 1);
-		// for(int i = 0; i < res.length; ++i)
-		// res[i] = newMatrix[i][i];
 		return newMatrix;
 	}
 

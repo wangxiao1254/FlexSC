@@ -1,10 +1,9 @@
 package gc;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Arrays;
 
+import network.Network;
 import ot.FakeOTReceiver;
 import ot.OTExtReceiver;
 import ot.OTPreprocessReceiver;
@@ -19,21 +18,21 @@ public abstract class GCEvaComp extends GCCompEnv{
 
 	protected long gid = 0;
 
-	public GCEvaComp(InputStream is, OutputStream os, Mode m) {
-		super(is, os, Party.Bob, m);
+	public GCEvaComp(Network channel, Mode mode) {
+		super(channel, Party.Bob, mode);
 
 		if (Flag.FakeOT)
-			rcv = new FakeOTReceiver(is, os);
+			rcv = new FakeOTReceiver(channel);
 		else if (Flag.ProprocessOT)
-			rcv = new OTPreprocessReceiver(is, os);
+			rcv = new OTPreprocessReceiver(channel);
 		else
-			rcv = new OTExtReceiver(is, os);
-		
+			rcv = new OTExtReceiver(channel);
+
 	}
 
 	public GCSignal inputOfAlice(boolean in) {
 		Flag.sw.startOT();
-		GCSignal signal = GCSignal.receive(is);
+		GCSignal signal = GCSignal.receive(channel);
 		Flag.sw.stopOT();
 		return signal;
 	}
@@ -44,7 +43,6 @@ public abstract class GCEvaComp extends GCCompEnv{
 		try {
 			signal = rcv.receive(in);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Flag.sw.stopOT();
@@ -59,14 +57,13 @@ public abstract class GCEvaComp extends GCCompEnv{
 		}
 		return ret;
 	}
-	
+
 	public GCSignal[] inputOfBobInter(boolean[] x) {
 		Flag.sw.startOT();
 		GCSignal[] signal = null;
 		try {
 			signal = rcv.receive(x);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Flag.sw.stopOT();
@@ -77,14 +74,14 @@ public abstract class GCEvaComp extends GCCompEnv{
 		Flag.sw.startOT();
 		GCSignal[] result = new GCSignal[x.length];
 		for (int i = 0; i < x.length; ++i)
-			result[i] = GCSignal.receive(is);
+			result[i] = GCSignal.receive(channel);
 		Flag.sw.stopOT();
 		return result;
 	}
 
 	public boolean outputToAlice(GCSignal out) {
 		if (!out.isPublic())
-			out.send(os);
+			out.send(channel);
 		return false;
 	}
 
@@ -92,10 +89,9 @@ public abstract class GCEvaComp extends GCCompEnv{
 		if (out.isPublic())
 			return out.v;
 
-		GCSignal lb = GCSignal.receive(is);
+		GCSignal lb = GCSignal.receive(channel);
 		if (lb.equals(out))
 			return false;
-		// else if (lb.equals(R.xor(out)))
 		else
 			return true;
 	}
@@ -105,14 +101,10 @@ public abstract class GCEvaComp extends GCCompEnv{
 
 		for (int i = 0; i < result.length; ++i) {
 			if (!out[i].isPublic())
-				out[i].send(os);
+				out[i].send(channel);
 		}
-		try {
-			os.flush();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		channel.flush();		
 
 		for (int i = 0; i < result.length; ++i)
 			result[i] = false;
@@ -140,9 +132,9 @@ public abstract class GCEvaComp extends GCCompEnv{
 
 	public GCSignal not(GCSignal a) {
 		if (a.isPublic())
-			return ((!a.v) ?_ONE:_ZERO);//new GCSignal(!a.v);
+			return ((!a.v) ?_ONE:_ZERO);
 		else {
-			return a;//new GCSignal(a);
+			return a;
 		}
 	}
 }

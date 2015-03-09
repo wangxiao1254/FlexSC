@@ -40,7 +40,7 @@ public class TestNPOTMany {
 					m[i][0] = GCSignal.freshLabel(rnd);
 					m[i][1] = GCSignal.freshLabel(rnd);
 				}
-				snd = new NPOTSender(80, is, os);
+				snd = new NPOTSender(80, this);
 				snd.send(m);
 				
 				disconnect();
@@ -59,7 +59,7 @@ public class TestNPOTMany {
 			try {
 				connect("localhost", 54321);
 				
-				rcv = new NPOTReceiver(is, os);
+				rcv = new NPOTReceiver(this);
 				c = new boolean[n];
 				for (int i = 0; i < n; i++)
 					c[i] = rnd.nextBoolean();

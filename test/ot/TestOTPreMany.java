@@ -23,7 +23,7 @@ public class TestOTPreMany {
 			SecureRandom rnd = new SecureRandom();
 			try {
 				listen(54321);
-				snd = new OTPreprocessSender(80, is, os);
+				snd = new OTPreprocessSender(80, this);
 				
 				for(int k = 0; k < 100; ++k) {
 					m = new GCSignal[n][2];
@@ -53,7 +53,7 @@ public class TestOTPreMany {
 		public void run() {
 			try {
 				connect("localhost", 54321);
-				rcv = new OTPreprocessReceiver(is, os);
+				rcv = new OTPreprocessReceiver(this);
 
 				
 				for(int k = 0; k < 100; ++k) {

@@ -192,7 +192,6 @@ public class IntegerLib<T> extends CircuitLib<T> implements ArithmeticLib<T> {
 		T[] reachedOneSignal = zeros(x.length);
 		T[] result = env.newTArray(x.length);
 		for (int i = 0; i < x.length - 1; ++i) {
-			// Signal comp = x[i];
 			reachedOneSignal[i + 1] = or(reachedOneSignal[i], x[i]);
 			result[i] = xor(x[i], reachedOneSignal[i]);
 		}
@@ -442,7 +441,6 @@ public class IntegerLib<T> extends CircuitLib<T> implements ArithmeticLib<T> {
 		T[] yhi = Arrays.copyOfRange(y, y.length / 2, y.length);
 
 		int nextlength = Math.max(x.length / 2, x.length - x.length / 2);
-		// nextlength = nextlength/2+nextlength%2;
 		xlo = padSignal(xlo, nextlength);
 		xhi = padSignal(xhi, nextlength);
 		ylo = padSignal(ylo, nextlength);
@@ -489,7 +487,6 @@ public class IntegerLib<T> extends CircuitLib<T> implements ArithmeticLib<T> {
 			T[] oldRoot = root;
 			root = copy(root);
 			root[0] = SIGNAL_ONE;
-			// root= incrementByOne(root);
 			T[] remMinusRoot = sub(rem, root);
 			T isRootSmaller = not(remMinusRoot[remMinusRoot.length - 1]);
 			rem = mux(rem, remMinusRoot, isRootSmaller);
@@ -519,13 +516,11 @@ public class IntegerLib<T> extends CircuitLib<T> implements ArithmeticLib<T> {
 	// not fully implemented, more cases to consider
 	@Override
 	public T[] toSecureFloat(T[] a, FloatLib<T> lib) {
-//		if(a.length <= lib.VLength) {
-			T[] v = padSignal(a, lib.VLength);
-			T[] p = leadingZeros(v);
-			v = leftPrivateShift(v, p);
-			p = padSignal(p, lib.PLength);
-			p = sub(zeros(p.length), p);
-//		}
+		T[] v = padSignal(a, lib.VLength);
+		T[] p = leadingZeros(v);
+		v = leftPrivateShift(v, p);
+		p = padSignal(p, lib.PLength);
+		p = sub(zeros(p.length), p);
 		return lib.pack(new FloatLib.Representation<T>(SIGNAL_ZERO, v, p));
 	}
 

@@ -6,17 +6,15 @@ package ot;
 import gc.GCSignal;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+
+import network.Network;
 
 public abstract class OTSender {
-	InputStream is;
-	OutputStream os;
+	Network channel;
 	int msgBitLength;
 
-	public OTSender(int bitLen, InputStream in, OutputStream out) {
-		is = in;
-		os = out;
+	public OTSender(int bitLen, Network channel) {
+		this.channel = channel;
 		msgBitLength = bitLen;
 	}
 

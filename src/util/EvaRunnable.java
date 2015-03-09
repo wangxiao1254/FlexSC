@@ -20,6 +20,7 @@ public abstract  class EvaRunnable<T> extends network.Client implements Runnable
 	int port;
 	String host;
 	protected String[] args;
+	public boolean verbose = true;
 
 	public void setParameter(Mode m, String host, int port, String[] args){
 		this.m = m;
@@ -33,16 +34,18 @@ public abstract  class EvaRunnable<T> extends network.Client implements Runnable
 		this.port = port;
 		this.host = host;
 	}
-	
+
 	public void run() {
 		try {
-			System.out.println("connecting");
+			if(verbose)
+				System.out.println("connecting");
 			connect(host, port);
-			System.out.println("connected");
+			if(verbose)
+				System.out.println("connected");
 
 			@SuppressWarnings("unchecked")
-			CompEnv<T> env = CompEnv.getEnv(m, Party.Bob, is, os);
-			
+			CompEnv<T> env = CompEnv.getEnv(m, Party.Bob, this);
+
 			double s = System.nanoTime();
 			Flag.sw.startTotal();
 			prepareInput(env);
@@ -54,8 +57,10 @@ public abstract  class EvaRunnable<T> extends network.Client implements Runnable
 			Flag.sw.stopTotal();
 			double e = System.nanoTime();
 			disconnect();
-			System.out.println("Eva running time:"+(e-s)/1e9);
-			System.out.println("Number Of AND Gates:"+Flag.sw.ands);
+			if(verbose){
+				System.out.println("Eva running time:"+(e-s)/1e9);
+				System.out.println("Number Of AND Gates:"+Flag.sw.ands);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
@@ -69,7 +74,7 @@ public abstract  class EvaRunnable<T> extends network.Client implements Runnable
 		String host = null;
 		int port = 0;
 		Mode mode = null;
-		
+
 		try {
 			scanner = new Scanner(file);
 			while(scanner.hasNextLine()) {
@@ -90,7 +95,7 @@ public abstract  class EvaRunnable<T> extends network.Client implements Runnable
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		Class<?> clazz = Class.forName(args[0]+"$Evaluator");
 		EvaRunnable run = (EvaRunnable) clazz.newInstance();
 		run.setParameter(mode, host, port, Arrays.copyOfRange(args, 1, args.length));

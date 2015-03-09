@@ -12,7 +12,6 @@ import org.junit.Test;
 import util.Utils;
 import circuits.arithmetic.IntegerLib;
 
-//import gc.T;
 
 public class TestIntegerLib extends TestHarness {
 
@@ -35,7 +34,7 @@ public class TestIntegerLib extends TestHarness {
 		}
 	}
 
-	//@Test
+	@Test
 	public void testIntSub() throws Exception {
 
 		for (int i = 0; i < testCases; i++) {
@@ -53,7 +52,7 @@ public class TestIntegerLib extends TestHarness {
 		}
 	}
 
-	//@Test
+	@Test
 	public void testIntDiv() throws Exception {
 
 		for (int i = 0; i < testCases; i++) {
@@ -73,7 +72,7 @@ public class TestIntegerLib extends TestHarness {
 		}
 	}
 
-	//@Test
+	@Test
 	public void testIntMultiplication() throws Exception {
 
 		for (int i = 0; i < testCases; i++) {
@@ -93,7 +92,7 @@ public class TestIntegerLib extends TestHarness {
 		}
 	}
 
-	//@Test
+	@Test
 	public void testIntMod() throws Exception {
 
 		for (int i = 0; i < testCases; i++) {
@@ -112,7 +111,7 @@ public class TestIntegerLib extends TestHarness {
 		}
 	}
 
-	//@Test
+	@Test
 	public void testIntEq() throws Exception {
 
 		for (int i = 0; i < testCases; i++) {
@@ -150,7 +149,7 @@ public class TestIntegerLib extends TestHarness {
 		}
 	}
 
-	//@Test
+	@Test
 	public void testIntGeq() throws Exception {
 
 		for (int i = 0; i < 1; i++) {
@@ -188,7 +187,7 @@ public class TestIntegerLib extends TestHarness {
 		}
 	}
 
-	//@Test
+	@Test
 	public void testIntLeq() throws Exception {
 
 		for (int i = 0; i < testCases; i++) {
@@ -226,7 +225,7 @@ public class TestIntegerLib extends TestHarness {
 		}
 	}
 
-	//@Test
+	@Test
 	public void testIntSqrt() throws Exception {
 		for (int i = 0; i < testCases; i++) {
 			Test_2Input1Output.runThreads(new Helper(rnd.nextInt(1 << 30), 0) {
@@ -244,7 +243,7 @@ public class TestIntegerLib extends TestHarness {
 		}
 	}
 
-	//@Test
+	@Test
 	public void testIntAbs() throws Exception {
 		Random rnd = new Random();
 
@@ -262,7 +261,7 @@ public class TestIntegerLib extends TestHarness {
 		}
 	}
 
-	//@Test
+	@Test
 	public void testIncrementByOne() throws Exception {
 		Random rnd = new Random();
 
@@ -280,7 +279,7 @@ public class TestIntegerLib extends TestHarness {
 		}
 	}
 
-	//@Test
+	@Test
 	public void testDecrementByOne() throws Exception {
 		Random rnd = new Random();
 
@@ -298,7 +297,7 @@ public class TestIntegerLib extends TestHarness {
 		}
 	}
 	
-	//@Test
+	@Test
 	public void testLeftPrivateShift() throws Exception {
 		Random rnd = new Random();
 

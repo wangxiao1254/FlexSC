@@ -14,12 +14,12 @@ public class DbgUtils {
 	static void debugVal(CompEnv<GCSignal> env, GCSignal bs, String msg)
 			throws Exception {
 		if (env instanceof GCGen) {
-			bs.send(((GCGen) env).os);
-			GCGen.R.send(((GCGen) env).os);
+			bs.send(((GCGen) env).channel);
+			GCGen.R.send(((GCGen) env).channel);
 		} else {
 			int x;
-			GCSignal glb = GCSignal.receive(((GCEva) env).is);
-			GCSignal R = GCSignal.receive(((GCEva) env).is);
+			GCSignal glb = GCSignal.receive(((GCEva) env).channel);
+			GCSignal R = GCSignal.receive(((GCEva) env).channel);
 			if (bs.equals(glb))
 				x = 0;
 			else if (bs.equals(R.xor(glb)))

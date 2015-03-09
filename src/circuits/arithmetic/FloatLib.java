@@ -174,7 +174,6 @@ public class FloatLib<T> implements ArithmeticLib<T> {
 		pa = lib.sub(pa, lib.toSignals(1, PLength));
 
 		va = lib.conditionalLeftPublicShift(va, 1, pa[0]);
-		// pa = lib.conditionalDecrement(pa, pa[0]);
 
 		va = lib.sqrt(va);
 		pa = lib.rightPublicShift(pa, 1);

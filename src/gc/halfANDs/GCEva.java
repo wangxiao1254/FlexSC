@@ -4,15 +4,13 @@ import flexsc.Flag;
 import flexsc.Mode;
 import gc.GCEvaComp;
 import gc.GCSignal;
-
-import java.io.InputStream;
-import java.io.OutputStream;
+import network.Network;
 
 public class GCEva extends GCEvaComp {
 	Garbler gb;
 
-	public GCEva(InputStream is, OutputStream os) {
-		super(is, os, Mode.OPT);
+	public GCEva(Network channel) {
+		super(channel, Mode.OPT);
 		gb = new Garbler();
 	}
 
@@ -33,8 +31,8 @@ public class GCEva extends GCEvaComp {
 			GCSignal TG = GCSignal.ZERO, WG, TE = GCSignal.ZERO, WE;
 			try {
 				Flag.sw.startGCIO();
-				TG = GCSignal.receive(is);
-				TE = GCSignal.receive(is);
+				TG = GCSignal.receive(channel);
+				TE = GCSignal.receive(channel);
 				Flag.sw.stopGCIO();
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -1,4 +1,4 @@
-package gc.regular;
+package gc.offline;
 
 import flexsc.Flag;
 import flexsc.Mode;
@@ -11,7 +11,7 @@ public class GCEva extends GCEvaComp {
 	GCSignal[][] gtt = new GCSignal[2][2];
 
 	public GCEva(Network channel) {
-		super(channel, Mode.REAL);
+		super(channel, Mode.OFFLINE);
 		gb = new Garbler();
 		gtt[0][0] = GCSignal.ZERO;
 	}
@@ -31,23 +31,21 @@ public class GCEva extends GCEvaComp {
 
 	public GCSignal and(GCSignal a, GCSignal b) {
 		Flag.sw.startGC();
-		Flag.sw.ands++;
 
 		GCSignal res;
 		if (a.isPublic() && b.isPublic())
-			res = new GCSignal(a.v && b.v);
+			res = ( (a.v && b.v) ? _ONE :_ZERO);
 		else if (a.isPublic())
-			res = a.v ? b : new GCSignal(false);
+			res = a.v ? b :_ZERO;
 		else if (b.isPublic())
-			res = b.v ? a : new GCSignal(false);
+			res = b.v ? a :_ZERO;
 		else {
-			res = new GCSignal(new byte[10]);
 			receiveGTT();
 
 			int i0 = a.getLSB();
 			int i1 = b.getLSB();
 
-			gb.dec(a, b, gid, gtt[i0][i1], res);
+			res = gb.dec(a, b, gid, gtt[i0][i1]);
 			gid++;
 		}
 		Flag.sw.stopGC();

@@ -1,10 +1,8 @@
 // Copyright (C) 2014 by Xiao Shaun Wang <wangxiao@cs.umd.edu>
 package circuits;
 
-import java.io.IOException;
 import java.util.Arrays;
 
-import network.Server;
 import flexsc.CompEnv;
 import flexsc.Mode;
 import flexsc.Party;
@@ -32,7 +30,7 @@ public class CircuitLib<T> {
 			a >>= 1;
 		}
 		return result;
-		
+
 	}
 
 	public T[] enforceBits(T[] a, int length) {
@@ -42,13 +40,13 @@ public class CircuitLib<T> {
 			return Arrays.copyOfRange(a, 0, length);
 	}
 
-	 public T[] enforceBits(T a, int length) {
-         T[] ret = zeros(length);
-         ret[0] = a;
-         return ret;
-   }
+	public T[] enforceBits(T a, int length) {
+		T[] ret = zeros(length);
+		ret[0] = a;
+		return ret;
+	}
 	public T[] randBools(int length) {
-		if(env.mode == Mode.COUNT) {
+		if(env.getMode() == Mode.COUNT) {
 			return zeros(length);
 		}
 		boolean[] res = new boolean[length];
@@ -65,33 +63,30 @@ public class CircuitLib<T> {
 		return env.outputToAlice(x);
 	}
 
-	public boolean[] declassifyToBob(T[] x) {
+	public boolean[] declassifyToBob(T[] x) throws BadLabelException {
 		return env.outputToBob(x);
 	}
 
 	public boolean[] declassifyToBoth(T[] x) throws BadLabelException {
-		if(env.mode == Mode.COUNT){
+		if(env.getMode() == Mode.COUNT){
 			return new boolean[x.length];
 		}
 		boolean[] pos = env.outputToAlice(x);
-		try {
-			if (env.getParty() == Party.Alice) {
-				byte[] tmp = new byte[pos.length];
-				for (int i = 0; i < pos.length; ++i)
-					tmp[i] = (byte) (pos[i] ? 1 : 0);
-				env.os.write(tmp);
-				env.flush();
-			} else {
-				byte tmp[] = Server.readBytes(env.is, x.length);
-				pos = new boolean[x.length];
-				for (int k = 0; k < tmp.length; ++k) {
-					pos[k] = ((tmp[k] - 1) == 0);
-				}
+
+		if (env.getParty() == Party.Alice) {
+			byte[] tmp = new byte[pos.length];
+			for (int i = 0; i < pos.length; ++i)
+				tmp[i] = (byte) (pos[i] ? 1 : 0);
+			env.channel.writeByte(tmp, tmp.length);
+			env.flush();
+		} else {
+			byte tmp[] = env.channel.readBytes(x.length);
+			pos = new boolean[x.length];
+			for (int k = 0; k < tmp.length; ++k) {
+				pos[k] = ((tmp[k] - 1) == 0);
 			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+
 		return pos;
 	}
 

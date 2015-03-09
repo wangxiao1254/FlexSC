@@ -37,6 +37,7 @@ public class Test_2Input1Output extends TestHarness {
 		boolean[] z;
 		Helper h;
 		public GenRunnableTest2O1I(Helper h) {
+			verbose = false;
 			this.h = h;
 		}
 		
@@ -72,6 +73,7 @@ public class Test_2Input1Output extends TestHarness {
 	public static class EvaRunnableTest2O1I<T> extends EvaRunnable<T> {		
 		EvaRunnableTest2O1I(Helper h) {
 			this.h = h;
+			verbose = false;
 		}
 
 		Helper h;

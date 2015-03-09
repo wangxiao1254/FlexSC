@@ -1,7 +1,5 @@
 package util;
 
-import network.Server;
-
 import org.apache.commons.cli.ParseException;
 
 import flexsc.Flag;
@@ -15,7 +13,7 @@ public class Sender<T> extends network.Client implements Runnable {
 
 			while(true) {
 				double t = System.nanoTime();
-				Server.readBytes(is, 65536);
+				readBytes(65536);
 				double t2 = System.nanoTime();
 				System.out.println((t2-t)/1000000000);
 			}

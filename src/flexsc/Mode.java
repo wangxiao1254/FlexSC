@@ -11,7 +11,9 @@ public enum Mode {
 	//Simulating the protocol and count number of gates/encs
 	COUNT,
 	//Half Gates
-	OPT;
+	OPT,
+	//Offline
+	OFFLINE;
 
 	public static Mode getMode(String optionValue) {
 		if(optionValue.equals("VERIFY")) {
@@ -21,6 +23,8 @@ public enum Mode {
 		} else if(optionValue.equals("COUNT")) {
 			return COUNT;
 		} else if(optionValue.equals("OPT")) {
+			return OPT;
+		} else if(optionValue.equals("OFFLINE")) {
 			return OPT;
 		} else return null;
 	}

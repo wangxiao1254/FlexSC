@@ -24,7 +24,7 @@ public class TestOTExt {
 			try {
 				listen(54321);
 
-				snd = new OTExtSender(80, is, os);
+				snd = new OTExtSender(80, this);
 				m = new GCSignal[n][2];
 				for (int i = 0; i < n; i++) {
 					m[i][0] = GCSignal.freshLabel(rnd);
@@ -48,7 +48,7 @@ public class TestOTExt {
 			try {
 				connect("localhost", 54321);
 				
-				rcv = new OTExtReceiver(is, os);
+				rcv = new OTExtReceiver(this);
 				c = new boolean[n];
 				rcvd = new GCSignal[n];
 				for (int i = 0; i < n; i++) {

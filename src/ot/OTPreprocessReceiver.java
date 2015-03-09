@@ -7,9 +7,9 @@ import flexsc.Flag;
 import gc.GCSignal;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Arrays;
+
+import network.Network;
 
 public class OTPreprocessReceiver  extends OTReceiver {
 	GCSignal[] buffer = new GCSignal[OTPreprocessSender.bufferSize];
@@ -17,12 +17,8 @@ public class OTPreprocessReceiver  extends OTReceiver {
 	int bufferusage = 0;
 
 	public void fillup() {
-		try {
-			os.flush();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			channel.flush();
+
 		while(bufferusage < OTPreprocessSender.bufferSize) {
 			int l = Math.min(OTPreprocessSender.fillLength, OTPreprocessSender.bufferSize-bufferusage);
 			
@@ -32,24 +28,20 @@ public class OTPreprocessReceiver  extends OTReceiver {
 			try {
 				kc = reciever.receive(Arrays.copyOfRange(choose, bufferusage, bufferusage+l));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			System.arraycopy(kc, 0, buffer, bufferusage, kc.length);
 			bufferusage += l;
 		}
-		try {
-			os.flush();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+			channel.flush();
+		
 	}
 
 	OTExtReceiver reciever;
-	public OTPreprocessReceiver(InputStream in, OutputStream out) {
-		super(in, out);
-		reciever = new OTExtReceiver(in, out);
+	public OTPreprocessReceiver(Network channel) {
+		super(channel);
+		reciever = new OTExtReceiver(channel);
 		fillup();
 	}
 
@@ -58,9 +50,9 @@ public class OTPreprocessReceiver  extends OTReceiver {
 		bufferusage--;
 		byte z = (b^choose[bufferusage]) ? (byte)1 : (byte)0;
 		Flag.sw.startOTIO();
-		os.write(z);
-		os.flush();
-		GCSignal[] y = new GCSignal[]{GCSignal.receive(is),  GCSignal.receive(is)};
+		channel.writeByte(z);
+		channel.flush();
+		GCSignal[] y = new GCSignal[]{GCSignal.receive(channel),  GCSignal.receive(channel)};
 		Flag.sw.stopOTIO();
 		if(bufferusage == 0)
 			fillup();
@@ -77,14 +69,14 @@ public class OTPreprocessReceiver  extends OTReceiver {
 			z[i] = (b[i]^choose[tmp]) ? (byte)1 : (byte)0;
 		}
 		Flag.sw.startOTIO();
-		os.write(z);
-		os.flush();
+		channel.writeByte(z, z.length);
+		channel.flush();
 		Flag.sw.stopOTIO();
 		GCSignal[] ret = new GCSignal[b.length];
 		for(int i = 0; i < b.length; ++i) {
 			bufferusage--;
 			Flag.sw.startOTIO();
-			GCSignal[] y = new GCSignal[]{GCSignal.receive(is),  GCSignal.receive(is)};
+			GCSignal[] y = new GCSignal[]{GCSignal.receive(channel),  GCSignal.receive(channel)};
 			Flag.sw.stopOTIO();
 			ret[i] = y[b[i]?1:0].xor(buffer[bufferusage]);
 		}

@@ -1,10 +1,9 @@
 // Copyright (C) 2014 by Xiao Shaun Wang <wangxiao@cs.umd.edu>
 package oram;
 
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Arrays;
 
+import util.Utils;
 import flexsc.CompEnv;
 import flexsc.Mode;
 import flexsc.Party;
@@ -19,8 +18,7 @@ public abstract class OramParty<T> {
 	public int lengthOfPos;
 	public int lengthOfData;
 
-	protected InputStream is;
-	protected OutputStream os;
+	
 	public CompEnv<T> env;
 	public Party p;
 	public Mode mode;
@@ -30,8 +28,6 @@ public abstract class OramParty<T> {
 
 	void setParameters(CompEnv<T> env, int N, int dataSize) {
 		this.env = env;
-		this.is = env.is;
-		this.os = env.os;
 
 		this.dataSize = dataSize;
 		long a = 1;
@@ -71,16 +67,10 @@ public abstract class OramParty<T> {
 			dummyArray[i] = false;
 		lib = new BucketLib<T>(lengthOfIden, lengthOfPos, lengthOfData, env);
 
-		boolean[] iden = new boolean[lengthOfIden];
-		boolean[] pos = new boolean[lengthOfPos];
 		boolean[] data = new boolean[lengthOfData];
-		for (int i = 0; i < lengthOfIden; ++i)
-			iden[i] = true;
-		for (int i = 0; i < lengthOfPos; ++i)
-			pos[i] = true;
 		for (int i = 0; i < lengthOfData; ++i)
 			data[i] = true;
-		pb_for_count_mode = new PlainBlock(iden, pos, data, false);
+		pb_for_count_mode = new PlainBlock(0, 0, data, false);
 
 	}
 
@@ -109,13 +99,13 @@ public abstract class OramParty<T> {
 	}
 
 	public Block<T> inputBlockOfServer(PlainBlock b) {
-		T[] TArray = env.inputOfBob(b.toBooleanArray());
+		T[] TArray = env.inputOfBob(b.toBooleanArray(lengthOfIden, lengthOfPos));
 		return new Block<T>(TArray, lengthOfIden, lengthOfPos, lengthOfData);
 
 	}
 
 	public Block<T> inputBlockOfClient(PlainBlock b) {
-		T[] TArray = env.inputOfAlice(b.toBooleanArray());
+		T[] TArray = env.inputOfAlice(b.toBooleanArray(lengthOfIden, lengthOfPos));
 		return new Block<T>(TArray, lengthOfIden, lengthOfPos, lengthOfData);
 	}
 
@@ -132,14 +122,14 @@ public abstract class OramParty<T> {
 	}
 
 	public Block<T>[] inputBucketOfServer(PlainBlock[] b) {
-		T[] TArray = env.inputOfBob(PlainBlock.toBooleanArray(b));
+		T[] TArray = env.inputOfBob(PlainBlock.toBooleanArray(b,lengthOfIden, lengthOfPos));
 		return toBlocks(TArray, lengthOfIden, lengthOfPos, lengthOfData,
 				b.length);// new Block<T>(TArray,
 							// lengthOfIden,lengthOfPos,lengthOfData);
 	}
 
 	public Block<T>[] inputBucketOfClient(PlainBlock[] b) {
-		T[] TArray = env.inputOfAlice(PlainBlock.toBooleanArray(b));
+		T[] TArray = env.inputOfAlice(PlainBlock.toBooleanArray(b,lengthOfIden, lengthOfPos));
 		env.flush();
 		return toBlocks(TArray, lengthOfIden, lengthOfPos, lengthOfData,
 				b.length);
@@ -151,7 +141,7 @@ public abstract class OramParty<T> {
 		boolean[] data = env.outputToAlice(b.data);
 		boolean isDummy = env.outputToAlice(b.isDummy);
 
-		return new PlainBlock(iden, pos, data, isDummy);
+		return new PlainBlock(Utils.toLong(iden), Utils.toLong(pos), data, isDummy);
 	}
 
 	public PlainBlock[] outputBucket(Block<T>[] b) throws BadLabelException {
@@ -174,16 +164,11 @@ public abstract class OramParty<T> {
 	public PlainBlock getDummyBlock(boolean b) {
 		if (mode == Mode.COUNT)
 			return pb_for_count_mode;
-		boolean[] iden = new boolean[lengthOfIden];
-		boolean[] pos = new boolean[lengthOfPos];
 		boolean[] data = new boolean[lengthOfData];
-		for (int i = 0; i < lengthOfIden; ++i)
-			iden[i] = true;
-		for (int i = 0; i < lengthOfPos; ++i)
-			pos[i] = true;
+
 		for (int i = 0; i < lengthOfData; ++i)
 			data[i] = true;
-		return new PlainBlock(iden, pos, data, b);
+		return new PlainBlock(0, 0, data, b);
 	}
 
 	PlainBlock r = getDummyBlock(true);
@@ -192,15 +177,16 @@ public abstract class OramParty<T> {
 		if (mode == Mode.COUNT)
 			return pb_for_count_mode;
 
-		PlainBlock result = getDummyBlock(true);
-		for (int i = 0; i < lengthOfIden; ++i)
-			result.iden[i] = CompEnv.rnd.nextBoolean();
-		for (int i = 0; i < lengthOfPos; ++i)
-			result.pos[i] = CompEnv.rnd.nextBoolean();
+//		PlainBlock result = getDummyBlock(true);
+//		for (int i = 0; i < lengthOfIden; ++i)
+//			result.iden[i] = CompEnv.rnd.nextBoolean();
+//		for (int i = 0; i < lengthOfPos; ++i)
+//			result.pos[i] = CompEnv.rnd.nextBoolean();
+		boolean[] data = new boolean[lengthOfData];
 		for (int i = 0; i < lengthOfData; ++i)
-			result.data[i] = CompEnv.rnd.nextBoolean();
-		result.isDummy = CompEnv.rnd.nextBoolean();
-		return result;
+			data[i] = CompEnv.rnd.nextBoolean();
+		boolean isDummy = CompEnv.rnd.nextBoolean();
+		return new PlainBlock(CompEnv.rnd.nextLong(), CompEnv.rnd.nextLong(), data, isDummy);
 	}
 
 	public PlainBlock[] randomBucket(int length) {

@@ -1,15 +1,12 @@
 // Copyright (C) 2014 by Xiao Shaun Wang <wangxiao@cs.umd.edu>
 package flexsc;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
+import network.Network;
 import util.Utils;
 
 public class CVCompEnv extends BooleanCompEnv {
-	public CVCompEnv(InputStream is, OutputStream os, Party p) {
-		super(is, os, p, Mode.VERIFY);
+	public CVCompEnv(Network channel, Party p) {
+		super(channel, p, Mode.VERIFY);
 		this.party = p;
 	}
 
@@ -17,42 +14,29 @@ public class CVCompEnv extends BooleanCompEnv {
 	@Override
 	public Boolean inputOfAlice(boolean in) {
 		Boolean res = null;
-		try {
-			res = in;
-			if (party == Party.Alice)
-				os.write(in ? 1 : 0);
-			else {
-				int re = is.read();
-				res = re == 1;
-			}
-			flush();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.exit(1);
+		res = in;
+		if (party == Party.Alice)
+			channel.writeInt(in ? 1 : 0);
+		else {
+			int re = channel.readInt();
+			res = re == 1;
 		}
+		channel.flush();
 		return res;
 	}
 
 	@Override
 	public Boolean inputOfBob(boolean in) {
 		Boolean res = null;
-		try {
-			os.flush();
-			res = in;
-			if (party == Party.Bob)
-				os.write(in ? 1 : 0);
-			else {
-				int re = is.read();
-				res = re == 1;
-			}
-			os.flush();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.exit(1);
+		channel.flush();
+		res = in;
+		if (party == Party.Bob)
+			channel.writeInt(in ? 1 : 0);
+		else {
+			int re = channel.readInt();
+			res = re == 1;
 		}
-
+		channel.flush();
 		return res;
 	}
 

@@ -11,7 +11,7 @@ import flexsc.Party;
 
 public class CountTrivialOram {
 
-	static int newN = 500;
+	static int newN = 1024*2;
 	public  static void main(String args[]) throws Exception {
 		for(int i = 5; i <=10 ; i++) {
 			GenRunnable gen = new GenRunnable(12345, i, 3, 32, 4, 8);
@@ -24,6 +24,7 @@ public class CountTrivialOram {
 			tGen.join();
 		}
 	}
+	
 	@Test
 	public void runThreads() throws Exception {
 		GenRunnable gen = new GenRunnable(12345, 20, 3, 32, 8, 6);
@@ -81,10 +82,9 @@ public class CountTrivialOram {
 //						+ " " + capacity + " " + dataSize);
 
 				@SuppressWarnings("unchecked")
-				CompEnv<Boolean> env = CompEnv.getEnv(Mode.COUNT, Party.Alice,
-						is, os);
-				TrivialPrivateOram<Boolean> client = new TrivialPrivateOram<Boolean>(
-						env, newN, dataSize);
+				CompEnv<Boolean> env = CompEnv.getEnv(Mode.COUNT, Party.Alice, this);
+				LinearScanOram<Boolean> client = new LinearScanOram<Boolean>(
+						env, N, dataSize);
 
 				for (int i = 0; i < writeCount; ++i) {
 					int element = i % N;
@@ -157,10 +157,9 @@ public class CountTrivialOram {
 //						+ " " + capacity + " " + dataSize);
 
 				@SuppressWarnings("unchecked")
-				CompEnv<Boolean> env = CompEnv.getEnv(Mode.COUNT, Party.Bob,
-						is, os);
-				TrivialPrivateOram<Boolean> server = new TrivialPrivateOram<Boolean>(
-						env, newN, dataSize);
+				CompEnv<Boolean> env = CompEnv.getEnv(Mode.COUNT, Party.Bob, this);
+				LinearScanOram<Boolean> server = new LinearScanOram<Boolean>(
+						env, N, dataSize);
 				
 				for (int i = 0; i < writeCount; ++i) {
 					int element = i % N;

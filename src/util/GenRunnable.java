@@ -17,30 +17,33 @@ public abstract class GenRunnable<T> extends network.Server implements Runnable 
 	Mode m;
 	int port;
 	protected String[] args;
+	public boolean verbose = true;
 	public void setParameter(Mode m, int port, String[] args) {
 		this.m = m;
 		this.port = port;
 		this.args = args;
 	}
-	
+
 	public void setParameter(Mode m, int port) {
 		this.m = m;
 		this.port = port;
 	}
-	
+
 	public abstract void prepareInput(CompEnv<T> gen) throws Exception;
 	public abstract void secureCompute(CompEnv<T> gen) throws Exception;
 	public abstract void prepareOutput(CompEnv<T> gen) throws Exception;
 
 	public void run() {
 		try {
-			System.out.println("connecting");
+			if(verbose)
+				System.out.println("connecting");
 			listen(port);
-			System.out.println("connected");
-			
+			if(verbose)
+				System.out.println("connected");
+
 			@SuppressWarnings("unchecked")
-			CompEnv<T> env = CompEnv.getEnv(m, Party.Alice, is, os);
-			
+			CompEnv<T> env = CompEnv.getEnv(m, Party.Alice, this);
+
 			double s = System.nanoTime();
 			Flag.sw.startTotal();
 			prepareInput(env);
@@ -52,15 +55,16 @@ public abstract class GenRunnable<T> extends network.Server implements Runnable 
 			Flag.sw.stopTotal();
 			double e = System.nanoTime();
 			disconnect();
-			System.out.println("Gen running time:"+(e-s)/1e9);
-			
+			if(verbose)
+				System.out.println("Gen running time:"+(e-s)/1e9);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
 	}
 
-	
+
 	@SuppressWarnings("rawtypes")
 	public static void main(String[] args) throws ParseException, ClassNotFoundException, InstantiationException, IllegalAccessException { 
 		File file = new File("Config.conf");
@@ -68,7 +72,7 @@ public abstract class GenRunnable<T> extends network.Server implements Runnable 
 		Scanner scanner;
 		int port=0;
 		Mode mode=null;
-		
+
 		try {
 			scanner = new Scanner(file);
 			while(scanner.hasNextLine()) {
@@ -87,7 +91,7 @@ public abstract class GenRunnable<T> extends network.Server implements Runnable 
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		Class<?> clazz = Class.forName(args[0]+"$Generator");
 		GenRunnable run = (GenRunnable) clazz.newInstance();
 		run.setParameter(mode, port, Arrays.copyOfRange(args, 1, args.length));

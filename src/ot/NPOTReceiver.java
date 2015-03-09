@@ -6,25 +6,21 @@ import flexsc.Flag;
 import gc.GCSignal;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.Security;
 
-import network.RWBigInteger;
+import network.Network;
 import rand.ISAACProvider;
 
 public class NPOTReceiver extends OTReceiver {
-	// private static SecureRandom rnd = new SecureRandom();
 	static SecureRandom rnd;
 	static {
 		Security.addProvider(new ISAACProvider());
 		try {
 			rnd = SecureRandom.getInstance("ISAACRandom");
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -38,8 +34,8 @@ public class NPOTReceiver extends OTReceiver {
 
 	Cipher cipher;
 
-	public NPOTReceiver(InputStream in, OutputStream out) throws Exception {
-		super(in, out);
+	public NPOTReceiver(Network channel) throws Exception {
+		super(channel);
 
 		cipher = new Cipher();
 
@@ -58,12 +54,12 @@ public class NPOTReceiver extends OTReceiver {
 
 	private void initialize() throws Exception {
 		Flag.sw.startOTIO();
-		C = RWBigInteger.readBI(is);
-		p = RWBigInteger.readBI(is);
-		q = RWBigInteger.readBI(is);
-		g = RWBigInteger.readBI(is);
-		gr = RWBigInteger.readBI(is);
-		msgBitLength = is.read();
+		C = channel.readBI();
+		p = channel.readBI();
+		q = channel.readBI();
+		g = channel.readBI();
+		gr = channel.readBI();
+		msgBitLength = channel.readInt();
 		Flag.sw.stopOTIO();
 	}
 
@@ -86,8 +82,8 @@ public class NPOTReceiver extends OTReceiver {
 
 		Flag.sw.startOTIO();
 		for (int i = 0; i < choices.length; i++)
-			RWBigInteger.writeBI(os, pk0[i]);
-		os.flush();
+			channel.writeBI(pk0[i]);
+		channel.flush();
 		Flag.sw.stopOTIO();
 
 	}
@@ -96,8 +92,8 @@ public class NPOTReceiver extends OTReceiver {
 		BigInteger[][] msg = new BigInteger[choices.length][2];
 		Flag.sw.startOTIO();
 		for (int i = 0; i < choices.length; i++) {
-			msg[i][0] = RWBigInteger.readBI(is);
-			msg[i][1] = RWBigInteger.readBI(is);
+			msg[i][0] = channel.readBI();
+			msg[i][1] = channel.readBI();
 		}
 		Flag.sw.stopOTIO();
 

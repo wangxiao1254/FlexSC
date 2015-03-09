@@ -9,14 +9,14 @@ import gc.BadLabelException;
 public class SecureArray<T> {
 	static final int threshold = 256;
 	boolean useTrivialOram = false;
-	public TrivialPrivateOram<T> trivialOram = null;
+	public LinearScanOram<T> trivialOram = null;
 	public RecursiveCircuitOram<T> circuitOram = null;
 	public int lengthOfIden;
 
 	public SecureArray(CompEnv<T> env, int N, int dataSize) throws Exception {
 		useTrivialOram = N <= threshold;
 		if (useTrivialOram) {
-			trivialOram = new TrivialPrivateOram<T>(env, N, dataSize);
+			trivialOram = new LinearScanOram<T>(env, N, dataSize);
 			lengthOfIden = trivialOram.lengthOfIden;
 		} else {
 			circuitOram = new RecursiveCircuitOram<T>(env, N, dataSize);
@@ -28,13 +28,7 @@ public class SecureArray<T> {
 		return circuitOram.clients.get(0).readAndRemove(iden, 
 				Arrays.copyOfRange(circuitOram.clients.get(0).lib.declassifyToBoth(iden), 0, circuitOram.clients.get(0).lengthOfPos), false);
 	}
-	public void setInitialValue(int inital) {
-		if (useTrivialOram)
-			trivialOram.setInitialValue(inital);
-		else
-			 circuitOram.setInitialValue(inital);
-		
-	}
+
 	public T[] read(T[] iden) throws BadLabelException {
 		if (useTrivialOram)
 			return trivialOram.read(iden);

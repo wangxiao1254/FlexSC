@@ -37,8 +37,7 @@ public class CountCircuitOramBasic {
 				listen(port);
 
 				@SuppressWarnings("unchecked")
-				CompEnv<Boolean> env = CompEnv.getEnv(Mode.COUNT, Party.Alice,
-						is, os);
+				CompEnv<Boolean> env = CompEnv.getEnv(Mode.COUNT, Party.Alice, this);
 				CircuitOram<Boolean> client = new CircuitOram<Boolean>(env, N,
 						dataSize, capacity, 80);
 //				System.out.println("logN:" + client.logN + ", N:" + client.N);
@@ -54,7 +53,7 @@ public class CountCircuitOramBasic {
 							Utils.fromInt(1, client.lengthOfPos),
 							scNewValue, scData);
 
-					System.out.println(pm.statistic.andGate*(logN*4-7));
+					System.out.println(pm.statistic.andGate);
 					os.flush();
 					
 				}
@@ -82,8 +81,7 @@ public class CountCircuitOramBasic {
 				connect(host, port);
 
 				@SuppressWarnings("unchecked")
-				CompEnv<Boolean> env = CompEnv.getEnv(Mode.COUNT, Party.Bob,
-						is, os);
+				CompEnv<Boolean> env = CompEnv.getEnv(Mode.COUNT, Party.Bob, this);
 				CircuitOram<Boolean> server = new CircuitOram<Boolean>(env, N,
 						dataSize, capacity, 80);
 
@@ -113,9 +111,9 @@ public class CountCircuitOramBasic {
 	@Test
 	public void runThreads() throws Exception {
 		for(int i = 10; i <= 30; i+=2 ) {
-			this.logN = i;
-			this.N = 1<<i;
-			this.dataSize = i+i+i+i+32+32;
+			this.logN = 27;
+			this.N = 1<<logN;
+			this.dataSize = 64+64;//i+i+i+i+32+32;
 			System.out.print(i+"\t");
 		Thread tGen = new Thread(gen);
 		Thread tEva = new Thread(eva);

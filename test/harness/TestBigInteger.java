@@ -40,6 +40,7 @@ public class TestBigInteger extends TestHarness{
 		Helper h;
 		public GenRunnableTestBigInteger(Helper h) {
 			this.h = h;
+			verbose = false;
 		}
 		
 		T[] a;
@@ -77,6 +78,7 @@ public class TestBigInteger extends TestHarness{
 	public static class EvaRunnableTestBigInteger<T> extends EvaRunnable<T> {		
 		EvaRunnableTestBigInteger(Helper h) {
 			this.h = h;
+			verbose = false;
 		}
 
 		Helper h;

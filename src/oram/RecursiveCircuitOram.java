@@ -1,9 +1,6 @@
 // Copyright (C) 2014 by Xiao Shaun Wang <wangxiao@cs.umd.edu>
 package oram;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -12,16 +9,13 @@ import flexsc.Party;
 import gc.BadLabelException;
 
 public class RecursiveCircuitOram<T> {
-	public TrivialPrivateOram<T> baseOram;
+	public LinearScanOram<T> baseOram;
 	public ArrayList<CircuitOram<T>> clients = new ArrayList<>();
 	public int lengthOfIden;
 	int recurFactor;
 	int cutoff;
 	int capacity;
 
-	SecureRandom rng = new SecureRandom();
-	protected InputStream is;
-	protected OutputStream os;
 	Party p;
 
 	public RecursiveCircuitOram(CompEnv<T> env, int N, int dataSize,
@@ -39,8 +33,6 @@ public class RecursiveCircuitOram<T> {
 	}
 	void init(CompEnv<T> env, int N, int dataSize, int cutoff, int recurFactor,
 			int capacity, int sp) {
-		this.is = env.is;
-		this.os = env.os;
 		this.p = env.party;
 		this.cutoff = cutoff;
 		this.recurFactor = recurFactor;
@@ -57,7 +49,7 @@ public class RecursiveCircuitOram<T> {
 			newN = (1 << oram.lengthOfIden) / recurFactor;
 		}
 		CircuitOram<T> last = clients.get(clients.size() - 1);
-		baseOram = new TrivialPrivateOram<T>(env, (1 << last.lengthOfIden),
+		baseOram = new LinearScanOram<T>(env, (1 << last.lengthOfIden),
 				last.lengthOfPos);
 	}
 
@@ -88,7 +80,7 @@ public class RecursiveCircuitOram<T> {
 
 	public T[][] travelToDeep(T[] iden, int level) throws BadLabelException {
 		if (level == clients.size()) {
-			T[] baseMap = baseOram.readAndRemove(subIdentifier(iden, baseOram));
+			T[] baseMap = baseOram.readAndRemove(baseOram.lib.padSignal(iden, baseOram.lengthOfIden));
 			T[] ithPos = baseOram.lib.rightPublicShift(iden,
 					baseOram.lengthOfIden);// iden>>baseOram.lengthOfIden;
 
@@ -98,7 +90,7 @@ public class RecursiveCircuitOram<T> {
 			T[] newPos = baseOram.lib
 					.randBools(clients.get(level - 1).lengthOfPos);
 			put(baseMap, ithPos, newPos);
-			baseOram.putBack(subIdentifier(iden, baseOram), baseMap);
+			baseOram.putBack(baseOram.lib.padSignal(iden, baseOram.lengthOfIden), baseMap);
 			T[][] result = baseOram.env.newTArray(2, 0);
 			result[0] = pos;
 			result[1] = newPos;

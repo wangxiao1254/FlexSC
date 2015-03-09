@@ -27,7 +27,7 @@ public class TestCircuitOramRec {
 	}
 	@Test
 	public void runThreads() throws Exception {
-		GenRunnable gen = new GenRunnable(12345, 20, 3, 32, 8, 6);
+		GenRunnable gen = new GenRunnable(12345, 10, 3, 32, 4, 6);
 		EvaRunnable eva = new EvaRunnable("localhost", 12345);
 		Thread tGen = new Thread(gen);
 		Thread tEva = new Thread(eva);
@@ -39,8 +39,8 @@ public class TestCircuitOramRec {
 		System.out.print("\n");
 	}
 
-	final static int writeCount = 2;//1 << 7;
-	final static int readCount = 0;//(1 << 7);
+	final static int writeCount = 1 << 7;
+	final static int readCount = (1 << 7);
 
 	public TestCircuitOramRec() {
 	}
@@ -83,8 +83,7 @@ public class TestCircuitOramRec {
 						+ " " + capacity + " " + dataSize);
 
 				@SuppressWarnings("unchecked")
-				CompEnv<GCSignal> env = CompEnv.getEnv(Mode.OPT, Party.Alice,
-						is, os);
+				CompEnv<GCSignal> env = CompEnv.getEnv(Mode.OPT, Party.Alice, this);
 				RecursiveCircuitOram<GCSignal> client = new RecursiveCircuitOram<GCSignal>(
 						env, N, dataSize, cutoff, recurFactor, capacity, 80);
 
@@ -94,7 +93,7 @@ public class TestCircuitOramRec {
 
 					Flag.sw.ands = 0;
 					GCSignal[] scData = client.baseOram.env.inputOfAlice(Utils
-							.fromInt(element, dataSize));
+							.fromInt(element*2, dataSize));
 					os.flush();
 					Flag.sw.startTotal();
 					client.write(client.baseOram.lib.toSignals(element), scData);
@@ -115,7 +114,7 @@ public class TestCircuitOramRec {
 					boolean[] b = client.baseOram.env.outputToAlice(scb);
 
 					// Assert.assertTrue(Utils.toInt(b) == element);
-					if (Utils.toInt(b) != element)
+//					if (Utils.toInt(b) != element)
 						System.out.println("inconsistent: " + element + " "
 								+ Utils.toInt(b));
 				}
@@ -158,8 +157,7 @@ public class TestCircuitOramRec {
 						+ " " + capacity + " " + dataSize);
 
 				@SuppressWarnings("unchecked")
-				CompEnv<GCSignal> env = CompEnv.getEnv(Mode.OPT, Party.Bob,
-						is, os);
+				CompEnv<GCSignal> env = CompEnv.getEnv(Mode.OPT, Party.Bob, this);
 				RecursiveCircuitOram<GCSignal> server = new RecursiveCircuitOram<GCSignal>(
 						env, N, dataSize, cutoff, recurFactor, capacity, 80);
 				for (int i = 0; i < writeCount; ++i) {

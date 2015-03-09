@@ -9,28 +9,24 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.Security;
 
-import network.RWBigInteger;
+import network.Network;
 import rand.ISAACProvider;
 
 public class NPOTSender extends OTSender {
 
-	// private static SecureRandom rnd = new SecureRandom();
 	static SecureRandom rnd;
 	static {
 		Security.addProvider(new ISAACProvider());
 		try {
 			rnd = SecureRandom.getInstance("ISAACRandom");
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -44,9 +40,9 @@ public class NPOTSender extends OTSender {
 
 	Cipher cipher;
 
-	public NPOTSender(int msgBitLength, InputStream is, OutputStream os)
+	public NPOTSender(int msgBitLength, Network channel)
 			throws Exception {
-		super(msgBitLength, is, os);
+		super(msgBitLength, channel);
 		cipher = new Cipher();
 
 		initialize();
@@ -71,18 +67,17 @@ public class NPOTSender extends OTSender {
 			fois.close();
 
 			Flag.sw.startOTIO();
-			RWBigInteger.writeBI(os, C);
-			RWBigInteger.writeBI(os, p);
-			RWBigInteger.writeBI(os, q);
-			RWBigInteger.writeBI(os, g);
-			RWBigInteger.writeBI(os, gr);
-			os.write(msgBitLength);
-			os.flush();
+			channel.writeBI(C);
+			channel.writeBI(p);
+			channel.writeBI(q);
+			channel.writeBI(g);
+			channel.writeBI(gr);
+			channel.writeInt(msgBitLength);
+			channel.flush();
 			Flag.sw.stopOTIO();
 
 			Cr = C.modPow(r, p);
 		} else {
-			System.out.println("to generate params");
 			BigInteger pdq;
 			q = new BigInteger(qLength, certainty, rnd);
 
@@ -101,16 +96,14 @@ public class NPOTSender extends OTSender {
 			gr = g.modPow(r, p);
 			C = (new BigInteger(qLength, rnd)).mod(q);
 
-			System.out.println("runs to here");
-
 			Flag.sw.startOTIO();
-			RWBigInteger.writeBI(os, C);
-			RWBigInteger.writeBI(os, p);
-			RWBigInteger.writeBI(os, q);
-			RWBigInteger.writeBI(os, g);
-			RWBigInteger.writeBI(os, gr);
-			os.write(msgBitLength);
-			os.flush();
+			channel.writeBI(C);
+			channel.writeBI(p);
+			channel.writeBI(q);
+			channel.writeBI(g);
+			channel.writeBI(gr);
+			channel.writeInt(msgBitLength);
+			channel.flush();
 			Flag.sw.stopOTIO();
 
 			Cr = C.modPow(r, p);
@@ -143,7 +136,7 @@ public class NPOTSender extends OTSender {
 		BigInteger[] pk0 = new BigInteger[msgPairs.length];
 		Flag.sw.startOTIO();
 		for (int i = 0; i < pk0.length; i++)
-			pk0[i] = RWBigInteger.readBI(is);
+			pk0[i] = channel.readBI();
 		Flag.sw.stopOTIO();
 
 		BigInteger[] pk1 = new BigInteger[msgPairs.length];
@@ -160,10 +153,10 @@ public class NPOTSender extends OTSender {
 		}
 		Flag.sw.startOTIO();
 		for (int i = 0; i < msg.length; i++) {
-			RWBigInteger.writeBI(os, msg[i][0]);
-			RWBigInteger.writeBI(os, msg[i][1]);
+			channel.writeBI(msg[i][0]);
+			channel.writeBI(msg[i][1]);
 		}
-		os.flush();
+		channel.flush();
 		Flag.sw.stopOTIO();
 
 	}

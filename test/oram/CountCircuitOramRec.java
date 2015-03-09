@@ -13,7 +13,7 @@ public class CountCircuitOramRec {
 
 	public  static void main(String args[]) throws Exception {
 		for(int i = 9; i <=16 ; i++) {
-			GenRunnable gen = new GenRunnable(12345, i+1, 3, 32, 8, 6);
+			GenRunnable gen = new GenRunnable(12345, 11, 3, 32, 4, 6);
 			EvaRunnable eva = new EvaRunnable("localhost", 12345);
 			Thread tGen = new Thread(gen);
 			Thread tEva = new Thread(eva);
@@ -25,7 +25,7 @@ public class CountCircuitOramRec {
 	}
 	@Test
 	public void runThreads() throws Exception {
-		GenRunnable gen = new GenRunnable(12345, 20, 3, 32, 8, 6);
+		GenRunnable gen = new GenRunnable(12345, 16, 3, 32, 8, 6);
 		EvaRunnable eva = new EvaRunnable("localhost", 12345);
 		Thread tGen = new Thread(gen);
 		Thread tEva = new Thread(eva);
@@ -80,8 +80,7 @@ public class CountCircuitOramRec {
 //						+ " " + capacity + " " + dataSize);
 
 				@SuppressWarnings("unchecked")
-				CompEnv<Boolean> env = CompEnv.getEnv(Mode.COUNT, Party.Alice,
-						is, os);
+				CompEnv<Boolean> env = CompEnv.getEnv(Mode.COUNT, Party.Alice, this);
 				RecursiveCircuitOram<Boolean> client = new RecursiveCircuitOram<Boolean>(
 						env, N, dataSize, cutoff, recurFactor, capacity, 80);
 
@@ -156,8 +155,7 @@ public class CountCircuitOramRec {
 //						+ " " + capacity + " " + dataSize);
 
 				@SuppressWarnings("unchecked")
-				CompEnv<Boolean> env = CompEnv.getEnv(Mode.COUNT, Party.Bob,
-						is, os);
+				CompEnv<Boolean> env = CompEnv.getEnv(Mode.COUNT, Party.Bob, this);
 				RecursiveCircuitOram<Boolean> server = new RecursiveCircuitOram<Boolean>(
 						env, N, dataSize, cutoff, recurFactor, capacity, 80);
 				for (int i = 0; i < writeCount; ++i) {

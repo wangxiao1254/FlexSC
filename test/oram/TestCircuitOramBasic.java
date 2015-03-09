@@ -46,8 +46,7 @@ public class TestCircuitOramBasic {
 
 				int data[] = new int[N + 1];
 				@SuppressWarnings("unchecked")
-				CompEnv<Boolean> env = CompEnv.getEnv(Mode.VERIFY, Party.Alice,
-						is, os);
+				CompEnv<Boolean> env = CompEnv.getEnv(Mode.VERIFY, Party.Alice, this);
 				CircuitOram<Boolean> client = new CircuitOram<Boolean>(env, N,
 						dataSize, capacity, 80);
 				System.out.println("logN:" + client.logN + ", N:" + client.N);
@@ -115,7 +114,7 @@ public class TestCircuitOramBasic {
 				for (int j = 1; j < client.tree.length; ++j) {
 					idens[j] = new int[client.tree[j].length];
 					for (int i = 0; i < client.tree[j].length; ++i)
-						idens[j][i] = Utils.toInt(client.tree[j][i].iden);
+						idens[j][i] = (int) client.tree[j][i].iden;
 				}
 
 				for (int j = 1; j < client.tree.length; ++j) {
@@ -126,7 +125,7 @@ public class TestCircuitOramBasic {
 
 				stash = new int[client.queue.length];
 				for (int j = 0; j < client.queue.length; ++j)
-					stash[j] = Utils.toInt(client.queue[j].iden);
+					stash[j] = (int) client.queue[j].iden;
 
 				os.flush();
 
@@ -158,8 +157,7 @@ public class TestCircuitOramBasic {
 				// CircuitOramServer<Boolean>(is, os, N, dataSize, Party.Bob,
 				// capacity, Mode.REAL, 80);
 				@SuppressWarnings("unchecked")
-				CompEnv<Boolean> env = CompEnv.getEnv(Mode.VERIFY, Party.Bob,
-						is, os);
+				CompEnv<Boolean> env = CompEnv.getEnv(Mode.VERIFY, Party.Bob, this);
 				CircuitOram<Boolean> server = new CircuitOram<Boolean>(env, N,
 						dataSize, capacity, 80);
 
@@ -198,7 +196,7 @@ public class TestCircuitOramBasic {
 				for (int j = 1; j < server.tree.length; ++j) {
 					idens[j] = new int[server.tree[j].length];
 					for (int i = 0; i < server.tree[j].length; ++i)
-						idens[j][i] = Utils.toInt(server.tree[j][i].iden);
+						idens[j][i] = (int) server.tree[j][i].iden;
 				}
 
 				for (int j = 1; j < server.tree.length; ++j) {
@@ -209,7 +207,7 @@ public class TestCircuitOramBasic {
 
 				stash = new int[server.queue.length];
 				for (int j = 0; j < server.queue.length; ++j)
-					stash[j] = Utils.toInt(server.queue[j].iden);
+					stash[j] = (int) server.queue[j].iden;
 				os.flush();
 
 				disconnect();
