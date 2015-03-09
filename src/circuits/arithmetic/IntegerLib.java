@@ -6,7 +6,6 @@ import java.util.Arrays;
 import util.Utils;
 import circuits.CircuitLib;
 import flexsc.CompEnv;
-import gc.BadLabelException;
 
 public class IntegerLib<T> extends CircuitLib<T> implements ArithmeticLib<T> {
 

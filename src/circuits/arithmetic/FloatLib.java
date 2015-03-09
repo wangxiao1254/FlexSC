@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import util.Utils;
 import flexsc.CompEnv;
-import gc.BadLabelException;
 
 public class FloatLib<T> implements ArithmeticLib<T> {
 

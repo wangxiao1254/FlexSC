@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import util.Utils;
 import flexsc.CompEnv;
-import gc.BadLabelException;
 
 //http://x86asm.net/articles/fixed-point-arithmetic-and-tricks/
 public class FixedPointLib<T> implements ArithmeticLib<T> {
