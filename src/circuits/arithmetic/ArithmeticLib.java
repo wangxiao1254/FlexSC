@@ -1,7 +1,6 @@
 package circuits.arithmetic;
 
 import flexsc.CompEnv;
-import gc.BadLabelException;
 
 public interface ArithmeticLib<T> {
 	CompEnv<T> getEnv();
@@ -9,7 +8,7 @@ public interface ArithmeticLib<T> {
 
 	T[] inputOfBob(double d);
 	
-	double outputToAlice(T[] a) throws BadLabelException;
+	double outputToAlice(T[] a);
 
 	T[] add(T[] x, T[] y);
 

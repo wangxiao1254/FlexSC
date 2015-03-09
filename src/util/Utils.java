@@ -12,6 +12,17 @@ import flexsc.CompEnv;
 import flexsc.Party;
 
 public class Utils {
+	public static int logFloor(int n) {
+		int w = 0;
+		n--;
+		while(n > 0) {
+			w ++;
+			n >>= 1;
+		}
+		return w == 0 ? 1 : w;
+	}
+
+	
 	public static <T>void print(CompEnv<T> env, String name, T[] data, T[] data2, T con) throws Exception {
 		int a = toInt(env.outputToAlice(data));
 		int ab = toInt(env.outputToAlice(data2));

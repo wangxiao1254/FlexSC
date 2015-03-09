@@ -229,7 +229,7 @@ public class FloatLib<T> implements ArithmeticLib<T> {
 	}
 
 	@Override
-	public double outputToAlice(T[] a) throws BadLabelException {
+	public double outputToAlice(T[] a) {
 		return Utils.toFloat(env.outputToAlice(a), VLength, PLength);
 	}
 

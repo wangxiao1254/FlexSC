@@ -1,8 +1,6 @@
 // Copyright (C) 2014 by Xiao Shaun Wang <wangxiao@cs.umd.edu>
 package flexsc;
 
-import gc.BadLabelException;
-
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.Security;
@@ -70,7 +68,7 @@ public abstract class CompEnv<T> {
 
 	public abstract T inputOfBob(boolean in);
 
-	public abstract boolean outputToAlice(T out) throws BadLabelException;
+	public abstract boolean outputToAlice(T out);
 
 	public abstract boolean outputToBob(T out);
 
@@ -111,7 +109,7 @@ public abstract class CompEnv<T> {
 	}
 
 	
-	public abstract boolean[] outputToAlice(T[] out) throws BadLabelException;
+	public abstract boolean[] outputToAlice(T[] out);
 
 	public abstract boolean[] outputToBob(T[] out);
 

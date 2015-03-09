@@ -102,7 +102,7 @@ public class FixedPointLib<T> implements ArithmeticLib<T> {
 	}
 
 	@Override
-	public double outputToAlice(T[] a) throws BadLabelException {
+	public double outputToAlice(T[] a) {
 		return Utils.toFixPoint(env.outputToAlice(a), offset);
 	}
 

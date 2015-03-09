@@ -530,7 +530,7 @@ public class IntegerLib<T> extends CircuitLib<T> implements ArithmeticLib<T> {
 	}
 
 	@Override
-	public double outputToAlice(T[] a) throws BadLabelException {
+	public double outputToAlice(T[] a) {
 		return Utils.toInt(env.outputToAlice(a));
 	}
 
