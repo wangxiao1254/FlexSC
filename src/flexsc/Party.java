@@ -4,6 +4,5 @@
 package flexsc;
 
 public enum Party {
-	Alice,
-	Bob;
+	Alice, Bob;
 }

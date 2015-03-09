@@ -1,25 +1,23 @@
-// Copyright (C) 2014 by Xiao Shaun Wang <wangxiao@cs.umd.edu>
-
 package gc;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-
+import network.Network;
 import flexsc.CompEnv;
 import flexsc.Mode;
 import flexsc.Party;
 
 public abstract class GCCompEnv extends CompEnv<GCSignal> {
-	public GCCompEnv(InputStream is, OutputStream os, Party p) {
-		super(is, os, p, Mode.REAL);
+	public GCCompEnv(Network channel, Party p, Mode mode) {
+		super(channel, p, mode);
 	}
 
+	protected GCSignal _ONE = new GCSignal(true);
+	protected GCSignal _ZERO = new GCSignal(false);
 	public GCSignal ONE() {
-		return new GCSignal(true);
+		return _ONE;
 	}
 	
 	public GCSignal ZERO() {
-		return new GCSignal(false);
+		return _ZERO;
 	}
 	
 	public GCSignal[] newTArray(int len) {

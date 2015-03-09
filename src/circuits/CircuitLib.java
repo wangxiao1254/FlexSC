@@ -1,16 +1,16 @@
 // Copyright (C) 2014 by Xiao Shaun Wang <wangxiao@cs.umd.edu>
 package circuits;
 
-import java.io.IOException;
 import java.util.Arrays;
-import java.util.Random;
 
 import flexsc.CompEnv;
+import flexsc.Mode;
 import flexsc.Party;
+import gc.BadLabelException;
 import gc.GCSignal;
 
 public class CircuitLib<T> {
-	protected CompEnv<T> env;
+	public CompEnv<T> env;
 	public final T SIGNAL_ZERO;
 	public final T SIGNAL_ONE;
 
@@ -30,41 +30,63 @@ public class CircuitLib<T> {
 			a >>= 1;
 		}
 		return result;
+
 	}
 
-	public T[] randBools(Random rng, int length) throws Exception {
+	public T[] enforceBits(T[] a, int length) {
+		if(length > a.length)
+			return padSignal(a, length);
+		else
+			return Arrays.copyOfRange(a, 0, length);
+	}
+
+	public T[] enforceBits(T a, int length) {
+		T[] ret = zeros(length);
+		ret[0] = a;
+		return ret;
+	}
+	public T[] randBools(int length) {
+		if(env.getMode() == Mode.COUNT) {
+			return zeros(length);
+		}
 		boolean[] res = new boolean[length];
-		for(int i = 0; i < length; ++i)
-			res[i] = rng.nextBoolean();
-		T[] alice = env.inputOfAlice(res); 
+		for (int i = 0; i < length; ++i)
+			res[i] = CompEnv.rnd.nextBoolean();
+		T[] alice = env.inputOfAlice(res);
 		T[] bob = env.inputOfBob(res);
-		return xor(alice, bob);
+		T[] resSC = xor(alice, bob);
+
+		return resSC;
 	}
 
-	public boolean[] getBooleans(T[] x) throws Exception {
+	public boolean[] declassifyToAlice(T[] x) throws BadLabelException {
 		return env.outputToAlice(x);
 	}
 
-	public boolean[] syncBooleans(boolean[] pos) throws IOException {
-		if(env.getParty() == Party.Alice){
-			//send pos to bob
-			env.os.write(new byte[]{(byte) pos.length});
-			byte[] tmp = new byte[pos.length];
-			for(int i = 0; i < pos.length; ++i)
-				tmp[i] = (byte) (pos[i] ? 1 : 0);
-			env.os.write(tmp);
-			env.os.flush();
+	public boolean[] declassifyToBob(T[] x) throws BadLabelException {
+		return env.outputToBob(x);
+	}
+
+	public boolean[] declassifyToBoth(T[] x) throws BadLabelException {
+		if(env.getMode() == Mode.COUNT){
+			return new boolean[x.length];
 		}
-		else {
-			byte[] l = new byte[1];
-			env.is.read(l);
-			byte tmp[] = new byte[l[0]];
-			env.is.read(tmp);
-			pos = new boolean[l[0]];
-			for(int k = 0; k < tmp.length; ++k) {
+		boolean[] pos = env.outputToAlice(x);
+
+		if (env.getParty() == Party.Alice) {
+			byte[] tmp = new byte[pos.length];
+			for (int i = 0; i < pos.length; ++i)
+				tmp[i] = (byte) (pos[i] ? 1 : 0);
+			env.channel.writeByte(tmp, tmp.length);
+			env.flush();
+		} else {
+			byte tmp[] = env.channel.readBytes(x.length);
+			pos = new boolean[x.length];
+			for (int k = 0; k < tmp.length; ++k) {
 				pos[k] = ((tmp[k] - 1) == 0);
 			}
 		}
+
 		return pos;
 	}
 
@@ -96,13 +118,13 @@ public class CircuitLib<T> {
 	/*
 	 * Basic logical operations on Signal and Signal[]
 	 */
-	public T and(T x, T y) throws Exception {
+	public T and(T x, T y) {
 		assert (x != null && y != null) : "CircuitLib.and: bad inputs";
 
 		return env.and(x, y);
 	}
 
-	public T[] and(T[] x, T[] y) throws Exception {
+	public T[] and(T[] x, T[] y) {
 		assert (x != null && y != null && x.length == y.length) : "CircuitLib.and[]: bad inputs";
 
 		T[] result = env.newTArray(x.length);
@@ -134,7 +156,6 @@ public class CircuitLib<T> {
 		return env.xor(x, SIGNAL_ONE);
 	}
 
-	// tested
 	public T[] not(T[] x) {
 		assert (x != null) : "CircuitLib.not[]: bad input";
 
@@ -145,13 +166,13 @@ public class CircuitLib<T> {
 		return result;
 	}
 
-	public T or(T x, T y) throws Exception {
+	public T or(T x, T y) {
 		assert (x != null && y != null) : "CircuitLib.or: bad inputs";
 
 		return xor(xor(x, y), and(x, y)); // http://stackoverflow.com/a/2443029
 	}
 
-	public T[] or(T[] x, T[] y) throws Exception {
+	public T[] or(T[] x, T[] y) {
 		assert (x != null && y != null && x.length == y.length) : "CircuitLib.or[]: bad inputs";
 
 		T[] result = env.newTArray(x.length);
@@ -164,7 +185,7 @@ public class CircuitLib<T> {
 	/*
 	 * Output x when c == 0; Otherwise output y.
 	 */
-	public T mux(T x, T y, T c) throws Exception {
+	public T mux(T x, T y, T c) {
 		assert (x != null && y != null && c != null) : "CircuitLib.mux: bad inputs";
 		T t = xor(x, y);
 		t = and(t, c);
@@ -172,7 +193,7 @@ public class CircuitLib<T> {
 		return ret;
 	}
 
-	public T[] mux(T[] x, T[] y, T c) throws Exception {
+	public T[] mux(T[] x, T[] y, T c) {
 		assert (x != null && y != null && x.length == y.length) : "CircuitLib.mux[]: bad inputs";
 
 		T[] ret = env.newTArray(x.length);
@@ -182,10 +203,39 @@ public class CircuitLib<T> {
 		return ret;
 	}
 
+	public T[][] mux(T[][] x, T[][] y, T c) {
+		assert (x != null && y != null && x.length == y.length) : "CircuitLib.mux[][]: bad inputs";
+
+		T[][] ret = env.newTArray(x.length, 1);
+		for (int i = 0; i < x.length; i++)
+			ret[i] = mux(x[i], y[i], c);
+
+		return ret;
+	}
+
+	public T[][][] mux(T[][][] x, T[][][] y, T c) {
+		assert (x != null && y != null && x.length == y.length) : "CircuitLib.mux[]: bad inputs";
+
+		T[][][] ret = env.newTArray(x.length, 1, 1);
+		for (int i = 0; i < x.length; i++)
+			ret[i] = mux(x[i], y[i], c);
+
+		return ret;
+	}
+
 	public T[] padSignal(T[] a, int length) {
 		T[] res = zeros(length);
-		for(int i = 0; i < a.length && i < length; ++i)
+		for (int i = 0; i < a.length && i < length; ++i)
 			res[i] = a[i];
+		return res;
+	}
+
+	public T[] padSignedSignal(T[] a, int length) {
+		T[] res = env.newTArray(length);
+		for (int i = 0; i < a.length && i < length; ++i)
+			res[i] = a[i];
+		for (int i = a.length; i < length; ++i)
+			res[i] = a[a.length - 1];
 		return res;
 	}
 

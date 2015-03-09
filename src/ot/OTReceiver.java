@@ -5,19 +5,19 @@ package ot;
 
 import gc.GCSignal;
 
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.IOException;
+
+import network.Network;
 
 public abstract class OTReceiver {
-	InputStream is;
-	OutputStream os;
+	Network channel;
 	int msgBitLength;
 
-	public OTReceiver (InputStream in, OutputStream out) {
-		is = in;
-		os = out;
+	public OTReceiver(Network channel) {
+		this.channel = channel;
 	}
-	
-	public abstract GCSignal receive(boolean c) throws Exception;
-	public abstract GCSignal[] receive(boolean[] c) throws Exception;
+
+	public abstract GCSignal receive(boolean c) throws IOException;
+
+	public abstract GCSignal[] receive(boolean[] c) throws IOException;
 }

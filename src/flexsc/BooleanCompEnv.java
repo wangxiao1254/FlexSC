@@ -1,15 +1,13 @@
-// Copyright (C) 2013 by Yan Huang <yhuang@cs.umd.edu>
-// 					 and Xiao Shaun Wang <wangxiao@cs.umd.edu>
-
+// Copyright (C) 2014 by Xiao Shaun Wang <wangxiao@cs.umd.edu>
 package flexsc;
 
-import java.io.InputStream;
-import java.io.OutputStream;
+import network.Network;
 
 public abstract class BooleanCompEnv extends CompEnv<Boolean> {
-	
-	public BooleanCompEnv(InputStream is, OutputStream os, Party p, Mode m) {
-		super(is, os, p, m);
+	Boolean t = true;
+	Boolean f = false;
+	public BooleanCompEnv(Network cha, Party p, Mode m) {
+		super(cha, p, m);
 	}
 
 	@Override
@@ -27,9 +25,19 @@ public abstract class BooleanCompEnv extends CompEnv<Boolean> {
 	public Boolean[][] newTArray(int d1, int d2) {
 		return new Boolean[d1][d2];
 	}
-	
+
 	@Override
 	public Boolean[][][] newTArray(int d1, int d2, int d3) {
 		return new Boolean[d1][d2][d3];
+	}
+	
+	@Override
+	public Boolean ONE() {
+		return t;
+	}
+
+	@Override
+	public Boolean ZERO() {
+		return f;
 	}
 }

@@ -3,14 +3,13 @@
 
 package ot;
 
-
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
 class BitMatrix {
 	private int nRows;
 	private int nCols;
-	BigInteger[] data;   // column vectors of the matrix
+	BigInteger[] data; // column vectors of the matrix
 
 	public BitMatrix(int rows, int cols) {
 		nRows = rows;
@@ -27,7 +26,7 @@ class BitMatrix {
 		return NaiveTranspose(this);
 	}
 
-	static public BitMatrix NaiveTranspose(BitMatrix a){
+	static public BitMatrix NaiveTranspose(BitMatrix a) {
 		BitMatrix b = new BitMatrix(a.nCols, a.nRows);
 
 		for (int i = 0; i < a.nRows; i++)
@@ -39,9 +38,8 @@ class BitMatrix {
 					b.data[i] = b.data[i].setBit(j);
 		return b;
 	}
-	
-	static public BitMatrix COtranspose(BitMatrix a)
-	{
+
+	static public BitMatrix COtranspose(BitMatrix a) {
 		BitMatrix b = new BitMatrix(a.nCols, a.nRows);
 		for (int i = 0; i < a.nRows; i++)
 			b.data[i] = BigInteger.ZERO;
@@ -49,22 +47,20 @@ class BitMatrix {
 		return b;
 	}
 
-	static public void COtranspose(BitMatrix a, BitMatrix b, int startx, int starty, int endx, int endy){
+	static public void COtranspose(BitMatrix a, BitMatrix b, int startx,
+			int starty, int endx, int endy) {
 
-		if(endy - starty == 1 && endx - startx == 1)
-		{
+		if (endy - starty == 1 && endx - startx == 1) {
 			if (a.data[starty].testBit(startx))
 				b.data[startx] = b.data[startx].setBit(starty);
 			return;
-		}
-		else if (endy-starty < endx-startx) {
+		} else if (endy - starty < endx - startx) {
 
-			int midx = (startx + endx)/2;
+			int midx = (startx + endx) / 2;
 			COtranspose(a, b, startx, starty, midx, endy);
 			COtranspose(a, b, midx, starty, endx, endy);
-		}
-		else{
-			int midy = (starty + endy)/2;
+		} else {
+			int midy = (starty + endy) / 2;
 			COtranspose(a, b, startx, starty, endx, midy);
 			COtranspose(a, b, startx, midy, endx, endy);
 		}
