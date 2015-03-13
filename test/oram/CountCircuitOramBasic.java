@@ -113,7 +113,7 @@ public class CountCircuitOramBasic {
 		for(int i = 10; i <= 30; i+=2 ) {
 			this.logN = 27;
 			this.N = 1<<logN;
-			this.dataSize = 64+64;//i+i+i+i+32+32;
+			this.dataSize = 64*8;//i+i+i+i+32+32;
 			System.out.print(i+"\t");
 		Thread tGen = new Thread(gen);
 		Thread tEva = new Thread(eva);

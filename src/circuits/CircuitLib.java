@@ -6,7 +6,6 @@ import java.util.Arrays;
 import flexsc.CompEnv;
 import flexsc.Mode;
 import flexsc.Party;
-import gc.BadLabelException;
 import gc.GCSignal;
 
 public class CircuitLib<T> {
@@ -40,11 +39,12 @@ public class CircuitLib<T> {
 			return Arrays.copyOfRange(a, 0, length);
 	}
 
-	public T[] enforceBits(T a, int length) {
-		T[] ret = zeros(length);
-		ret[0] = a;
-		return ret;
+
+	public T enforceBits(T a, int length) {
+		if(a == null)return SIGNAL_ZERO;
+		else return a;
 	}
+
 	public T[] randBools(int length) {
 		if(env.getMode() == Mode.COUNT) {
 			return zeros(length);
@@ -59,15 +59,15 @@ public class CircuitLib<T> {
 		return resSC;
 	}
 
-	public boolean[] declassifyToAlice(T[] x) throws BadLabelException {
+	public boolean[] declassifyToAlice(T[] x) {
 		return env.outputToAlice(x);
 	}
 
-	public boolean[] declassifyToBob(T[] x) throws BadLabelException {
+	public boolean[] declassifyToBob(T[] x) {
 		return env.outputToBob(x);
 	}
 
-	public boolean[] declassifyToBoth(T[] x) throws BadLabelException {
+	public boolean[] declassifyToBoth(T[] x) {
 		if(env.getMode() == Mode.COUNT){
 			return new boolean[x.length];
 		}

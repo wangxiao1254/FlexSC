@@ -52,12 +52,12 @@ public class CircuitOram<T> extends TreeBasedOramParty<T> {
 
 	}
 
-	protected void ControlEviction() throws BadLabelException {
+	protected void ControlEviction() {
 		flushOneTime(nextPath());
 		flushOneTime(nextPath());
 	}
 
-	public void flushOneTime(boolean[] pos) throws BadLabelException {
+	public void flushOneTime(boolean[] pos) {
 		PlainBlock[][] blocks = getPath(pos);
 		Block<T>[][] scPath = preparePath(blocks, blocks);
 
@@ -72,7 +72,7 @@ public class CircuitOram<T> extends TreeBasedOramParty<T> {
 		initalValue = intial;
 	}
 	public T[] readAndRemove(T[] scIden, boolean[] pos,
-			boolean RandomWhenNotFound) throws BadLabelException {
+			boolean RandomWhenNotFound) {
 		PlainBlock[][] blocks = getPath(pos);
 		Block<T>[][] scPath = preparePath(blocks, blocks);
 
@@ -94,7 +94,7 @@ public class CircuitOram<T> extends TreeBasedOramParty<T> {
 		}
 	}
 
-	public void putBack(T[] scIden, T[] scNewPos, T[] scData) throws BadLabelException {
+	public void putBack(T[] scIden, T[] scNewPos, T[] scData) {
 		Block<T> b = new Block<T>(scIden, scNewPos, scData, lib.SIGNAL_ZERO);
 		lib.add(scQueue, b);
 
@@ -102,20 +102,20 @@ public class CircuitOram<T> extends TreeBasedOramParty<T> {
 		ControlEviction();
 	}
 
-	public T[] read(T[] scIden, boolean[] pos, T[] scNewPos) throws BadLabelException {
+	public T[] read(T[] scIden, boolean[] pos, T[] scNewPos) {
 		scIden = Arrays.copyOf(scIden, lengthOfIden);
 		T[] r = readAndRemove(scIden, pos, false);
 		putBack(scIden, scNewPos, r);
 		return r;
 	}
 
-	public void write(T[] scIden, boolean[] pos, T[] scNewPos, T[] scData) throws BadLabelException {
+	public void write(T[] scIden, boolean[] pos, T[] scNewPos, T[] scData)  {
 		scIden = Arrays.copyOf(scIden, lengthOfIden);
 		readAndRemove(scIden, pos, false);
 		putBack(scIden, scNewPos, scData);
 	}
 
-	public T[] access(T[] scIden, boolean[] pos, T[] scNewPos, T[] scData, T op) throws BadLabelException {
+	public T[] access(T[] scIden, boolean[] pos, T[] scNewPos, T[] scData, T op) {
 		scIden = Arrays.copyOf(scIden, lengthOfIden);
 		T[] r = readAndRemove(scIden, pos, false);
 		T[] toWrite = lib.mux(r, scData, op);

@@ -10,7 +10,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class TestOTExtMany {
-	static final int n = 9000;
+	static final int n = 1000;
 	GCSignal[][] m;
 	boolean[] c;
 	GCSignal[] rcvd;

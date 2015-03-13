@@ -4,7 +4,6 @@ package oram;
 import flexsc.CompEnv;
 import flexsc.Mode;
 import flexsc.Party;
-import gc.BadLabelException;
 
 public abstract class TreeBasedOramParty<T> extends OramParty<T> {
 	public PlainBlock[][] tree;
@@ -110,7 +109,7 @@ public abstract class TreeBasedOramParty<T> extends OramParty<T> {
 		return result;
 	}
 
-	public PlainBlock[][] preparePlainPath(Block<T>[][] blocks) throws BadLabelException {
+	public PlainBlock[][] preparePlainPath(Block<T>[][] blocks) {
 		Block<T>[][] randomSCPath = lib.newBlockMatrix(blocks.length);
 
 		PlainBlock[][] randomPath = new PlainBlock[blocks.length][];

@@ -35,6 +35,7 @@ public class TestFloat extends TestHarness {
 		Helper h;
 		public GenRunnableTestFloat(Helper h) {
 			this.h = h;
+			verbose = false;
 		}
 		
 		T[] a;
@@ -67,7 +68,7 @@ public class TestFloat extends TestHarness {
 				else
 					error = Math.abs((h.plainCompute(h.a, h.b) - z));
 
-				if (Math.abs((h.plainCompute(h.a, h.b) - z) / z) > 1E-3)
+				if (Math.abs((h.plainCompute(h.a, h.b) - z) / z) > 1E-6)
 					System.out.print(error + " " + z + " "
 							+ h.plainCompute(h.a, h.b) + " " + h.a + " " + h.b
 							+ "\n");
@@ -79,6 +80,7 @@ public class TestFloat extends TestHarness {
 	public static class EvaRunnableTestFloat<T> extends EvaRunnable<T> {		
 		EvaRunnableTestFloat(Helper h) {
 			this.h = h;
+			verbose = false;
 		}
 
 		Helper h;
