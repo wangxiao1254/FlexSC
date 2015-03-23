@@ -58,7 +58,7 @@ public class GCGen extends GCGenComp {
 			gb.enc(labelL[1], labelR[1], gid,
 					gtt[1 ^ cL][1 ^ cR], toSend[1 ^ cL][1 ^ cR]);
 
-		return lb[0];
+		return GCSignal.newInstance(lb[0].bytes);
 	}
 
 	private void sendGTT() {
@@ -80,11 +80,11 @@ public class GCGen extends GCGenComp {
 		Flag.sw.startGC();
 		GCSignal res;
 		if (a.isPublic() && b.isPublic())
-			res = ( (a.v && b.v) ? _ONE: _ZERO);
+			res = ( (a.v && b.v) ? new GCSignal(true): new GCSignal(false));
 		else if (a.isPublic())
-			res = a.v ? b : _ZERO;
+			res = a.v ? b : new GCSignal(false);
 		else if (b.isPublic())
-			res = b.v ? a : _ZERO;
+			res = b.v ? a : new GCSignal(false);
 		else {
 			GCSignal ret;
 			ret = garble(a, b);

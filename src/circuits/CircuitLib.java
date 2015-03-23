@@ -19,7 +19,7 @@ public class CircuitLib<T> {
 		SIGNAL_ONE = e.ONE();
 	}
 
-	public T[] toSignals(int a, int width) {
+	public T[] toSignals(long a, int width) {
 		T[] result = env.newTArray(width);
 		for (int i = 0; i < width; ++i) {
 			if ((a & 1) == 1)

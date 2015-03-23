@@ -512,6 +512,27 @@ public class IntegerLib<T> extends CircuitLib<T> implements ArithmeticLib<T> {
 		return a;
 	}
 
+	public T[] multiplyMipsInternal(T[] x, T[] y, T signed) {
+		T[] padx = null,pady = null;
+		padx = mux(padSignal(x, 64), padSignedSignal(x, 64), signed);
+		pady = mux(padSignal(y, 64), padSignedSignal(y, 64), signed);
+		T[] res = multiply(padx, pady);
+		//System.out.println(Utils.toLong(env.outputToAlice(res)));
+		return res;
+		}
+		public void multiplyMips(T[] x, T[] y, T signed, T[] high, T[] low) {
+		T[] res = multiplyMipsInternal(x, y, signed);
+		//T[][] ret = env.newTArray(2, 0);
+		low = Arrays.copyOf(res, 32);
+		high = Arrays.copyOfRange(res, 32,64);
+		//return ret;
+		}
+		public T[] SRA(T[] x, T[] s) {
+			int len = x.length;
+			T[] ret = padSignedSignal(x, x.length*2);
+			ret = rightPrivateShift(ret, s);
+			return Arrays.copyOf(ret, len);
+			}
 	// not fully implemented, more cases to consider
 	@Override
 	public T[] toSecureFloat(T[] a, FloatLib<T> lib) {

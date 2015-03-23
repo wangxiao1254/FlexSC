@@ -13,11 +13,11 @@ public abstract class GCCompEnv extends CompEnv<GCSignal> {
 	protected GCSignal _ONE = new GCSignal(true);
 	protected GCSignal _ZERO = new GCSignal(false);
 	public GCSignal ONE() {
-		return _ONE;
+		return new GCSignal(true);
 	}
 	
 	public GCSignal ZERO() {
-		return _ZERO;
+		return new GCSignal(false);
 	}
 	
 	public GCSignal[] newTArray(int len) {
