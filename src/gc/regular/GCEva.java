@@ -31,7 +31,6 @@ public class GCEva extends GCEvaComp {
 
 	public GCSignal and(GCSignal a, GCSignal b) {
 		Flag.sw.startGC();
-		Flag.sw.ands++;
 
 		GCSignal res;
 		if (a.isPublic() && b.isPublic())
@@ -41,6 +40,7 @@ public class GCEva extends GCEvaComp {
 		else if (b.isPublic())
 			res = b.v ? a : new GCSignal(false);
 		else {
+			++numOfAnds;
 			res = new GCSignal(new byte[10]);
 			receiveGTT();
 

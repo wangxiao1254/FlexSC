@@ -10,7 +10,6 @@ public class CVCompEnv extends BooleanCompEnv {
 		this.party = p;
 	}
 
-	public long numOfAnds = 0;
 	@Override
 	public Boolean inputOfAlice(boolean in) {
 		Boolean res = null;

@@ -97,7 +97,6 @@ public class GCGen extends GCGenComp {
 	}
 
 	public GCSignal and(GCSignal a, GCSignal b) {
-		++Flag.sw.ands;
 
 		Flag.sw.startGC();
 		GCSignal res = null;
@@ -108,6 +107,7 @@ public class GCGen extends GCGenComp {
 		else if (b.isPublic())
 			res = b.v ? a : _ZERO;
 		else {
+			++numOfAnds;
 			if(Flag.offline) {
 				res = readGateFromFile();
 			} else {

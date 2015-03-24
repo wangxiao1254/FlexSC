@@ -9,7 +9,6 @@ import network.Network;
 public class GCGen extends GCGenComp {
 	Garbler gb;
 
-	public long ands = 0;
 	public GCGen(Network channel){
 		super(channel, Mode.OPT);
 		gb = new Garbler();
@@ -55,8 +54,7 @@ public class GCGen extends GCGenComp {
 	}
 	
 	public GCSignal and(GCSignal a, GCSignal b) {
-		++ands;
-		++Flag.sw.ands;
+
 		Flag.sw.startGC();
 		GCSignal res;
 		if (a.isPublic() && b.isPublic())
@@ -66,6 +64,7 @@ public class GCGen extends GCGenComp {
 		else if (b.isPublic())
 			res = b.v ? a : _ZERO;
 		else {
+			++numOfAnds;
 			GCSignal ret = garble(a, b);
 			gid++;
 			res = ret;

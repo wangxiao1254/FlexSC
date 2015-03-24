@@ -6,12 +6,14 @@ import circuits.arithmetic.IntegerLib;
 import flexsc.CompEnv;
 
 public class LinearScanOram<T> {
-	T[][] content;
+	public T[][] content;
 	CompEnv<T> env;
 	public int lengthOfIden;
 	public IntegerLib<T> lib;
+	public int dataSize;
 	public LinearScanOram(CompEnv<T> env, int N, int dataSize) {
 		this.env = env;
+		this.dataSize = dataSize;
 		lib = new IntegerLib<T>(env);
 		content = env.newTArray(N, 0);
 		lengthOfIden = Utils.log2(N);

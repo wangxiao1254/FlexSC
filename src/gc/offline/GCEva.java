@@ -40,6 +40,7 @@ public class GCEva extends GCEvaComp {
 		else if (b.isPublic())
 			res = b.v ? a :_ZERO;
 		else {
+			++numOfAnds;
 			receiveGTT();
 
 			int i0 = a.getLSB();

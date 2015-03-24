@@ -10,7 +10,7 @@ import rand.ISAACProvider;
 import util.Utils;
 
 public abstract class CompEnv<T> {
-
+	public long numOfAnds = 0;
 	public static SecureRandom rnd;
 	static{
 		Security.addProvider(new ISAACProvider());
