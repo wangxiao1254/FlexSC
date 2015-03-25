@@ -10,8 +10,6 @@ public abstract class GCCompEnv extends CompEnv<GCSignal> {
 		super(channel, p, mode);
 	}
 
-	protected GCSignal _ONE = new GCSignal(true);
-	protected GCSignal _ZERO = new GCSignal(false);
 	public GCSignal ONE() {
 		return new GCSignal(true);
 	}

@@ -34,11 +34,11 @@ public class GCEva extends GCEvaComp {
 
 		GCSignal res;
 		if (a.isPublic() && b.isPublic())
-			res = ( (a.v && b.v) ? _ONE :_ZERO);
+			res = ( (a.v && b.v) ? new GCSignal(true) :new GCSignal(false));
 		else if (a.isPublic())
-			res = a.v ? b :_ZERO;
+			res = a.v ? b :new GCSignal(false);
 		else if (b.isPublic())
-			res = b.v ? a :_ZERO;
+			res = b.v ? a :new GCSignal(false);
 		else {
 			++numOfAnds;
 			receiveGTT();
