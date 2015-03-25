@@ -1,7 +1,6 @@
 package circuits.arithmetic;
 
 
-import util.Pair;
 import flexsc.CompEnv;
 
 public class DenseMatrixLib<T> {
@@ -142,7 +141,7 @@ public class DenseMatrixLib<T> {
 	}
 
 	// using Gram-Schmidt process
-	public Pair<T[][][], T[][][]> QRDecomposition(T[][][] matrix) {
+	public void QRDecomposition(T[][][] matrix, T[][][] res1, T[][][] res2) {
 		T[][][] u = env.newTArray(matrix[0].length, matrix.length, 1);
 		T[][][] e = env.newTArray(matrix[0].length, matrix.length, 1);
 		T[][][] a = transpose(matrix);
@@ -163,15 +162,17 @@ public class DenseMatrixLib<T> {
 					r[i][j] = zero;
 			}
 		}
-		return new Pair<T[][][], T[][][]>(transpose(e), r);
+		res1 = transpose(e);
+		res2 = r;
 	}
 
 	public T[][][] eigenValues(T[][][] matrix, int numberOfIterations) {
-		Pair<T[][][], T[][][]> QR = QRDecomposition(matrix);
+		T[][][] e1=null, e2=null;
+		QRDecomposition(matrix, e1, e2);
 		T[][][] newMatrix = null;
 		for (int i = 0; i < numberOfIterations; ++i) {
-			newMatrix = multiply(QR.getElement1(), QR.getElement0());
-			QR = QRDecomposition(newMatrix);
+			newMatrix = multiply(e1, e2);
+			QRDecomposition(newMatrix, e1, e2);
 		}
 		return newMatrix;
 	}

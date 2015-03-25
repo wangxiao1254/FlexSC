@@ -25,7 +25,9 @@ public class TestMatrixQRDecomposition extends TestHarness {
 				@Override
 				public <T>T[][][] secureCompute(T[][][] a,
 						T[][][] b, DenseMatrixLib<T> lib) {
-					return lib.QRDecomposition(a).getElement0();
+					 T[][][] e1=null,e2=null;
+					 lib.QRDecomposition(a, e1, e2);
+					 return e1;
 				}
 
 				@Override
