@@ -1,106 +1,91 @@
 package harness;
 
-import org.junit.Assert;
 
-import util.EvaRunnable;
-import util.GenRunnable;
+import java.math.BigInteger;
+
+import org.junit.Test;
+
 import util.Utils;
+import circuits.arithmetic.IntegerLib;
 import flexsc.CompEnv;
+import flexsc.Flag;
 import flexsc.Mode;
 import flexsc.PMCompEnv;
-import gc.BadLabelException;
+import flexsc.Party;
 
 public class TestSpeed extends TestHarness {
 
-	public static abstract class Helper {
-		int intA, intB;
-		boolean[] a;
-		boolean[] b;
-
-		public Helper(int aa, int bb) {
-			intA = aa;
-			intB = bb;
-
-			a = Utils.fromInt(aa, 32);
-			b = Utils.fromInt(bb, 32);
+	public <T>T[] secureCompute(T[] a, T[] b, CompEnv<T> env) {
+		IntegerLib<T> lib = new IntegerLib<T>(env);
+		T[] res = null;
+		
+		double t1 = System.nanoTime();
+		Flag.sw.ands = 0;
+		for(int i = 0; i < 100; ++i) {
+			res = lib.and(a, b);
+			double t2 = System.nanoTime();
+			double t = (t2-t1)/1000000000.0;
+			System.out.println(t +"\t"+ Flag.sw.ands/t);
 		}
-
-		public abstract<T> T[] secureCompute(T[] Signala, T[] Signalb, CompEnv<T> e);
-
-		public abstract int plainCompute(int x, int y);
+		
+		return res;
 	}
-
-	public static class GenRunnableTest2O1I<T> extends GenRunnable<T> {
-		public double andgates;
-		public double encs;
-		
+	int LEN = 1024*1024;
+	class GenRunnable<T> extends network.Server implements Runnable {
 		boolean[] z;
-		Helper h;
-		public GenRunnableTest2O1I(Helper h) {
-			this.h = h;
-		}
-		
-		T[] a;
-		T[] b;
-		T[] d;
-		@Override
-		public void prepareInput(CompEnv<T> gen) {
-			a = gen.inputOfAlice(h.a);
-			b = gen.inputOfBob(new boolean[32]);
-		}
 
-		@Override
-		public void secureCompute(CompEnv<T> gen) {
-			d = h.secureCompute(a, b, gen);
-		}
+		public void run() {
+			try {
+				listen(54321);
+				@SuppressWarnings("unchecked")
+				CompEnv<T> gen = CompEnv.getEnv(Mode.REAL, Party.Alice, this);
 
-		@Override
-		public void prepareOutput(CompEnv<T> gen) throws BadLabelException {
-			z = gen.outputToAlice(d);
-			if (m == Mode.COUNT) {
-					((PMCompEnv) gen).statistic.finalize();
-					andgates = ((PMCompEnv) gen).statistic.andGate;
-					encs = ((PMCompEnv) gen).statistic.NumEncAlice;
-				System.out.println(andgates + " " + encs);
-			} else {
-				Assert.assertEquals(h.plainCompute(h.intA, h.intB),
-						Utils.toSignedInt(z));
+				T[] a = gen.inputOfAlice(Utils.fromBigInteger(BigInteger.ONE, LEN));
+				T[] b = gen.inputOfBob(new boolean[LEN]);
+
+				T[] d = secureCompute(a, b, gen);
+				os.flush();
+
+				z = gen.outputToAlice(d);
+
+				disconnect();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.exit(1);
 			}
 		}
 	}
 
-	public static class EvaRunnableTest2O1I<T> extends EvaRunnable<T> {		
-		EvaRunnableTest2O1I(Helper h) {
-			this.h = h;
-		}
+	class EvaRunnable<T> extends network.Client implements Runnable {
+		public double andgates;
+		public double encs;
 
-		Helper h;
-		T[] a;
-		T[] b;
-		T[] d;
+		public void run() {
+			try {
+				connect("localhost", 54321);
+				@SuppressWarnings("unchecked")
+				CompEnv<T> env = CompEnv.getEnv(Mode.REAL, Party.Bob, this);
 
-		@Override
-		public void prepareInput(CompEnv<T> env) {
-			a = env.inputOfAlice(new boolean[32]);
-			b = env.inputOfBob(h.b);
-		}
+				T[] a = env.inputOfAlice(new boolean[LEN]);
+				T[] b = env.inputOfBob(Utils.fromBigInteger(BigInteger.ONE, LEN));
 
-		@Override
-		public void secureCompute(CompEnv<T> env) {
-			d = h.secureCompute(a, b, env);
-		}
+				T[] d = secureCompute(a, b, env);
 
-		@Override
-		public void prepareOutput(CompEnv<T> env) throws BadLabelException {
-			env.outputToAlice(d);
+				env.outputToAlice(d);
+				os.flush();
+
+				disconnect();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.exit(1);
+			}
 		}
 	}
 
-	static public <T>void runThreads(Helper h) throws Exception {
-		GenRunnable<T> gen = new GenRunnableTest2O1I<T>(h);
-		gen.setParameter(m, 54321);
-		EvaRunnable<T> env = new EvaRunnableTest2O1I<T>(h);
-		env.setParameter(m, "localhost", 54321);
+	@Test
+	public <T>void runThreads() throws Exception {
+		GenRunnable<T> gen = new GenRunnable<T>();
+		EvaRunnable<T> env = new EvaRunnable<T>();
 		Thread tGen = new Thread(gen);
 		Thread tEva = new Thread(env);
 		tGen.start();
@@ -108,5 +93,12 @@ public class TestSpeed extends TestHarness {
 		tEva.start();
 		tGen.join();
 		tEva.join();
+	}
+	
+	public static void main(String args[]) throws Exception {
+		 TestSpeed test = new TestSpeed();
+		 if(new Integer(args[0]) == 0)
+			 test.new GenRunnable().run();
+		 else test.new EvaRunnable().run();
 	}
 }
