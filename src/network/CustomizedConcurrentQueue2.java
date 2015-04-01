@@ -1,6 +1,7 @@
 package network;
 
 
+
 public class CustomizedConcurrentQueue2 {
 	int capacity;
 	int head = 0;
@@ -16,9 +17,8 @@ public class CustomizedConcurrentQueue2 {
 		finished = true;
 	}
 
-	public  int insert (byte[] in) {
+	 public  int insert(byte[] in) {
 		int remains = capacity - head;
-		System.out.println(remains);
 		if(remains >= in.length) {
 			System.arraycopy(in, 0, data, head, in.length);
 			head +=in.length;
@@ -31,24 +31,26 @@ public class CustomizedConcurrentQueue2 {
 		return 0;
 	}
 
-	public int size() {
-		return (head - tail + capacity) % capacity;
-	}
-
-	public  int pop(byte[] d) {
-		int size = size();
+	 synchronized public  int pop(byte[] d) {
+		int h = head;
+		int size = (h - tail + capacity) % capacity;
+//		if(h != 0)
+//		System.out.println(h+" "+size+" "+tail+" "+size);
 		if(finished && size == 0) return -1;
 
-		if(size <= 0) return 0;
-		int h = head;
-		if(head > tail) {
-			System.arraycopy(data, tail, d, 0, head-tail);
+		if(size == 0) return 0;
+//		System.out.println(size);
+
+
+		if(h > tail) {
+			System.arraycopy(data, tail, d, 0, h-tail);
 		} else {
 			System.arraycopy(data, tail, d, 0, capacity-tail);
-			System.arraycopy(data, 0, d, capacity-tail, head);
+			System.arraycopy(data, 0, d, capacity-tail, h);
 		}
+//		System.out.println("!!");
+
 		tail = h;
-		System.out.println(size);
 		return size;
 	}
 }

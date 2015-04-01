@@ -21,19 +21,21 @@ public class TestSpeed extends TestHarness {
 
 		Flag.sw.ands = 0;
 
-		
+		double t1 = System.nanoTime();
 		for(int i = 0; i < 100; ++i) {
 //			System.out.println(i+" "+env.getParty()+" "+System.currentTimeMillis()%10000/1000.0);
 //			res = lib.and(a, b);
+			
+//			 T[] rr = env.newTArray(1);
+//			 rr[0]  = re[0];
+			
 			T[] re = lib.and(a, b);
-			 T[] rr = env.newTArray(1);
-			 rr[0]  = re[0];
-			double t1 = System.nanoTime();
-			lib.declassifyToBoth(rr);
+//			lib.declassifyToBoth(rr);
 //			env.flush();
 			double t2 = System.nanoTime();
 			double t = (t2-t1)/1000000000.0;
-			System.out.println(t);
+			System.out.println(i+" "+t +"\t"+ env.numOfAnds/t+" "+env.getParty());
+
 		}
 		
 		return res;
@@ -54,9 +56,8 @@ public class TestSpeed extends TestHarness {
 				T[] d = secureCompute(a, b, gen);
 				os.flush();
 
-				z = gen.outputToAlice(d);
-
 				disconnect();
+
 			} catch (Exception e) {
 				e.printStackTrace();
 				System.exit(1);
@@ -76,10 +77,11 @@ public class TestSpeed extends TestHarness {
 
 				T[] a = env.inputOfAlice(new boolean[LEN]);
 				T[] b = env.inputOfBob(Utils.fromBigInteger(BigInteger.ONE, LEN));
+				
 				T[] d = secureCompute(a, b, env);
-
-				env.outputToAlice(d);
+				
 				os.flush();
+
 
 				disconnect();
 			} catch (Exception e) {

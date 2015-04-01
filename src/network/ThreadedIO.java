@@ -19,7 +19,6 @@ public class ThreadedIO implements Runnable {
 				if(len != 0) {
 					os.write(res, 0, len);
 					os.flush();
-//					Thread.sleep(2);
 				}
 			}
 			

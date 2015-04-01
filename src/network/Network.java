@@ -20,8 +20,8 @@ public class Network {
 	public InputStream is;
 	protected OutputStream os;
 	Thread thd;
-	boolean  THREADEDIO = true;
-	static int NetworkThreadedQueueSize = 10000000;
+	boolean  THREADEDIO = false;
+	static int NetworkThreadedQueueSize = 1024*256;
 	public void setUpThread() {
 		if(THREADEDIO) {
 			queue = new CustomizedConcurrentQueue(NetworkThreadedQueueSize);
@@ -45,9 +45,9 @@ public class Network {
 		try {
 			if(THREADEDIO) {
 				queue.destory();
-//				if(sock != null)
-				Thread.sleep(100);
+				os.flush();
 				thd.join();
+
 			}
 			os.flush();
 			// protocol payloads are received.
@@ -107,8 +107,10 @@ public class Network {
 
 	public void writeByte(byte[] data, int length) {
 		try {
-			if(THREADEDIO)
+			if(THREADEDIO){
 				queue.insert(data);
+//			System.out.println(data.length);
+			}
 			else {
 				os.write(data);
 			}
