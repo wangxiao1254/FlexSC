@@ -13,10 +13,23 @@ import flexsc.Mode;
 import gc.GCSignal;
 
 public class Network {
-	public InputStream is;
-	protected OutputStream os;
 	protected Socket sock;
 	protected ServerSocket serverSock;
+	public CustomizedConcurrentQueue queue;
+	ThreadedIO threadedio;
+	public InputStream is;
+	protected OutputStream os;
+	Thread thd;
+	boolean  THREADEDIO = true;
+	static int NetworkThreadedQueueSize = 10000000;
+	public void setUpThread() {
+		if(THREADEDIO) {
+			queue = new CustomizedConcurrentQueue(NetworkThreadedQueueSize);
+			threadedio = new ThreadedIO(queue, os);
+			thd = new Thread(threadedio);
+			thd.start();
+		}
+	}
 
 	public Network() {
 		
@@ -30,13 +43,25 @@ public class Network {
 
 	public void disconnect() {
 		try {
-			os.flush(); // dummy I/O to prevent dropping connection earlier than
+			if(THREADEDIO) {
+				queue.destory();
+//				if(sock != null)
+				Thread.sleep(100);
+				thd.join();
+			}
+			os.flush();
 			// protocol payloads are received.
-			if(sock != null)
+			if(sock != null) {
 				sock.close();
-			if(serverSock!= null)
+			}
+			if(serverSock!= null){
 				serverSock.close();
+				}
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -82,16 +107,24 @@ public class Network {
 
 	public void writeByte(byte[] data, int length) {
 		try {
-			os.write(data);
+			if(THREADEDIO)
+				queue.insert(data);
+			else {
+				os.write(data);
+			}
 		} catch (Exception e) {
-			System.exit(1);
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 
 	public void writeByte(byte data) {
 		try {
-			os.write(data);
+			if(THREADEDIO)
+				queue.insert(new byte[]{data});
+			else {
+				os.write(data);
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -59,7 +59,7 @@ public abstract  class EvaRunnable<T> extends network.Client implements Runnable
 			disconnect();
 			if(verbose){
 				System.out.println("Eva running time:"+(e-s)/1e9);
-				System.out.println("Number Of AND Gates:"+Flag.sw.ands);
+				System.out.println("Number Of AND Gates:"+env.numOfAnds);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

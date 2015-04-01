@@ -117,14 +117,17 @@ public abstract class GCGenComp extends GCCompEnv {
 	protected boolean gatesRemain = false;
 
 	public boolean outputToAlice(GCSignal out) {
+
 		if (gatesRemain) {
 			gatesRemain = false;
 			flush();
 		}
+		
 		if (out.isPublic())
 			return out.v;
 
 		GCSignal lb = GCSignal.receive(channel);
+
 		if (lb.equals(out))
 			return false;
 		else if (lb.equals(R.xor(out)))

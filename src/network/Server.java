@@ -18,6 +18,6 @@ public class Server extends Network {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} // create socket and bind to port
-		
+		setUpThread();	
 	}
 }

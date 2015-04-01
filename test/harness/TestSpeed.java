@@ -10,7 +10,6 @@ import circuits.arithmetic.IntegerLib;
 import flexsc.CompEnv;
 import flexsc.Flag;
 import flexsc.Mode;
-import flexsc.PMCompEnv;
 import flexsc.Party;
 
 public class TestSpeed extends TestHarness {
@@ -19,18 +18,27 @@ public class TestSpeed extends TestHarness {
 		IntegerLib<T> lib = new IntegerLib<T>(env);
 		T[] res = null;
 		
-		double t1 = System.nanoTime();
+
 		Flag.sw.ands = 0;
+
+		
 		for(int i = 0; i < 100; ++i) {
-			res = lib.and(a, b);
+//			System.out.println(i+" "+env.getParty()+" "+System.currentTimeMillis()%10000/1000.0);
+//			res = lib.and(a, b);
+			T[] re = lib.and(a, b);
+			 T[] rr = env.newTArray(1);
+			 rr[0]  = re[0];
+			double t1 = System.nanoTime();
+			lib.declassifyToBoth(rr);
+//			env.flush();
 			double t2 = System.nanoTime();
 			double t = (t2-t1)/1000000000.0;
-			System.out.println(t +"\t"+ Flag.sw.ands/t);
+			System.out.println(t);
 		}
 		
 		return res;
 	}
-	int LEN = 1024*1024;
+	int LEN = 1024*10;
 	class GenRunnable<T> extends network.Server implements Runnable {
 		boolean[] z;
 
@@ -68,7 +76,6 @@ public class TestSpeed extends TestHarness {
 
 				T[] a = env.inputOfAlice(new boolean[LEN]);
 				T[] b = env.inputOfBob(Utils.fromBigInteger(BigInteger.ONE, LEN));
-
 				T[] d = secureCompute(a, b, env);
 
 				env.outputToAlice(d);
@@ -97,6 +104,17 @@ public class TestSpeed extends TestHarness {
 	
 	public static void main(String args[]) throws Exception {
 		 TestSpeed test = new TestSpeed();
+		 if(args.length == 0){
+			 	GenRunnable gen = test.new GenRunnable();
+				EvaRunnable env = test.new EvaRunnable();
+				Thread tGen = new Thread(gen);
+				Thread tEva = new Thread(env);
+				tGen.start();
+				Thread.sleep(5);
+				tEva.start();
+				tGen.join();
+				tEva.join();
+		 }
 		 if(new Integer(args[0]) == 0)
 			 test.new GenRunnable().run();
 		 else test.new EvaRunnable().run();

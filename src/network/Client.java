@@ -23,7 +23,7 @@ public class Client extends Network {
 					if (sock != null)
 						break;
 				} catch(IOException e){
-					Thread.sleep(100);
+					Thread.sleep(10);
 				}
 			}
 			if (Flag.countIO) {
@@ -39,6 +39,7 @@ public class Client extends Network {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		setUpThread();
 	}
 
 	public void printStatistic() {

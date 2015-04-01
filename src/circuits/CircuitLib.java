@@ -67,13 +67,16 @@ public class CircuitLib<T> {
 		return env.outputToBob(x);
 	}
 
-	public boolean[] declassifyToBoth(T[] x) {
+	public boolean[] declassifyToBoth2(T[] x) {
+		
+
 		if(env.getMode() == Mode.COUNT){
 			return new boolean[x.length];
 		}
-		boolean[] pos = env.outputToAlice(x);
+		
+		boolean[] pos = env.outputToBob(x);	
 
-		if (env.getParty() == Party.Alice) {
+		if (env.getParty() == Party.Bob) {
 			byte[] tmp = new byte[pos.length];
 			for (int i = 0; i < pos.length; ++i)
 				tmp[i] = (byte) (pos[i] ? 1 : 0);
@@ -86,8 +89,41 @@ public class CircuitLib<T> {
 				pos[k] = ((tmp[k] - 1) == 0);
 			}
 		}
-
 		return pos;
+	}
+
+	public boolean[] declassifyToBoth(T[] x) {
+		if(env.getMode() == Mode.COUNT){
+			return new boolean[x.length];
+		}
+		else if (env.getMode() == Mode.VERIFY) {
+			return util.Utils.tobooleanArray((Boolean[]) x);
+		}else {
+
+			GCSignal[] in = (GCSignal[])x;
+
+			boolean[] pos = new boolean[x.length];
+			GCSignal tmp;
+			for(int i = 0; i < x.length; ++i) {
+				if(in[i].isPublic()) {
+					pos[i] = in[i].v;
+				}
+				else {
+					in[i].send(env.channel);
+				}
+			}
+			env.channel.flush();
+			for(int i = 0; i < x.length; ++i) {
+				if(!in[i].isPublic()) {
+					tmp = GCSignal.receive(env.channel);
+					if(tmp.equals(in[i]))
+						 pos[i] = false;
+					else
+						pos[i] = true;
+				}
+			}
+			return pos;
+		}
 	}
 
 	// Defaults to 32 bit constants.
