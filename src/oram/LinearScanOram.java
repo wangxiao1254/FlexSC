@@ -21,6 +21,15 @@ public class LinearScanOram<T> {
 			content[i] = lib.zeros(dataSize);
 	}
 
+	public void add(T[] iden, T[] data, T dummy) {
+		T[] iden1 = lib.padSignal(iden, lengthOfIden);
+		for(int i = 0; i < content.length; ++i) {
+			T eq = lib.eq(iden1, lib.toSignals(i, lengthOfIden));
+			eq = lib.and(eq, dummy);
+			content[i] = lib.mux(content[i], data, eq);
+		}
+	}
+	
 	public void add(T[] iden, T[] data) {
 		T[] iden1 = lib.padSignal(iden, lengthOfIden);
 		for(int i = 0; i < content.length; ++i) {
@@ -43,14 +52,6 @@ public class LinearScanOram<T> {
 		return res;
 	}
 
-	public T[] read(int index) {
-		return content[index];
-	}
-
-	public void write(int index, T[] d) {
-		content[index] = d;
-	}
-
 	public T[] read(T[] iden) {
 		return readAndRemove(iden, false);
 	}
@@ -59,6 +60,10 @@ public class LinearScanOram<T> {
 		add(iden, data);
 	}
 
+	public void write(T[] iden, T[] data, T dummy) {
+		add(iden, data, dummy);
+	}
+	
 	public void putBack(T[] scIden, T[] scData) {
 		add(scIden, scData);
 	}

@@ -91,6 +91,13 @@ public class GCSignal {
 		return new GCSignal(b);
 	}
 
+	public static void receive(Network channel, GCSignal s) {
+		if(s.bytes == null)
+			s.bytes = new byte[len];
+		channel.readBytes(s.bytes);
+	}
+
+	
 	@Override
 	public boolean equals(Object lb) {
 		if (this == lb)

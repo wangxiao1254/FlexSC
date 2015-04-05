@@ -14,14 +14,19 @@ public class GCEva extends GCEvaComp {
 		super(channel, Mode.REAL);
 		gb = new Garbler();
 		gtt[0][0] = GCSignal.ZERO;
+		gtt[0][1] = GCSignal.newInstance(new byte[10]);
+		gtt[1][0] = GCSignal.newInstance(new byte[10]);
+		gtt[1][1] = GCSignal.newInstance(new byte[10]);
 	}
 
 	private void receiveGTT() {
 		try {
 			Flag.sw.startGCIO();
-			gtt[0][1] = GCSignal.receive(channel);
-			gtt[1][0] = GCSignal.receive(channel);
-			gtt[1][1] = GCSignal.receive(channel);
+			GCSignal.receive(channel, gtt[0][1]);
+			GCSignal.receive(channel, gtt[1][0]);
+			GCSignal.receive(channel, gtt[1][1]);
+//			gtt[1][0] = GCSignal.receive(channel);
+//			gtt[1][1] = GCSignal.receive(channel);
 			Flag.sw.stopGCIO();
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -5,7 +5,6 @@ import java.util.Arrays;
 
 import flexsc.CompEnv;
 import flexsc.Party;
-import gc.BadLabelException;
 
 public class CircuitOram<T> extends TreeBasedOramParty<T> {
 	public CircuitOramLib<T> lib;
@@ -114,6 +113,12 @@ public class CircuitOram<T> extends TreeBasedOramParty<T> {
 		readAndRemove(scIden, pos, false);
 		putBack(scIden, scNewPos, scData);
 	}
+	
+	public void write(T[] scIden, T[] pos, T[] scNewPos, T[] scData, T dummy)  {
+		scIden = Arrays.copyOf(scIden, lengthOfIden);
+		conditionalReadAndRemove(scIden, pos, dummy);
+		conditionalPutBack(scIden, scNewPos, scData, dummy);
+	}
 
 	public T[] access(T[] scIden, boolean[] pos, T[] scNewPos, T[] scData, T op) {
 		scIden = Arrays.copyOf(scIden, lengthOfIden);
@@ -123,7 +128,7 @@ public class CircuitOram<T> extends TreeBasedOramParty<T> {
 		return toWrite;
 	}
 
-	public T[] conditionalReadAndRemove(T[] scIden, T[] pos, T condition) throws BadLabelException {
+	public T[] conditionalReadAndRemove(T[] scIden, T[] pos, T condition) {
 		// Utils.print(env, "rar: iden:", scIden, pos, condition);
 		scIden = Arrays.copyOf(scIden, lengthOfIden);
 		T[] scPos = Arrays.copyOf(pos, lengthOfPos);
@@ -146,13 +151,8 @@ public class CircuitOram<T> extends TreeBasedOramParty<T> {
 		return lib.mux(res.data, lib.toSignals(initalValue, res.data.length), res.isDummy);
 	}
 
-	public int cnttt = 0;
 	public void conditionalPutBack(T[] scIden, T[] scNewPos, T[] scData,
-			T condition) throws BadLabelException {
-		
-//		 Utils.print(env, "pb:iden:", scIden, scNewPos, condition);
-		cnttt++;
-//		System.out.println(cnttt);
+			T condition) {
 		env.flush();
 		scIden = Arrays.copyOf(scIden, lengthOfIden);
 

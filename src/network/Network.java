@@ -94,6 +94,24 @@ public class Network {
 		return temp;
 	}
 
+	public void readBytes(byte[] temp) {
+//		byte[] temp = new byte[len];
+		try {
+			int remain = temp.length;
+			while (0 < remain) {
+				int readBytes;
+
+				readBytes = is.read(temp, temp.length - remain, remain);
+				if (readBytes != -1) {
+					remain -= readBytes;
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	
 	public byte[] readBytes() {
 		byte[] lenBytes = readBytes(4);
 		int len = ByteBuffer.wrap(lenBytes).getInt();

@@ -73,6 +73,13 @@ public class RecursiveCircuitOram<T> {
 		boolean[] oldPos = baseOram.lib.declassifyToBoth(poses[0]);
 		currentOram.write(iden, oldPos, poses[1], data);
 	}
+	
+	public void write(T[] iden, T[] data, T dummy) {
+		T[][] poses = travelToDeep(iden, 1);
+		CircuitOram<T> currentOram = clients.get(0);
+
+		currentOram. write(iden, poses[0], poses[1], data, dummy);
+	}
 
 	public T[] access(T[] iden, T[] data, T op) {
 		T[][] poses = travelToDeep(iden, 1);
