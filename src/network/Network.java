@@ -15,24 +15,11 @@ import gc.GCSignal;
 public class Network {
 	protected Socket sock;
 	protected ServerSocket serverSock;
-	public CustomizedConcurrentQueue queue;
-	ThreadedIO threadedio;
 	public InputStream is;
 	protected OutputStream os;
-	Thread thd;
-	boolean  THREADEDIO = false;
-	static int NetworkThreadedQueueSize = 1024*256;
-	public void setUpThread() {
-		if(THREADEDIO) {
-			queue = new CustomizedConcurrentQueue(NetworkThreadedQueueSize);
-			threadedio = new ThreadedIO(queue, os);
-			thd = new Thread(threadedio);
-			thd.start();
-		}
-	}
 
 	public Network() {
-		
+
 	}
 
 	public Network(InputStream is, OutputStream os, Socket sock) {
@@ -43,12 +30,6 @@ public class Network {
 
 	public void disconnect() {
 		try {
-			if(THREADEDIO) {
-				queue.destory();
-				os.flush();
-				thd.join();
-
-			}
 			os.flush();
 			// protocol payloads are received.
 			if(sock != null) {
@@ -56,17 +37,13 @@ public class Network {
 			}
 			if(serverSock!= null){
 				serverSock.close();
-				}
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
-	
+
 	public void flush() {
 		try {
 			os.flush();
@@ -95,7 +72,7 @@ public class Network {
 	}
 
 	public void readBytes(byte[] temp) {
-//		byte[] temp = new byte[len];
+		//		byte[] temp = new byte[len];
 		try {
 			int remain = temp.length;
 			while (0 < remain) {
@@ -111,7 +88,7 @@ public class Network {
 		}
 	}
 
-	
+
 	public byte[] readBytes() {
 		byte[] lenBytes = readBytes(4);
 		int len = ByteBuffer.wrap(lenBytes).getInt();
@@ -125,13 +102,7 @@ public class Network {
 
 	public void writeByte(byte[] data, int length) {
 		try {
-			if(THREADEDIO){
-				queue.insert(data);
-//			System.out.println(data.length);
-			}
-			else {
-				os.write(data);
-			}
+			os.write(data);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
@@ -140,11 +111,7 @@ public class Network {
 
 	public void writeByte(byte data) {
 		try {
-			if(THREADEDIO)
-				queue.insert(new byte[]{data});
-			else {
-				os.write(data);
-			}
+			os.write(data);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -161,6 +128,14 @@ public class Network {
 		return new BigInteger(rep);
 	}
 
+	public void writeLong(long i) {
+		writeByte(ByteBuffer.allocate(8).putLong(i).array(), 8);
+	}
+
+	public long readLong() {
+		return ByteBuffer.wrap(readBytes(8)).getLong();
+	}	
+	
 	public void writeInt(int i) {
 		writeByte(ByteBuffer.allocate(4).putInt(i).array(), 4);
 	}
@@ -169,19 +144,19 @@ public class Network {
 		return ByteBuffer.wrap(readBytes(4)).getInt();
 	}	
 
-	public <T> void send(T[][][] data, CompEnv<T> env) throws IOException {
+	public <T> void send(T[][][] data, CompEnv<T> env) {
 		for (int i = 0; i < data.length; i++) {
 			send(data[i], env);
 		}
 	}
 
-	public <T> void send(T[][] data, CompEnv<T> env) throws IOException {
+	public <T> void send(T[][] data, CompEnv<T> env) {
 		for (int i = 0; i < data.length; i++) {
 			send(data[i], env);
 		}
 	}
 
-	public <T> T[][] read(int length1, int length2, CompEnv<T> env) throws IOException {
+	public <T> T[][] read(int length1, int length2, CompEnv<T> env) {
 		T[][] ret = env.newTArray(length1, 1);
 		for (int i = 0; i < length1; i++) {
 			ret[i] = read(length2, env);
@@ -189,7 +164,7 @@ public class Network {
 		return ret;
 	}
 
-	public <T> T[][][] read(int length1, int length2, int length3, CompEnv<T> env) throws IOException {
+	public <T> T[][][] read(int length1, int length2, int length3, CompEnv<T> env) {
 		T[][][] ret = env.newTArray(length1, 1, 1);
 		for (int i = 0; i < length1; i++) {
 			ret[i] = read(length2, length3, env);
@@ -197,13 +172,13 @@ public class Network {
 		return ret;
 	}
 
-	public <T> void send(T[] data, CompEnv<T> env) throws IOException {
+	public <T> void send(T[] data, CompEnv<T> env) {
 		for (int i = 0; i < data.length; i++) {
 			send(data[i], env);
 		}
 	}
 
-	public <T> void send(T data, CompEnv<T> env) throws IOException {
+	public <T> void send(T data, CompEnv<T> env) {
 		Mode mode = env.getMode();
 		if (mode == Mode.REAL) {
 			GCSignal gcData = (GCSignal) data;
@@ -215,7 +190,7 @@ public class Network {
 		}
 	}
 
-	public <T> T[] read(int length, CompEnv<T> env) throws IOException {
+	public <T> T[] read(int length, CompEnv<T> env) {
 		T[] ret = env.newTArray(length);
 		for (int i = 0; i < length; i++) {
 			ret[i] = read(env);
@@ -224,7 +199,7 @@ public class Network {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> T read(CompEnv<T> env) throws IOException {
+	public <T> T read(CompEnv<T> env) {
 		Mode mode = env.getMode();
 		if (mode == Mode.REAL || mode == Mode.OPT || mode == Mode.OFFLINE) {
 			GCSignal signal = GCSignal.receive(this);
@@ -239,12 +214,12 @@ public class Network {
 		return null;
 	}
 
-	public boolean readBoolean() throws IOException {
+	public boolean readBoolean() {
 		int read = readInt();
 		return read == 1;
 	}
 
-	public void writeBoolean(boolean data) throws IOException {
+	public void writeBoolean(boolean data) {
 		int sen = data ? 1 : 0;
 		writeInt(sen);
 	}

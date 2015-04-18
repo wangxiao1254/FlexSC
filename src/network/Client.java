@@ -39,7 +39,6 @@ public class Client extends Network {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		setUpThread();
 	}
 
 	public void printStatistic() {

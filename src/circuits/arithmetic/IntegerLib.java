@@ -29,7 +29,7 @@ public class IntegerLib<T> extends CircuitLib<T> implements ArithmeticLib<T> {
 	}
 
 	// full 1-bit adder
-	protected T[] add(T x, T y, T cin) {
+	public T[] add(T x, T y, T cin) {
 		T[] res = env.newTArray(2);
 
 		T t1 = xor(x, cin);

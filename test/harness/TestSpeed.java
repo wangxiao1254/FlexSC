@@ -17,36 +17,26 @@ public class TestSpeed extends TestHarness {
 	public <T>T[] secureCompute(T[] a, T[] b, CompEnv<T> env) {
 		IntegerLib<T> lib = new IntegerLib<T>(env);
 		T[] res = null;
-		
 
 		Flag.sw.ands = 0;
 
 		double t1 = System.nanoTime();
-		for(int i = 0; i < 100; ++i) {
-//			System.out.println(i+" "+env.getParty()+" "+System.currentTimeMillis()%10000/1000.0);
-//			res = lib.and(a, b);
-			
-//			 T[] rr = env.newTArray(1);
-//			 rr[0]  = re[0];
-			
-			T[] re = lib.and(a, b);
-//			lib.declassifyToBoth(rr);
-//			env.flush();
+		for(int i = 0; i<10000000; ++i) {
+			a = lib.and(a, b);
 			double t2 = System.nanoTime();
 			double t = (t2-t1)/1000000000.0;
-			System.out.println(i+" "+t +"\t"+ env.numOfAnds/t+" "+env.getParty());
-
+			System.out.println(i+" "+t +"\t"+ (env.numOfAnds/t)+" "+env.getParty());
 		}
 		
 		return res;
 	}
-	int LEN = 1024*10;
+	int LEN = 1024*50;
 	class GenRunnable<T> extends network.Server implements Runnable {
 		boolean[] z;
 
 		public void run() {
 			try {
-				listen(54321);
+				listen(5001);
 				@SuppressWarnings("unchecked")
 				CompEnv<T> gen = CompEnv.getEnv(Mode.REAL, Party.Alice, this);
 
@@ -66,12 +56,19 @@ public class TestSpeed extends TestHarness {
 	}
 
 	class EvaRunnable<T> extends network.Client implements Runnable {
-		public double andgates;
-		public double encs;
+		public EvaRunnable(String s) {
+			this.s = s;
+		}
+		
+		public EvaRunnable() {
+			this.s = "localhost";
+		}
 
+		
+		String s;
 		public void run() {
 			try {
-				connect("localhost", 54321);
+				connect(s, 5001);
 				@SuppressWarnings("unchecked")
 				CompEnv<T> env = CompEnv.getEnv(Mode.REAL, Party.Bob, this);
 
@@ -119,6 +116,6 @@ public class TestSpeed extends TestHarness {
 		 }
 		 if(new Integer(args[0]) == 0)
 			 test.new GenRunnable().run();
-		 else test.new EvaRunnable().run();
+		 else test.new EvaRunnable(args[1]).run();
 	}
 }
