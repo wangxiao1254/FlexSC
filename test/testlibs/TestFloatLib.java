@@ -15,7 +15,7 @@ public class TestFloatLib extends TestHarness {
 
 	Random rng = new Random();
 
-	@Test
+//	@Test
 	public void testFloat() throws Exception {
 		for (int i = 0; i < testCases; i++) {
 			double a = rng.nextDouble() * (1 << 20) - (1 << 19);
@@ -34,7 +34,7 @@ public class TestFloatLib extends TestHarness {
 		}
 	}
 
-	@Test
+//	@Test
 	public void testFloatAdd() throws Exception {
 		for (int i = 0; i < testCases; i++) {
 			double a = rng.nextDouble() * (1 << 20) - (1 << 19);
@@ -67,7 +67,7 @@ public class TestFloatLib extends TestHarness {
 		});
 	}
 
-	@Test
+//	@Test
 	public void testFloatSub() throws Exception {
 		Random rng = new Random();
 
@@ -102,7 +102,7 @@ public class TestFloatLib extends TestHarness {
 
 	}
 
-	@Test
+//	@Test
 	public void testFloatDiv() throws Exception {
 		Random rng = new Random();
 
@@ -123,7 +123,7 @@ public class TestFloatLib extends TestHarness {
 		}
 	}
 
-	@Test
+//	@Test
 	public void testFloatMultiply() throws Exception {
 		Random rng = new Random();
 

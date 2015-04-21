@@ -57,7 +57,6 @@ public abstract class GenRunnable<T> extends network.Server implements Runnable 
 			disconnect();
 			if(verbose)
 				System.out.println("Gen running time:"+(e-s)/1e9);
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);

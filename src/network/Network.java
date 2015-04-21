@@ -19,7 +19,6 @@ public class Network {
 	protected OutputStream os;
 
 	public Network() {
-
 	}
 
 	public Network(InputStream is, OutputStream os, Socket sock) {
@@ -32,15 +31,15 @@ public class Network {
 		try {
 			os.flush();
 			// protocol payloads are received.
-			if(sock != null) {
-				sock.close();
-			}
-			if(serverSock!= null){
+			if(serverSock != null) {
 				serverSock.close();
+			} else {
+				sock.close();
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 
@@ -50,6 +49,7 @@ public class Network {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 
@@ -67,6 +67,7 @@ public class Network {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+			System.exit(1);
 		}
 		return temp;
 	}
@@ -85,6 +86,7 @@ public class Network {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 

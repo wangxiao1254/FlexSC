@@ -4,7 +4,7 @@ import flexsc.Mode;
 
 public class TestHarness {
 	static public int testCases;
-	static public Mode m = Mode.VERIFY;
+	static public Mode m = Mode.COUNT;
 	public TestHarness() {
 		if (m == Mode.COUNT) {
 			testCases = 1;

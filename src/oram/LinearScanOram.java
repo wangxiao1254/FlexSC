@@ -7,7 +7,7 @@ import flexsc.CompEnv;
 
 public class LinearScanOram<T> {
 	public T[][] content;
-	CompEnv<T> env;
+	public CompEnv<T> env;
 	public int lengthOfIden;
 	public IntegerLib<T> lib;
 	public int dataSize;

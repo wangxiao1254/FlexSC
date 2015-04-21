@@ -12,7 +12,7 @@ import flexsc.PMCompEnv;
 import gc.BadLabelException;
 
 public class TestFloat extends TestHarness {
-	public static int widthV = 24, widthP = 8;
+	public static int widthV = 54, widthP = 11;
 
 	public static abstract class Helper {
 		double a, b;
