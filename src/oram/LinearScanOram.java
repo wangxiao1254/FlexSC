@@ -1,7 +1,6 @@
 // Copyright (C) 2014 by Xiao Shaun Wang <wangxiao@cs.umd.edu>
 package oram;
 
-import util.Utils;
 import circuits.arithmetic.IntegerLib;
 import flexsc.CompEnv;
 
@@ -16,7 +15,14 @@ public class LinearScanOram<T> {
 		this.dataSize = dataSize;
 		lib = new IntegerLib<T>(env);
 		content = env.newTArray(N, 0);
-		lengthOfIden = Utils.log2(N);
+		long a = 1;
+		lengthOfIden = 1;
+		while (a < N) {
+			a *= 2;
+			++lengthOfIden;
+		}
+
+		--lengthOfIden;
 		for(int i = 0; i < N; ++i)
 			content[i] = lib.zeros(dataSize);
 	}
@@ -66,5 +72,8 @@ public class LinearScanOram<T> {
 	
 	public void putBack(T[] scIden, T[] scData) {
 		add(scIden, scData);
+	}
+	public T[] read(int index) {
+		return content[index];
 	}
 }
