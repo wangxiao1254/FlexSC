@@ -25,7 +25,7 @@ public class Sort {
 		public void prepareInput(CompEnv<T> gen) {
 			inputB = gen.newTArray(10, 0);
 			for(int i = 0; i < 10; ++i)
-				inputB[i] = gen.inputOfBob(Utils.fromInt(i, 32));
+				inputB[i] = gen.inputOfBob(new boolean[32]);
 			inputA = gen.newTArray(10, 0);
 			for(int i = 0; i < 10; ++i)
 				inputA[i] = gen.inputOfAlice(Utils.fromInt(i, 32));

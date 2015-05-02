@@ -1,9 +1,6 @@
 package util;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Arrays;
-import java.util.Scanner;
 
 import org.apache.commons.cli.ParseException;
 
@@ -18,10 +15,12 @@ public abstract class GenRunnable<T> extends network.Server implements Runnable 
 	int port;
 	protected String[] args;
 	public boolean verbose = true;
-	public void setParameter(Mode m, int port, String[] args) {
-		this.m = m;
-		this.port = port;
+	public ConfigParser config;
+	public void setParameter(ConfigParser  config, String[] args) {
+		this.m = Mode.getMode(config.getString("Mode"));
+		this.port = config.getInt("Port");
 		this.args = args;
+		this.config = config;
 	}
 
 	public void setParameter(Mode m, int port) {
@@ -65,35 +64,12 @@ public abstract class GenRunnable<T> extends network.Server implements Runnable 
 
 
 	@SuppressWarnings("rawtypes")
-	public static void main(String[] args) throws ParseException, ClassNotFoundException, InstantiationException, IllegalAccessException { 
-		File file = new File("Config.conf");
-
-		Scanner scanner;
-		int port=0;
-		Mode mode=null;
-
-		try {
-			scanner = new Scanner(file);
-			while(scanner.hasNextLine()) {
-				String a = scanner.nextLine();
-				String[] content = a.split(":");
-				if(content.length == 2) {
-					if(content[0].equals("Port"))
-						port = new Integer(content[1].replace(" ", ""));
-					else if(content[0].equals("Mode"))
-						mode = Mode.getMode(content[1].replace(" ", ""));
-					else{}
-				}	 
-			}
-			scanner.close();			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public static void main(String[] args) throws ParseException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+		ConfigParser config = new ConfigParser("Config.conf");
 
 		Class<?> clazz = Class.forName(args[0]+"$Generator");
 		GenRunnable run = (GenRunnable) clazz.newInstance();
-		run.setParameter(mode, port, Arrays.copyOfRange(args, 1, args.length));
+		run.setParameter(config, Arrays.copyOfRange(args, 1, args.length));
 		run.run();
 		if(Flag.CountTime)
 			Flag.sw.print();

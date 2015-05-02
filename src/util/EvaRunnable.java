@@ -1,9 +1,6 @@
 package util;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Arrays;
-import java.util.Scanner;
 
 import org.apache.commons.cli.ParseException;
 
@@ -21,12 +18,13 @@ public abstract  class EvaRunnable<T> extends network.Client implements Runnable
 	String host;
 	protected String[] args;
 	public boolean verbose = true;
-
-	public void setParameter(Mode m, String host, int port, String[] args){
-		this.m = m;
-		this.port = port;
-		this.host = host;
+	public ConfigParser config;
+	public void setParameter(ConfigParser config, String[] args) {
+		this.m = Mode.getMode(config.getString("Mode"));
+		this.port = config.getInt("Port");
+		host = config.getString("Host");
 		this.args = args;
+		this.config = config;
 	}
 
 	public void setParameter(Mode m, String host, int port){
@@ -69,36 +67,11 @@ public abstract  class EvaRunnable<T> extends network.Client implements Runnable
 
 	@SuppressWarnings("rawtypes")
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, ParseException, ClassNotFoundException {
-		File file = new File("Config.conf");
-		Scanner scanner;
-		String host = null;
-		int port = 0;
-		Mode mode = null;
-
-		try {
-			scanner = new Scanner(file);
-			while(scanner.hasNextLine()) {
-				String a = scanner.nextLine();
-				String[] content = a.split(":");
-				if(content.length == 2) {
-					if(content[0].equals("Host"))
-						host = content[1].replace(" ", "");
-					else if(content[0].equals("Port"))
-						port = new Integer(content[1].replace(" ", ""));
-					else if(content[0].equals("Mode"))
-						mode = Mode.getMode(content[1].replace(" ", ""));
-					else{}
-				}
-			}
-			scanner.close();			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		ConfigParser config = new ConfigParser("Config.conf");
 
 		Class<?> clazz = Class.forName(args[0]+"$Evaluator");
 		EvaRunnable run = (EvaRunnable) clazz.newInstance();
-		run.setParameter(mode, host, port, Arrays.copyOfRange(args, 1, args.length));
+		run.setParameter(config, Arrays.copyOfRange(args, 1, args.length));
 		run.run();
 		if(Flag.CountTime)
 			Flag.sw.print();
