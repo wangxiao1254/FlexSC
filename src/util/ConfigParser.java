@@ -38,4 +38,9 @@ public class ConfigParser {
 	public int getInt(String string){
 		return new Integer(config.get(string));
 	}
+	public boolean getBool(String string){
+		return config.get(string).contains("T")||config.get(string).contains("True")
+				||config.get(string).contains("true")||config.get(string).contains("Yes")
+				||config.get(string).contains("yes");
+	}
 }
