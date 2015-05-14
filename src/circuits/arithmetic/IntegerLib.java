@@ -143,14 +143,11 @@ public class IntegerLib<T> extends CircuitLib<T> implements ArithmeticLib<T> {
 	}
 
 	public T[] absolute(T[] x) {
-		T reachedOneSignal = SIGNAL_ZERO;
-		T[] result = zeros(x.length);
-		for (int i = 0; i < x.length; ++i) {
-			T comp = eq(SIGNAL_ONE, x[i]);
-			result[i] = xor(x[i], reachedOneSignal);
-			reachedOneSignal = or(reachedOneSignal, comp);
-		}
-		return mux(x, result, x[x.length - 1]);
+		T[] mask = env.newTArray(x.length);
+		for(int i = 0; i < x.length; ++i)
+			mask[i] = x[x.length-1];
+		T[] res = add(mask, x);
+		return xor(res, mask);
 	}
 
 	public T[] div(T[] x, T[] y) {
