@@ -11,11 +11,11 @@ public abstract class GCCompEnv extends CompEnv<GCSignal> {
 	}
 
 	public GCSignal ONE() {
-		return new GCSignal(true);
+		return new GCSignal(true, GCSignal.wid++);
 	}
 	
 	public GCSignal ZERO() {
-		return new GCSignal(false);
+		return new GCSignal(false, GCSignal.wid++);
 	}
 	
 	public GCSignal[] newTArray(int len) {
@@ -31,6 +31,6 @@ public abstract class GCCompEnv extends CompEnv<GCSignal> {
 	}
 	
 	public GCSignal newT(boolean v) {
-		return new GCSignal(v);
+		return new GCSignal(v, GCSignal.wid++);
 	}
 }

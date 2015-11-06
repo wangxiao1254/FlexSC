@@ -12,23 +12,27 @@ import network.Network;
 
 public class GCSignal {
 	public static final int len = 10;
+	public static int wid = 0;
 	public byte[] bytes;
 	public boolean v;
+	public int wireId;
 
-	public static final GCSignal ZERO = new GCSignal(new byte[len]);
+	public static final GCSignal ZERO = new GCSignal(new byte[len], 0 /* wireId */);
 
-	public GCSignal(byte[] b) {
+	public GCSignal(byte[] b, int wireId) {
 		bytes = b;
+		this.wireId = wireId;
 	}
 
-	public GCSignal(boolean b) {
+	public GCSignal(boolean b, int wireId) {
 		v = b;
+		this.wireId = wireId;
 	}
 
 	public static GCSignal freshLabel(SecureRandom rnd) {
 		byte[] b = new byte[len];
 		rnd.nextBytes(b);
-		return new GCSignal(b);
+		return new GCSignal(b, wid++);
 	}
 
 	public static GCSignal newInstance(byte[] bs) {
@@ -37,7 +41,7 @@ public class GCSignal {
 		Arrays.fill(b, (byte) ((bs[0] < 0) ? 0xff : 0));
 		int newlen = len < bs.length ? len : bs.length;
 		System.arraycopy(bs, 0, b, len - newlen, newlen);
-		return new GCSignal(b);
+		return new GCSignal(b, wid++);
 	}
 
 	public GCSignal(GCSignal lb) {
@@ -53,7 +57,7 @@ public class GCSignal {
 		byte[] nb = new byte[len];
 		for (int i = 0; i < len; i++)
 			nb[i] = (byte) (bytes[i] ^ lb.bytes[i]);
-		return new GCSignal(nb);
+		return new GCSignal(nb, wid++);
 	}
 	
 	public static void xor(GCSignal l, GCSignal r, GCSignal ret) {
@@ -88,7 +92,7 @@ public class GCSignal {
 	// 'send' and 'receive' are supposed to be used only for secret signals
 	public static GCSignal receive(Network channel) {
 		byte[] b = channel.readBytes(len);
-		return new GCSignal(b);
+		return new GCSignal(b, wid++);
 	}
 
 	public static void receive(Network channel, GCSignal s) {

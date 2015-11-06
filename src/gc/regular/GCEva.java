@@ -39,14 +39,14 @@ public class GCEva extends GCEvaComp {
 
 		GCSignal res;
 		if (a.isPublic() && b.isPublic())
-			res = new GCSignal(a.v && b.v);
+			res = new GCSignal(a.v && b.v, GCSignal.wid++);
 		else if (a.isPublic())
-			res = a.v ? b : new GCSignal(false);
+			res = a.v ? b : new GCSignal(false, GCSignal.wid++);
 		else if (b.isPublic())
-			res = b.v ? a : new GCSignal(false);
+			res = b.v ? a : new GCSignal(false, GCSignal.wid++);
 		else {
 			++numOfAnds;
-			res = new GCSignal(new byte[10]);
+			res = new GCSignal(new byte[10], GCSignal.wid++);
 			receiveGTT();
 
 			int i0 = a.getLSB();

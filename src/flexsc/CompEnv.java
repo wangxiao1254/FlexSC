@@ -43,6 +43,8 @@ public abstract class CompEnv<T> {
 				return new gc.offline.GCEva(w);
 			else
 				return new gc.offline.GCGen(w);
+		} else if (mode == Mode.CIRCUIT) {
+			return new ClearCircuitCompEnv(w, p);
 		} else {
 			try {
 				throw new Exception("not a supported Mode!");

@@ -13,7 +13,9 @@ public enum Mode {
 	//Half Gates
 	OPT,
 	//Offline
-	OFFLINE;
+	OFFLINE,
+	// Generate Clear Circuit
+	CIRCUIT;
 
 	public static Mode getMode(String optionValue) {
 		if(optionValue.equals("VERIFY")) {
@@ -26,6 +28,8 @@ public enum Mode {
 			return OPT;
 		} else if(optionValue.equals("OFFLINE")) {
 			return OPT;
+		} else if (optionValue.equals("CIRCUIT")) {
+			return CIRCUIT;
 		} else return null;
 	}
 }

@@ -13,11 +13,11 @@ public class GCGen extends GCGenComp {
 		super(channel, Mode.REAL);
 		gb = new Garbler();
 		for(int i = 0; i < 2; ++i) {
-			labelL[i] = new GCSignal(new byte[10]);
-			labelR[i] = new GCSignal(new byte[10]);
-			lb[i] = new GCSignal(new byte[10]);
-			toSend[0][i] = new GCSignal(new byte[10]);
-			toSend[1][i] = new GCSignal(new byte[10]);
+			labelL[i] = new GCSignal(new byte[10], GCSignal.wid++);
+			labelR[i] = new GCSignal(new byte[10], GCSignal.wid++);
+			lb[i] = new GCSignal(new byte[10], GCSignal.wid++);
+			toSend[0][i] = new GCSignal(new byte[10], GCSignal.wid++);
+			toSend[1][i] = new GCSignal(new byte[10], GCSignal.wid++);
 		}
 	}
 
@@ -78,11 +78,11 @@ public class GCGen extends GCGenComp {
 		Flag.sw.startGC();
 		GCSignal res;
 		if (a.isPublic() && b.isPublic())
-			res = ( (a.v && b.v) ? new GCSignal(true): new GCSignal(false));
+			res = ( (a.v && b.v) ? new GCSignal(true, GCSignal.wid++): new GCSignal(false, GCSignal.wid++));
 		else if (a.isPublic())
-			res = a.v ? b : new GCSignal(false);
+			res = a.v ? b : new GCSignal(false, GCSignal.wid++);
 		else if (b.isPublic())
-			res = b.v ? a : new GCSignal(false);
+			res = b.v ? a : new GCSignal(false, GCSignal.wid++);
 		else {
 			++numOfAnds;
 			GCSignal ret;
