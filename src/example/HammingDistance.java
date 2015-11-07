@@ -2,6 +2,10 @@ package example;
 
 import util.EvaRunnable;
 import util.GenRunnable;
+import util.Utils;
+
+import java.util.Arrays;
+
 import circuits.arithmetic.IntegerLib;
 import flexsc.CompEnv;
 import gc.BadLabelException;
@@ -21,12 +25,13 @@ public class HammingDistance {
 		
 		@Override
 		public void prepareInput(CompEnv<T> gen) {
-			boolean[] in = new boolean[10000];
+			boolean[] in = new boolean[10];
 			for(int i = 0; i < in.length; ++i)
 				in[i] = CompEnv.rnd.nextBoolean();
 			inputA = gen.inputOfAlice(in);
 			gen.flush();
-			inputB = gen.inputOfBob(new boolean[10000]);
+			inputB = gen.inputOfBob(new boolean[10]);
+			System.out.println("Input from Gen:"+Arrays.toString(in));
 		}
 		
 		@Override
@@ -35,7 +40,7 @@ public class HammingDistance {
 		}
 		@Override
 		public void prepareOutput(CompEnv<T> gen) throws BadLabelException {
-			System.out.println(gen.outputToAlice(scResult));
+			System.out.println(Utils.toInt(gen.outputToAlice(scResult)));
 		}
 		
 	}
@@ -47,12 +52,13 @@ public class HammingDistance {
 		
 		@Override
 		public void prepareInput(CompEnv<T> gen) {
-			boolean[] in = new boolean[10000];
+			boolean[] in = new boolean[10];
 			for(int i = 0; i < in.length; ++i)
 				in[i] = CompEnv.rnd.nextBoolean();
-			inputA = gen.inputOfAlice(new boolean[10000]);
+			inputA = gen.inputOfAlice(new boolean[10]);
 			gen.flush();
 			inputB = gen.inputOfBob(in);
+			System.out.println("Input from Eva:"+Arrays.toString(in));
 		}
 		
 		@Override

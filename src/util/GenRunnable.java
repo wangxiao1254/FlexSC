@@ -54,9 +54,10 @@ public abstract class GenRunnable<T> extends network.Server implements Runnable 
 			Flag.sw.stopTotal();
 			double e = System.nanoTime();
 			disconnect();
-			if(verbose)
+			if(verbose) {
 				System.out.println("Gen running time:"+(e-s)/1e9);
-			System.out.println(env.numOfAnds);
+				System.out.println(env.numOfAnds);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
