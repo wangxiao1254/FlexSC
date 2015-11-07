@@ -18,11 +18,11 @@ public class GCEva extends GCEvaComp {
 		Flag.sw.startGC();
 		GCSignal res;
 		if (a.isPublic() && b.isPublic())
-			res = ((a.v && b.v)? new GCSignal(true, GCSignal.wid++): new GCSignal(false, GCSignal.wid++));
+			res = ((a.v && b.v)? new GCSignal(true): new GCSignal(false));
 		else if (a.isPublic())
-			res =  a.v ? b : new GCSignal(false, GCSignal.wid++);
+			res =  a.v ? b : new GCSignal(false);
 		else if (b.isPublic())
-			res = b.v ? a : new GCSignal(false, GCSignal.wid++);
+			res = b.v ? a : new GCSignal(false);
 		else {
 			++numOfAnds;
 			int i0 = a.getLSB();

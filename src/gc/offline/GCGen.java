@@ -67,7 +67,7 @@ public class GCGen extends GCGenComp {
 		fread.read(gtt[0][1].bytes);
 		fread.read(gtt[1][0].bytes);
 		fread.read(gtt[1][1].bytes);
-		GCSignal a = new GCSignal(fread.read(10), GCSignal.wid++);
+		GCSignal a = new GCSignal(fread.read(10));
 		return a;
 	}
 
@@ -101,11 +101,11 @@ public class GCGen extends GCGenComp {
 		Flag.sw.startGC();
 		GCSignal res = null;
 		if (a.isPublic() && b.isPublic())
-			res = ( (a.v && b.v) ? new GCSignal(true, GCSignal.wid++):new GCSignal(false, GCSignal.wid++));
+			res = ( (a.v && b.v) ? new GCSignal(true):new GCSignal(false));
 		else if (a.isPublic())
-			res = a.v ? b : new GCSignal(false, GCSignal.wid++);
+			res = a.v ? b : new GCSignal(false);
 		else if (b.isPublic())
-			res = b.v ? a : new GCSignal(false, GCSignal.wid++);
+			res = b.v ? a : new GCSignal(false);
 		else {
 			++numOfAnds;
 			if(Flag.offline) {

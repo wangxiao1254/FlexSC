@@ -12,16 +12,16 @@ public class GCGen extends GCGenComp {
 	public GCGen(Network channel){
 		super(channel, Mode.OPT);
 		gb = new Garbler();
-		labelL[0] = new GCSignal(new byte[10], GCSignal.wid++);
-		labelL[1] = new GCSignal(new byte[10], GCSignal.wid++);
-		labelR[0] = new GCSignal(new byte[10], GCSignal.wid++);
-		labelR[1] = new GCSignal(new byte[10], GCSignal.wid++);
-		TG = new GCSignal(new byte[10], GCSignal.wid++);
-		WG = new GCSignal(new byte[10], GCSignal.wid++);
-		TE = new GCSignal(new byte[10], GCSignal.wid++);
-		WE = new GCSignal(new byte[10], GCSignal.wid++);
-		G1 = new GCSignal(new byte[10], GCSignal.wid++);
-		TMP = new GCSignal(new byte[10], GCSignal.wid++);
+		labelL[0] = new GCSignal(new byte[10]);
+		labelL[1] = new GCSignal(new byte[10]);
+		labelR[0] = new GCSignal(new byte[10]);
+		labelR[1] = new GCSignal(new byte[10]);
+		TG = new GCSignal(new byte[10]);
+		WG = new GCSignal(new byte[10]);
+		TE = new GCSignal(new byte[10]);
+		WE = new GCSignal(new byte[10]);
+		G1 = new GCSignal(new byte[10]);
+		TMP = new GCSignal(new byte[10]);
 	}
 
 	private GCSignal labelL[] = new GCSignal[2];
@@ -80,11 +80,11 @@ public class GCGen extends GCGenComp {
 		Flag.sw.startGC();
 		GCSignal res;
 		if (a.isPublic() && b.isPublic())
-			res = ((a.v && b.v)? new GCSignal(true, GCSignal.wid++): new GCSignal(false, GCSignal.wid++));
+			res = ((a.v && b.v)? new GCSignal(true): new GCSignal(false));
 		else if (a.isPublic())
-			res = a.v ? b : new GCSignal(false, GCSignal.wid++);
+			res = a.v ? b : new GCSignal(false);
 		else if (b.isPublic())
-			res = b.v ? a : new GCSignal(false, GCSignal.wid++);
+			res = b.v ? a : new GCSignal(false);
 		else {
 			++numOfAnds;
 			GCSignal ret = garble(a, b);

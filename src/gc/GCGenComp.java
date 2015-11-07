@@ -41,7 +41,7 @@ public abstract class GCGenComp extends GCCompEnv {
 			label[0] = GCSignal.freshLabel(rnd);
 		if(mode == Mode.OFFLINE) {
 			if(Flag.offline) {
-				label[0] = new GCSignal(gc.offline.GCGen.fread.read(10), GCSignal.wid++);
+				label[0] = new GCSignal(gc.offline.GCGen.fread.read(10));
 			}
 			else 
 				label[0].send(gc.offline.GCGen.fout);
@@ -182,7 +182,7 @@ public abstract class GCGenComp extends GCCompEnv {
 
 	public GCSignal xor(GCSignal a, GCSignal b) {
 		if (a.isPublic() && b.isPublic())
-			return new GCSignal(a.v ^ b.v, GCSignal.wid++);
+			return new GCSignal(a.v ^ b.v);
 		else if (a.isPublic())
 			return a.v ? not(b) : new GCSignal(b);
 		else if (b.isPublic())
@@ -194,7 +194,7 @@ public abstract class GCGenComp extends GCCompEnv {
 
 	public GCSignal not(GCSignal a) {
 		if (a.isPublic())
-			return new GCSignal(!a.v, GCSignal.wid++);
+			return new GCSignal(!a.v);
 		else
 			return R.xor(a);
 	}
