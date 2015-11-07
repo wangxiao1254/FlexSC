@@ -15,6 +15,7 @@ of the circuits, halfgate protocols and offline garblging.
 7. RAM support
 
 version 0.3(TODO)
+
 1. optimize some circuit size for Integers, redesign floating point numbers.
 2. optimize roundtrip problem
 3. develop better tutorial
