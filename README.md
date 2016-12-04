@@ -3,6 +3,8 @@ FlexSC
 
 A Flexible Efficient Secure Computation Backend.
 
+JAVA-8 required
+
 version 0.2
 
 1. Runnable backend.
