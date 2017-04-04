@@ -3,20 +3,15 @@ package example;
 import util.EvaRunnable;
 import util.GenRunnable;
 import util.Utils;
-
-import java.util.Arrays;
-
 import circuits.arithmetic.IntegerLib;
 import flexsc.CompEnv;
 import gc.BadLabelException;
 
-public class HammingDistance {
-
-    static int LEN = 32;
+public class Mult {
+	
 	static public<T> T[] compute(CompEnv<T> gen, T[] inputA, T[] inputB){
-		return  new IntegerLib<T>(gen).hammingDistance(inputA, inputB);
+		return new IntegerLib<T>(gen).multiplyFull(inputA, inputB);
 	}
-
 	
 	public static class Generator<T> extends GenRunnable<T> {
 
@@ -26,25 +21,21 @@ public class HammingDistance {
 		
 		@Override
 		public void prepareInput(CompEnv<T> gen) {
-			boolean[] in = new boolean[LEN];
-			for(int i = 0; i < in.length; ++i)
-				in[i] = CompEnv.rnd.nextBoolean();
-			inputA = gen.inputOfAlice(in);
+			inputA = gen.inputOfAlice(Utils.fromInt(new Integer(args[0]), 32));
 			gen.flush();
-			inputB = gen.inputOfBob(new boolean[LEN]);
-			System.out.println("Input from Gen:"+Arrays.toString(in));
+			inputB = gen.inputOfBob(new boolean[32]);
 		}
 		
 		@Override
 		public void secureCompute(CompEnv<T> gen) {
 			scResult = compute(gen, inputA, inputB);
 		}
+		
 		@Override
 		public void prepareOutput(CompEnv<T> gen) throws BadLabelException {
-			System.out.println(Utils.toInt(gen.outputToAlice(scResult)));
-			System.out.println("out len = " + scResult.length);
+		    System.out.println(Utils.toInt(gen.outputToAlice(scResult)));
+		    System.out.println(scResult.length);
 		}
-		
 	}
 	
 	public static class Evaluator<T> extends EvaRunnable<T> {
@@ -54,13 +45,9 @@ public class HammingDistance {
 		
 		@Override
 		public void prepareInput(CompEnv<T> gen) {
-			boolean[] in = new boolean[LEN];
-			for(int i = 0; i < in.length; ++i)
-				in[i] = CompEnv.rnd.nextBoolean();
-			inputA = gen.inputOfAlice(new boolean[LEN]);
+			inputA = gen.inputOfAlice(new boolean[32]);
 			gen.flush();
-			inputB = gen.inputOfBob(in);
-			System.out.println("Input from Eva:"+Arrays.toString(in));
+			inputB = gen.inputOfBob(Utils.fromInt(new Integer(args[0]), 32));
 		}
 		
 		@Override
@@ -70,7 +57,7 @@ public class HammingDistance {
 		
 		@Override
 		public void prepareOutput(CompEnv<T> gen) throws BadLabelException {
-		    // gen.outputToAlice(scResult);
+		    //gen.outputToAlice(scResult);
 		}
 	}
 }
