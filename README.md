@@ -5,7 +5,7 @@ A Flexible Efficient Secure Computation Backend.
 
 JAVA-8 required
 
-**Looking for more efficient FlexSC? [emp-toolkit](https://github.com/emp-toolkit) is written ic C/C++ and supports both malicious and semi-honest 2(M)PC**
+**Looking for more efficient FlexSC? [emp-toolkit](https://github.com/emp-toolkit) is written in C/C++ and supports both malicious and semi-honest 2(M)PC**
 
 version 0.2
 
