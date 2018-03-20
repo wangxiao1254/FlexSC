@@ -115,8 +115,8 @@ public class TestCircuitOramRec {
 
 					// Assert.assertTrue(Utils.toInt(b) == element);
 //					if (Utils.toInt(b) != element)
-						System.out.println("inconsistent: " + element + " "
-								+ Utils.toInt(b));
+//						System.out.println("inconsistent: " + element + " "
+//								+ Utils.toInt(b));
 				}
 
 				os.flush();
