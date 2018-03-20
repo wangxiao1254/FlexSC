@@ -12,7 +12,6 @@ public class TestCircuitOramRecServer {
 			gen.run();
 			Flag.sw.print();
 			System.out.print("\n");
-			//asdasdasdas
 		}
 	}
 }
