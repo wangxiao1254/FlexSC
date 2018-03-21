@@ -100,7 +100,7 @@ public class TestCircuitOramRec {
 					double t = Flag.sw.stopTotal();
 //					System.out.println(Flag.sw.ands + " " + t / 1000000000.0
 //							+ " " + Flag.sw.ands / t * 1000);
-					Flag.sw.addCounter();
+					if(i != 0) Flag.sw.addCounter();
 
 //					Runtime rt = Runtime.getRuntime();
 //					double usedMB = (rt.totalMemory() - rt.freeMemory()) / 1024.0 / 1024.0;
@@ -115,8 +115,8 @@ public class TestCircuitOramRec {
 
 					// Assert.assertTrue(Utils.toInt(b) == element);
 //					if (Utils.toInt(b) != element)
-						System.out.println("inconsistent: " + element + " "
-								+ Utils.toInt(b));
+//						System.out.println("inconsistent: " + element + " "
+//								+ Utils.toInt(b));
 				}
 
 				os.flush();
@@ -167,7 +167,7 @@ public class TestCircuitOramRec {
 					Flag.sw.startTotal();
 					server.write(server.baseOram.lib.toSignals(element), scData);
 					 Flag.sw.stopTotal();
-					 Flag.sw.addCounter();
+					 if(i != 0) Flag.sw.addCounter();
 //					printStatistic();
 				}
 
