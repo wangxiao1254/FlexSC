@@ -167,7 +167,7 @@ public class TestCircuitOramRec {
 					Flag.sw.startTotal();
 					server.write(server.baseOram.lib.toSignals(element), scData);
 					 Flag.sw.stopTotal();
-					 Flag.sw.addCounter();
+					 if(i != 0) Flag.sw.addCounter();
 //					printStatistic();
 				}
 
